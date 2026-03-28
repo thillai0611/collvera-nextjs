@@ -4,6 +4,9 @@ export const metadata = {
   title: 'Collvera — India\'s AI-Powered College Guide',
   description: 'Find the best MBA and PG colleges in India. Compare fees, placements, cutoffs. AI-powered recommendations personalised to your profile.',
   keywords: 'MBA colleges India, CAT cutoffs, IIM admissions, MBA fees placements, best MBA colleges',
+  verification: {
+    google: 'REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE',
+  },
   openGraph: {
     title: 'Collvera — India\'s AI College Guide',
     description: 'Compare 100+ MBA colleges. Check eligibility. Find your perfect college.',
