@@ -4,13 +4,11 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/colleges', label: 'Explore' },
-  { href: '/compare', label: 'Compare' },
-  { href: '/eligibility', label: 'Eligibility' },
-  { href: '/predictor', label: 'Rank Predictor' },
-  { href: '/rankings', label: 'Rankings' },
-  { href: '/blog', label: 'Blog' },
+  { href:'/colleges', label:'Colleges' },
+  { href:'/compare', label:'Compare' },
+  { href:'/eligibility', label:'Eligibility' },
+  { href:'/rankings', label:'Rankings' },
+  { href:'/blog', label:'Blog' },
 ]
 
 export default function Nav({ onLeadOpen }) {
@@ -19,50 +17,58 @@ export default function Nav({ onLeadOpen }) {
 
   return (
     <>
-      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(247,244,239,0.97)', backdropFilter:'blur(12px)', borderBottom:'1px solid rgba(26,18,8,0.1)', padding:'0 24px' }}>
-        <div style={{ maxWidth:1200, margin:'0 auto', display:'flex', alignItems:'center', justifyContent:'space-between', height:60 }}>
-          <Link href="/" style={{ display:'flex', alignItems:'baseline', gap:4, textDecoration:'none' }}>
-            <span style={{ fontFamily:'var(--font-display)', fontSize:'1.3rem', fontWeight:700, color:'var(--ink)' }}>Collvera</span>
-            <span style={{ fontSize:10, fontWeight:600, color:'var(--orange)', background:'var(--orange-light)', padding:'2px 6px', borderRadius:4, marginLeft:4, letterSpacing:'0.06em' }}>AI</span>
-          </Link>
+      <nav style={{ position:'sticky',top:0,zIndex:200,background:'rgba(6,5,4,.96)',backdropFilter:'blur(20px)',borderBottom:'1px solid rgba(255,255,255,.06)',padding:'0 32px',height:54,display:'flex',alignItems:'center',justifyContent:'space-between' }}>
+        <Link href="/" style={{ display:'flex',alignItems:'center',gap:8,textDecoration:'none' }}>
+          <span style={{ fontFamily:'var(--serif)',fontSize:'1.2rem',fontWeight:700,color:'#fff' }}>Collvera</span>
+          <span style={{ fontSize:9,color:'#1D9E75',background:'rgba(29,158,117,.15)',padding:'3px 8px',borderRadius:20,letterSpacing:'.06em',fontFamily:'var(--mono)',border:'1px solid rgba(29,158,117,.25)',display:'flex',alignItems:'center',gap:4 }}>
+            <span style={{ width:5,height:5,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite' }}></span>
+            AI · live
+          </span>
+        </Link>
 
-          <div className="desktop-nav" style={{ display:'flex', gap:2, alignItems:'center', flex:1, justifyContent:'center' }}>
-            {links.map(l => (
-              <Link key={l.href} href={l.href} style={{
-                padding:'6px 10px', borderRadius:6, fontSize:12, fontWeight:500, textDecoration:'none',
-                background: pathname === l.href ? 'var(--orange-light)' : 'transparent',
-                color: pathname === l.href ? 'var(--orange)' : 'var(--ink2)',
-                whiteSpace:'nowrap',
-              }}>{l.label}</Link>
-            ))}
-          </div>
+        <div className="desktop-only" style={{ display:'flex',gap:2 }}>
+          {links.map(l => (
+            <Link key={l.href} href={l.href} style={{ padding:'5px 11px',borderRadius:6,fontSize:12,color:pathname===l.href?'#fff':'rgba(255,255,255,.5)',background:pathname===l.href?'rgba(255,255,255,.08)':'transparent',textDecoration:'none',transition:'all .15s' }}>
+              {l.label}
+            </Link>
+          ))}
+        </div>
 
-          <div style={{ display:'flex', alignItems:'center', gap:12, flexShrink:0 }}>
-            <button className="btn btn-primary btn-sm desktop-cta" onClick={onLeadOpen}>Free Counselling →</button>
-            <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} style={{ display:'none', background:'none', border:'none', cursor:'pointer', padding:4, flexDirection:'column', gap:5 }}>
-              <span style={{ display:'block', width:22, height:2, background:'var(--ink)', borderRadius:2, transition:'all 0.2s', transform: menuOpen ? 'rotate(45deg) translate(5px,5px)' : 'none' }}></span>
-              <span style={{ display:'block', width:22, height:2, background:'var(--ink)', borderRadius:2, opacity: menuOpen ? 0 : 1, transition:'all 0.2s' }}></span>
-              <span style={{ display:'block', width:22, height:2, background:'var(--ink)', borderRadius:2, transition:'all 0.2s', transform: menuOpen ? 'rotate(-45deg) translate(5px,-5px)' : 'none' }}></span>
-            </button>
+        <div style={{ display:'flex',alignItems:'center',gap:12 }}>
+          <div className="desktop-only" style={{ fontSize:10,fontFamily:'var(--mono)',color:'rgba(255,255,255,.3)',display:'flex',alignItems:'center',gap:5 }}>
+            <span style={{ width:5,height:5,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite' }}></span>
+            AI processing queries
           </div>
+          <button onClick={onLeadOpen} style={{ background:'var(--orange)',color:'#fff',padding:'7px 16px',borderRadius:7,fontSize:12,cursor:'pointer',border:'none',fontWeight:500,transition:'all .2s' }}
+            onMouseOver={e=>e.target.style.background='#b84e00'}
+            onMouseOut={e=>e.target.style.background='var(--orange)'}>
+            Free Counselling →
+          </button>
+          <button onClick={() => setMenuOpen(!menuOpen)} className="mobile-hamburger" style={{ display:'none',background:'none',border:'none',cursor:'pointer',padding:4,flexDirection:'column',gap:5 }}>
+            <span style={{ display:'block',width:22,height:2,background:'#fff',borderRadius:2,transition:'all .2s',transform:menuOpen?'rotate(45deg) translate(5px,5px)':'none' }}></span>
+            <span style={{ display:'block',width:22,height:2,background:'#fff',borderRadius:2,transition:'all .2s',opacity:menuOpen?0:1 }}></span>
+            <span style={{ display:'block',width:22,height:2,background:'#fff',borderRadius:2,transition:'all .2s',transform:menuOpen?'rotate(-45deg) translate(5px,-5px)':'none' }}></span>
+          </button>
         </div>
       </nav>
 
       {menuOpen && (
-        <div style={{ position:'fixed', top:60, left:0, right:0, bottom:0, background:'rgba(247,244,239,0.99)', zIndex:99, padding:'16px 24px', overflowY:'auto' }}>
+        <div style={{ position:'fixed',top:54,left:0,right:0,bottom:0,background:'rgba(6,5,4,.98)',zIndex:199,padding:'16px 24px',overflowY:'auto' }}>
           {links.map(l => (
-            <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} style={{
-              display:'block', padding:'16px 8px', borderBottom:'1px solid var(--border2)',
-              fontSize:'1rem', fontWeight:500, textDecoration:'none',
-              color: pathname === l.href ? 'var(--orange)' : 'var(--ink)',
-              fontFamily:'var(--font-display)',
-            }}>{l.label}</Link>
+            <Link key={l.href} href={l.href} onClick={() => setMenuOpen(false)} style={{ display:'block',padding:'16px 8px',borderBottom:'1px solid rgba(255,255,255,.06)',fontSize:'1rem',fontWeight:500,textDecoration:'none',color:pathname===l.href?'var(--orange)':'rgba(255,255,255,.8)',fontFamily:'var(--serif)' }}>{l.label}</Link>
           ))}
-          <button className="btn btn-primary" onClick={() => { onLeadOpen(); setMenuOpen(false); }} style={{ width:'100%', justifyContent:'center', marginTop:20, padding:14 }}>
+          <button onClick={() => { onLeadOpen?.(); setMenuOpen(false); }} style={{ width:'100%',justifyContent:'center',marginTop:20,padding:14,background:'var(--orange)',color:'#fff',border:'none',borderRadius:8,fontSize:14,cursor:'pointer' }}>
             Get Free Counselling →
           </button>
         </div>
       )}
+
+      <style>{`
+        @media(max-width:768px){
+          .desktop-only{display:none!important}
+          .mobile-hamburger{display:flex!important}
+        }
+      `}</style>
     </>
   )
 }

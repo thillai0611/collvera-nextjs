@@ -1,189 +1,129 @@
 'use client'
 import { useState } from 'react'
-import Link from 'next/link'
 import Nav from '../components/Nav'
 import LeadModal from '../components/LeadModal'
+import Ticker from '../components/home/Ticker'
+import Hero from '../components/home/Hero'
+import MiniCAT from '../components/home/MiniCAT'
+import Link from 'next/link'
 
-const exampleQueries = [
-  'Best MBA for 95 percentile CAT',
-  'IIM A vs IIM B comparison',
-  'MBA under ₹10 lakhs fees',
-  'Top colleges for Finance MBA',
-]
+const DEADLINES=[{day:15,mon:'Apr',college:'ISB Hyderabad',prog:'PGP 2025-26 Round 3',urgency:'urgent',tags:['GMAT 680+','Work exp 2yr+'],days:18},{day:20,mon:'Apr',college:'SPJIMR Mumbai',prog:'PGDM 2025-27 Final round',urgency:'urgent',tags:['CAT/XAT 95%+','Work exp req'],days:23},{day:30,mon:'Apr',college:'XLRI Jamshedpur',prog:'PGDM-HRM 2025-27',urgency:'soon',tags:['XAT 94%+'],days:33},{day:5,mon:'May',college:'MDI Gurgaon',prog:'PGPM 2025-27 Round 2',urgency:'soon',tags:['CAT 95%+'],days:38},{day:15,mon:'May',college:'IIM Lucknow',prog:'PGP 2025-27 Final offers',urgency:'ok',tags:['CAT 97%+'],days:48},{day:31,mon:'May',college:'IMT Ghaziabad',prog:'PGDM 2025-27 Last round',urgency:'ok',tags:['CAT/XAT 88%+'],days:64}]
+const PLACEMENTS=[{name:'IIM Ahmedabad',e:'🏛️',pkg:35,delta:8,bars:[24,26,28,31,35]},{name:'IIM Bangalore',e:'🎓',pkg:33,delta:6,bars:[23,25,27,30,33]},{name:'FMS Delhi',e:'🎓',pkg:34,delta:12,bars:[20,24,26,29,34]},{name:'XLRI',e:'✝️',pkg:28,delta:5,bars:[20,22,23,25,28]},{name:'JBIMS Mumbai',e:'🏛️',pkg:28,delta:9,bars:[18,20,22,24,28]},{name:'MDI Gurgaon',e:'🏢',pkg:22,delta:4,bars:[15,16,18,20,22]},{name:'SPJIMR',e:'🎓',pkg:27,delta:7,bars:[17,19,22,24,27]},{name:'NMIMS',e:'🏛️',pkg:18,delta:3,bars:[13,14,15,16,18]}]
+const FEATURES=[{icon:'🔍',title:'Ask anything — real answers',body:'"IIM A vs IIM B for consulting", "Best MBA under ₹10L". Instant answers from verified data, not sponsored content.'},{icon:'⚖️',title:'Side-by-side comparisons',body:'Compare any two colleges on fees, placements, cutoffs, culture. AI gives a verdict for your specific goals.'},{icon:'🧠',title:'Readiness test + prediction',body:'Take 3 real CAT questions. AI predicts your percentile and shows exactly what to improve to unlock better colleges.'},{icon:'📊',title:'Verified placement data',body:'Every number shows when verified and from which source. Confidence score on every data point. No inflated figures.'},{icon:'🎯',title:'Eligibility checker',body:'Enter your full profile. AI calculates your realistic match % for each college with reasons — not just a cutoff comparison.'},{icon:'📅',title:'Deadline tracker — live',body:'AI tracks all upcoming application windows, PI dates, and shortlist releases. Updated automatically. Never miss a deadline.'}]
+const urgBg={urgent:'#fdecea',soon:'#fff8e1',ok:'var(--teal-lt)'}
+const urgColor={urgent:'#a32d2d',soon:'#854f0b',ok:'var(--teal)'}
 
-const aiKnowledge = {
-  'iim ahmedabad': 'IIM Ahmedabad is India\'s #1 B-School. CAT cutoff 99%+, fees ₹23L, avg package ₹35 LPA. Known for case-study method and legendary alumni network.',
-  'iim bangalore': 'IIM Bangalore ranks #2. Best for tech + consulting. CAT 99%+, fees ₹23L, avg package ₹33 LPA. Bangalore ecosystem means great startup and tech exposure.',
-  'fms': 'FMS Delhi — best value MBA in India. Only ₹2.3L fees, ₹34 LPA placements. ROI is mathematically unbeatable. CAT cutoff 98%+.',
-  'xlri': 'XLRI Jamshedpur — India\'s top HR school, founded 1949. XAT 97%+ cutoff. Fees ₹24L, avg ₹28 LPA. BM program rivals IIMs.',
-  'finance': 'Top for Finance: 1) IIM Calcutta, 2) IIM Ahmedabad, 3) FMS Delhi, 4) NMIMS Mumbai, 5) ISB Hyderabad.',
-  'marketing': 'Top for Marketing: 1) IIM Ahmedabad, 2) SPJIMR Mumbai, 3) NMIMS Mumbai, 4) MICA Ahmedabad, 5) IMT Ghaziabad.',
-  '99': 'With 99%+ CAT — target IIM A/B/C, FMS Delhi. Score gets you the call, GD-PI gets you the seat.',
-  '95': 'With 95 percentile — target IIM Lucknow, IIM Kozhikode, MDI Gurgaon, SPJIMR Mumbai, IIFT Delhi.',
-  '90': 'With 90 percentile — target IMT Ghaziabad, TAPMI, FORE Delhi, LIBA Chennai, XIM Bhubaneswar.',
-  'fees': 'By fees: Under ₹5L: FMS (₹2.3L). ₹5–15L: IIFT (₹16L). ₹15–25L: IIMs (₹19–23L), XLRI (₹24L). Above ₹25L: ISB (₹42L).',
-}
-
-function getAIReply(msg) {
-  const m = msg.toLowerCase()
-  for (const [k, v] of Object.entries(aiKnowledge)) {
-    if (m.includes(k)) return v
-  }
-  return "Great question! For the most accurate answer based on your CAT score, academics and goals — use our Eligibility Checker or get a free counselling session. Our counsellors typically respond within 24 hours. 🎯"
-}
-
-export default function Home() {
-  const [leadOpen, setLeadOpen] = useState(false)
-  const [messages, setMessages] = useState([
-    { role:'ai', text:"Hi! I'm Collvera AI 👋 Ask me anything about MBA colleges in India — cutoffs, fees, placements, comparisons. What's on your mind?" }
-  ])
-  const [input, setInput] = useState('')
-  const [msgCount, setMsgCount] = useState(0)
-
-  const send = (text) => {
-    const t = text || input
-    if (!t.trim()) return
-    setInput('')
-    const newMsgs = [...messages, { role:'user', text:t }]
-    setMessages(newMsgs)
-    const count = msgCount + 1
-    setMsgCount(count)
-    setTimeout(() => {
-      setMessages(m => [...m, {
-        role:'ai',
-        text: getAIReply(t),
-        showLead: count >= 3
-      }])
-    }, 700)
-  }
-
-  return (
-    <div style={{ minHeight:'100vh' }}>
-      <Nav onLeadOpen={() => setLeadOpen(true)} />
-
-      <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 24px' }}>
-
-        {/* HERO */}
-        <div style={{ padding:'64px 0 48px', maxWidth:760 }}>
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'var(--orange-light)', border:'1px solid rgba(232,93,4,0.2)', padding:'6px 16px', borderRadius:20, fontSize:12, color:'var(--orange2)', fontWeight:500, marginBottom:24 }}>
-            <span style={{ width:6, height:6, borderRadius:'50%', background:'var(--orange)', display:'inline-block' }}></span>
-            Powered by Claude AI · 100+ colleges · Free forever
+export default function HomePage(){
+  const [leadOpen,setLeadOpen]=useState(false)
+  return(
+    <div style={{minHeight:'100vh'}}>
+      <Ticker/>
+      <Nav onLeadOpen={()=>setLeadOpen(true)}/>
+      <Hero onLeadOpen={()=>setLeadOpen(true)}/>
+      {/* AI Identity Bar */}
+      <div style={{background:'#0a0907',borderTop:'1px solid rgba(15,110,86,.15)',borderBottom:'1px solid rgba(15,110,86,.15)',padding:'14px 32px',display:'flex',alignItems:'center',justifyContent:'center',gap:40,flexWrap:'wrap'}}>
+        {[['100%','AI-generated answers'],['0','humans involved'],['0','paid listings'],['Live','verified data'],['Free','always']].map(([n,l],i)=>(
+          <div key={i} style={{display:'flex',alignItems:'center',gap:8,fontSize:11.5,color:'rgba(255,255,255,.55)',fontFamily:'var(--mono)'}}>
+            <strong style={{color:'#1D9E75'}}>{n}</strong>&nbsp;{l}
           </div>
-          <h1 style={{ fontSize:'clamp(2.2rem,4vw,3.4rem)', fontWeight:700, lineHeight:1.1, marginBottom:20, letterSpacing:'-0.02em' }}>
-            Find Your Perfect College<br />
-            <em style={{ color:'var(--orange)', fontStyle:'italic' }}>with AI Intelligence</em>
-          </h1>
-          <p style={{ fontSize:'1.05rem', color:'var(--muted)', lineHeight:1.7, maxWidth:560, marginBottom:36 }}>
-            Ask anything about MBA & UG colleges in India. CAT cutoffs, fees, placements, rankings — instant answers, personalised to you.
-          </p>
-          <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-            <Link href="/colleges" className="btn btn-primary">Explore Colleges →</Link>
-            <Link href="/eligibility" className="btn btn-outline">Check Eligibility</Link>
-            <Link href="/predictor" className="btn btn-outline">Rank Predictor</Link>
+        ))}
+      </div>
+      <MiniCAT onLeadOpen={()=>setLeadOpen(true)}/>
+      {/* Counter */}
+      <div style={{background:'var(--ink)',padding:'18px 32px',display:'flex',justifyContent:'center',gap:56,flexWrap:'wrap'}}>
+        {[['312+','students guided today'],['20+','verified colleges'],['2,100+','AI queries answered'],['Free','always']].map(([n,l])=>(
+          <div key={l} style={{textAlign:'center'}}>
+            <div style={{fontFamily:'var(--serif)',fontSize:'1.7rem',fontWeight:700,color:'#fff'}}>{n}</div>
+            <div style={{fontSize:10,color:'rgba(255,255,255,.35)',fontFamily:'var(--mono)',marginTop:2}}>{l}</div>
           </div>
-        </div>
-
-        {/* STATS */}
-        <div className="stats-bar" style={{ display:'flex', gap:32, paddingBottom:40, borderBottom:'1px solid var(--border2)', flexWrap:'wrap' }}>
-          {[['100+','Colleges'],['50K+','Students guided'],['₹2L → ₹42L','Fee range'],['Free','Always']].map(([n,l]) => (
-            <div key={l}>
-              <div style={{ fontFamily:'var(--font-display)', fontSize:'1.6rem', fontWeight:700, color:'var(--ink)' }}>{n}</div>
-              <div style={{ fontSize:12, color:'var(--muted)', marginTop:2 }}>{l}</div>
+        ))}
+      </div>
+      {/* Below fold */}
+      <div style={{maxWidth:1100,margin:'0 auto',padding:'48px 32px 64px'}}>
+        <SectionHead>what collvera AI does</SectionHead>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:14,marginBottom:48}}>
+          {FEATURES.map((f,i)=>(
+            <div key={i} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:12,padding:20,cursor:'pointer',transition:'all .2s'}}
+              onMouseOver={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.borderColor='var(--ink)'}}
+              onMouseOut={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.borderColor='var(--border)'}}>
+              <div style={{fontSize:22,marginBottom:12}}>{f.icon}</div>
+              <div style={{fontSize:13.5,fontWeight:500,marginBottom:5}}>{f.title}</div>
+              <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.65}}>{f.body}</div>
             </div>
           ))}
         </div>
-
-        {/* MAIN GRID */}
-        <div className="main-grid" style={{ display:'grid', gridTemplateColumns:'1fr 340px', gap:32, padding:'40px 0 60px', alignItems:'start' }}>
-
-          {/* AI CHAT */}
-          <div className="card" style={{ overflow:'hidden' }}>
-            <div style={{ padding:'16px 20px', borderBottom:'1px solid var(--border2)', display:'flex', alignItems:'center', gap:12 }}>
-              <div style={{ width:36, height:36, borderRadius:10, background:'var(--ink)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16 }}>🧠</div>
-              <div>
-                <div style={{ fontWeight:600, fontSize:14 }}>Collvera AI Assistant</div>
-                <div style={{ fontSize:12, color:'#2e7d32' }}>● Online — responds instantly</div>
+        <SectionHead>application deadlines — AI tracked</SectionHead>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:12,marginBottom:48}}>
+          {DEADLINES.map((d,i)=>(
+            <div key={i} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:11,padding:16,display:'flex',gap:14,alignItems:'flex-start',transition:'transform .2s'}}
+              onMouseOver={e=>e.currentTarget.style.transform='translateY(-2px)'}
+              onMouseOut={e=>e.currentTarget.style.transform='none'}>
+              <div style={{background:'var(--cream)',borderRadius:8,padding:'8px 10px',textAlign:'center',flexShrink:0,minWidth:50}}>
+                <div style={{fontFamily:'var(--serif)',fontSize:'1.4rem',fontWeight:700,lineHeight:1}}>{d.day}</div>
+                <div style={{fontSize:9.5,fontFamily:'var(--mono)',color:'var(--muted)',textTransform:'uppercase',marginTop:2}}>{d.mon}</div>
               </div>
-            </div>
-
-            <div style={{ height:380, overflowY:'auto', padding:20, display:'flex', flexDirection:'column', gap:14 }}>
-              {messages.map((m, i) => (
-                <div key={i} style={{ display:'flex', gap:10, flexDirection: m.role==='user' ? 'row-reverse' : 'row' }}>
-                  <div style={{ width:28, height:28, borderRadius:8, background: m.role==='ai' ? 'var(--ink)' : 'var(--cream2)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, flexShrink:0 }}>
-                    {m.role==='ai' ? '🧠' : '👤'}
-                  </div>
-                  <div style={{ maxWidth:'78%' }}>
-                    <div style={{ padding:'10px 14px', borderRadius:12, fontSize:13, lineHeight:1.6, background: m.role==='ai' ? 'var(--cream)' : 'var(--orange)', color: m.role==='ai' ? 'var(--ink)' : '#fff', borderTopLeftRadius: m.role==='ai' ? 2 : 12, borderTopRightRadius: m.role==='user' ? 2 : 12 }}>
-                      {m.text}
-                    </div>
-                    {m.showLead && (
-                      <button className="btn btn-primary btn-sm" onClick={() => setLeadOpen(true)} style={{ marginTop:8 }}>
-                        Get personalised shortlist →
-                      </button>
-                    )}
-                  </div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:13,fontWeight:500,marginBottom:2}}>{d.college}</div>
+                <div style={{fontSize:11,color:'var(--muted)',marginBottom:7,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{d.prog}</div>
+                <div style={{display:'flex',gap:4,flexWrap:'wrap'}}>
+                  {d.tags.map(t=><span key={t} style={{fontSize:9,fontFamily:'var(--mono)',padding:'2px 7px',borderRadius:8,background:urgBg[d.urgency],color:urgColor[d.urgency]}}>{t}</span>)}
                 </div>
-              ))}
-            </div>
-
-            <div style={{ padding:'8px 12px', borderBottom:'1px solid var(--border2)', display:'flex', gap:6, flexWrap:'wrap' }}>
-              {exampleQueries.slice(0,3).map(q => (
-                <button key={q} onClick={() => send(q)} style={{ background:'var(--cream2)', border:'none', borderRadius:20, padding:'5px 12px', fontSize:11, color:'var(--muted)', cursor:'pointer' }}>{q}</button>
-              ))}
-            </div>
-
-            <div style={{ padding:16, display:'flex', gap:10 }}>
-              <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => e.key==='Enter' && send()} placeholder="Ask about any college or exam..." style={{ flex:1, borderRadius:8 }} />
-              <button className="btn btn-primary btn-sm" onClick={() => send()}>Send</button>
-            </div>
-          </div>
-
-          {/* SIDEBAR */}
-          <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-            <div className="card" style={{ padding:20 }}>
-              <div style={{ fontFamily:'var(--font-display)', fontSize:'1rem', fontWeight:600, marginBottom:16 }}>Quick Tools</div>
-              <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-                {[
-                  { icon:'⚖️', label:'Compare Colleges', href:'/compare' },
-                  { icon:'✅', label:'Eligibility Checker', href:'/eligibility' },
-                  { icon:'📊', label:'Rank Predictor', href:'/predictor' },
-                  { icon:'🏆', label:'NIRF Rankings', href:'/rankings' },
-                  { icon:'📖', label:'MBA Blog', href:'/blog' },
-                ].map(t => (
-                  <Link key={t.href} href={t.href} style={{ display:'flex', alignItems:'center', gap:10, background:'var(--cream)', border:'1px solid var(--border2)', borderRadius:10, padding:'11px 14px', textDecoration:'none', fontSize:13, fontWeight:500, color:'var(--ink)' }}>
-                    <span style={{ fontSize:16 }}>{t.icon}</span> {t.label}
-                    <span style={{ marginLeft:'auto', color:'var(--muted)' }}>→</span>
-                  </Link>
-                ))}
+                <div style={{fontSize:10,fontFamily:'var(--mono)',marginTop:6,color:urgColor[d.urgency],fontWeight:d.urgency==='urgent'?500:'normal'}}>{d.days<=7?'⚠️ ':''}{d.days} days remaining</div>
               </div>
             </div>
-
-            <div className="card" style={{ padding:20, background:'linear-gradient(135deg, var(--orange-light), #fff)', border:'1px solid rgba(232,93,4,0.15)' }}>
-              <div style={{ fontFamily:'var(--font-display)', fontSize:'1rem', fontWeight:600, marginBottom:6 }}>🎯 Get Your Free Shortlist</div>
-              <p style={{ fontSize:12, color:'var(--muted)', marginBottom:14, lineHeight:1.6 }}>Tell us your CAT score and goals. Get a personalised list of colleges you can get into — free.</p>
-              <button className="btn btn-primary" onClick={() => setLeadOpen(true)} style={{ width:'100%', justifyContent:'center' }}>
-                Get Free Shortlist →
-              </button>
-            </div>
+          ))}
+        </div>
+        <SectionHead>placement trends 2024 — source verified</SectionHead>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:12,marginBottom:48}}>
+          {PLACEMENTS.map((p,i)=>{
+            const mx=Math.max(...p.bars)
+            return(
+              <div key={i} style={{background:'var(--white)',border:'1px solid var(--border)',borderRadius:11,padding:16,transition:'transform .2s'}}
+                onMouseOver={e=>e.currentTarget.style.transform='translateY(-2px)'}
+                onMouseOut={e=>e.currentTarget.style.transform='none'}>
+                <div style={{fontSize:12.5,fontWeight:500,marginBottom:2}}>{p.e} {p.name}</div>
+                <div style={{fontFamily:'var(--serif)',fontSize:'1.5rem',fontWeight:700,marginBottom:3}}>₹{p.pkg} LPA</div>
+                <div style={{fontSize:11,fontFamily:'var(--mono)',color:'var(--teal)'}}>↑ {p.delta}% vs 2023</div>
+                <div style={{display:'flex',alignItems:'flex-end',gap:3,height:28,marginTop:10}}>
+                  {p.bars.map((v,j)=><div key={j} style={{background:j===4?'var(--teal)':'var(--cream2)',borderRadius:'2px 2px 0 0',flex:1,height:`${Math.round(v/mx*100)}%`}}></div>)}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        {/* Blog CTA */}
+        <div style={{background:'var(--ink)',borderRadius:16,padding:32,textAlign:'center'}}>
+          <div style={{fontFamily:'var(--serif)',fontSize:'1.3rem',fontWeight:700,color:'#fff',marginBottom:8}}>20 expert MBA guides — free</div>
+          <p style={{fontSize:13,color:'rgba(255,255,255,.5)',marginBottom:20,maxWidth:480,margin:'0 auto 20px'}}>IIM comparisons, fee ROI, CAT prep strategy, city guides — written by AI, verified by data.</p>
+          <div style={{display:'flex',gap:12,justifyContent:'center',flexWrap:'wrap'}}>
+            <Link href="/blog" style={{background:'var(--orange)',color:'#fff',padding:'11px 22px',borderRadius:8,fontSize:13,fontWeight:500,textDecoration:'none'}}>Read the guides →</Link>
+            <button onClick={()=>setLeadOpen(true)} style={{background:'transparent',color:'rgba(255,255,255,.7)',border:'1px solid rgba(255,255,255,.15)',padding:'11px 22px',borderRadius:8,fontSize:13,cursor:'pointer'}}>Get free counselling</button>
           </div>
         </div>
       </div>
-
-      <footer style={{ borderTop:'1px solid var(--border2)', padding:'32px 24px', textAlign:'center', background:'var(--cream2)' }}>
-        <div style={{ fontFamily:'var(--font-display)', fontSize:'1rem', fontWeight:600, marginBottom:6 }}>
-          Collvera<span style={{ color:'var(--orange)' }}>.com</span>
-          <span style={{ fontSize:11, color:'var(--orange)', background:'var(--orange-light)', padding:'2px 6px', borderRadius:4, marginLeft:8 }}>AI</span>
+      {/* Footer */}
+      <footer style={{background:'#060504',borderTop:'1px solid rgba(255,255,255,.06)',padding:'32px',textAlign:'center'}}>
+        <div style={{fontFamily:'var(--serif)',fontSize:'1.1rem',fontWeight:600,color:'#fff',marginBottom:6,display:'flex',alignItems:'center',justifyContent:'center',gap:8}}>
+          Collvera
+          <span style={{fontSize:9,color:'#1D9E75',background:'rgba(29,158,117,.15)',padding:'2px 7px',borderRadius:20,fontFamily:'var(--mono)',border:'1px solid rgba(29,158,117,.25)'}}>AI</span>
         </div>
-        <div style={{ fontSize:12, color:'var(--muted)', marginBottom:16 }}>India's smartest college guide · Powered by Claude AI</div>
-        <div style={{ display:'flex', justifyContent:'center', gap:20, fontSize:12, flexWrap:'wrap' }}>
-          {[['Explore','/colleges'],['Compare','/compare'],['Eligibility','/eligibility'],['Rank Predictor','/predictor'],['Rankings','/rankings'],['Blog','/blog']].map(([l,h]) => (
-            <Link key={h} href={h} style={{ color:'var(--muted)', textDecoration:'none' }}>{l}</Link>
+        <div style={{fontSize:11,color:'rgba(255,255,255,.3)',marginBottom:16,fontFamily:'var(--mono)'}}>India's only MBA guide run entirely by AI</div>
+        <div style={{display:'flex',justifyContent:'center',gap:20,fontSize:12,flexWrap:'wrap'}}>
+          {[['Colleges','/colleges'],['Compare','/compare'],['Eligibility','/eligibility'],['Rankings','/rankings'],['Blog','/blog']].map(([l,h])=>(
+            <Link key={h} href={h} style={{color:'rgba(255,255,255,.35)',textDecoration:'none'}}>{l}</Link>
           ))}
         </div>
-        <div style={{ fontSize:11, color:'var(--muted)', marginTop:16 }}>© 2026 Collvera.com · Data sourced from NIRF, official college websites</div>
+        <div style={{fontSize:10,color:'rgba(255,255,255,.2)',marginTop:16,fontFamily:'var(--mono)'}}>© 2026 Collvera.com · Data from NIRF, official college websites</div>
       </footer>
+      <LeadModal open={leadOpen} onClose={()=>setLeadOpen(false)}/>
+    </div>
+  )
+}
 
-      <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} />
+function SectionHead({children}){
+  return(
+    <div style={{fontSize:10,fontFamily:'var(--mono)',color:'var(--muted)',textTransform:'uppercase',letterSpacing:'.1em',marginBottom:20,display:'flex',alignItems:'center',gap:12}}>
+      {children}<span style={{flex:1,height:1,background:'var(--border)'}}></span>
     </div>
   )
 }
