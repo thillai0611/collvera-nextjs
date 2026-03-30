@@ -33,35 +33,27 @@ export default function HomePage(){
 
       {/* ── AI CHAT SECTION ── */}
       <div style={{background:'var(--ink)',borderBottom:'1px solid rgba(255,255,255,.06)'}}>
-        <div style={{maxWidth:860,margin:'0 auto',padding:'48px 32px'}}>
-          {/* Header */}
-          <div style={{textAlign:'center',marginBottom:28}}>
-            <div style={{fontSize:10,fontFamily:'var(--mono)',color:'#1D9E75',textTransform:'uppercase',letterSpacing:'.12em',marginBottom:10,display:'flex',alignItems:'center',justifyContent:'center',gap:6}}>
-              <span style={{width:6,height:6,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite',display:'inline-block'}}></span>
-              AI MBA Counsellor · live · free
+        <div style={{maxWidth:900,margin:'0 auto',padding:'40px 32px'}}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:40,alignItems:'start'}}>
+            <div style={{paddingTop:8}}>
+              <div style={{fontSize:10,fontFamily:'var(--mono)',color:'#1D9E75',textTransform:'uppercase',letterSpacing:'.12em',marginBottom:12,display:'flex',alignItems:'center',gap:6}}>
+                <span style={{width:6,height:6,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite',display:'inline-block'}}></span>
+                AI MBA Counsellor · live · free
+              </div>
+              <h2 style={{fontFamily:'var(--serif)',fontSize:'2.2rem',fontWeight:700,color:'#fff',marginBottom:14,lineHeight:1.1}}>Ask me anything about MBA in India</h2>
+              <p style={{fontSize:13.5,color:'rgba(255,255,255,.5)',lineHeight:1.75,marginBottom:20}}>College fees, placements, cutoffs, comparisons — instant answers from verified data. No humans. No bias.</p>
+              <div style={{display:'flex',flexDirection:'column',gap:7}}>
+                {['"IIM A vs IIM B for consulting"','"Colleges for 95 percentile CAT"','"Is FMS better than IIM Lucknow?"','"Best MBA under ₹10 lakhs"'].map(q=>(
+                  <div key={q} style={{fontSize:12,fontFamily:'var(--mono)',color:'rgba(255,255,255,.35)',background:'rgba(255,255,255,.04)',padding:'6px 12px',borderRadius:8,border:'1px solid rgba(255,255,255,.07)'}}>{q}</div>
+                ))}
+              </div>
             </div>
-            <h2 style={{fontFamily:'var(--serif)',fontSize:'2rem',fontWeight:700,color:'#fff',marginBottom:10}}>
-              Ask me anything about MBA in India
-            </h2>
-            <p style={{fontSize:14,color:'rgba(255,255,255,.5)',lineHeight:1.7,maxWidth:500,margin:'0 auto'}}>
-              College fees, placements, cutoffs, comparisons, eligibility — instant answers from verified data. No humans. No bias.
-            </p>
-          </div>
-
-          {/* Example queries */}
-          <div style={{display:'flex',gap:8,flexWrap:'wrap',justifyContent:'center',marginBottom:20}}>
-            {['"IIM A vs IIM B for consulting"','"Colleges for 95 percentile"','"Is FMS better than MDI?"','"Best MBA under ₹10 lakhs"'].map(q=>(
-              <span key={q} style={{fontSize:11.5,fontFamily:'var(--mono)',color:'rgba(255,255,255,.4)',background:'rgba(255,255,255,.05)',padding:'4px 12px',borderRadius:20,border:'1px solid rgba(255,255,255,.08)'}}>{q}</span>
-            ))}
-          </div>
-
-          {/* Chat widget */}
-          <div style={{borderRadius:16,overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,.4)'}}>
-            <ChatWidget />
+            <div style={{borderRadius:16,overflow:'hidden',boxShadow:'0 8px 40px rgba(0,0,0,.5)',border:'1px solid rgba(255,255,255,.08)'}}>
+              <ChatWidget height={480}/>
+            </div>
           </div>
         </div>
       </div>
-
       <MiniCAT onLeadOpen={()=>setLeadOpen(true)}/>
 
       {/* Counter */}
