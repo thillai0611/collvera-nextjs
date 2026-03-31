@@ -57,9 +57,10 @@ function FeaturedCard({ post }) {
         onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none' }}>
         <div style={{ height: 4, background: s.dot }}></div>
         <div style={{ padding: '20px 22px' }}>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center', flexWrap:'wrap' }}>
             <CategoryBadge cat={post.category} small />
             <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>{post.read_time}</span>
+            {post.published_at && <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily:'var(--mono)' }}>{new Date(post.published_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>}
           </div>
           <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.35, marginBottom: 10, color: 'var(--ink)' }}>{post.title}</h3>
           <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.65, marginBottom: 14 }}>{post.description}</p>
@@ -223,7 +224,7 @@ export default function BlogClient({ posts }) {
         {showFeatured && featured.length > 0 && (
           <div style={{ marginBottom: 36 }}>
             <div style={{ fontSize: 10, fontFamily: 'var(--mono)', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.1em', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
-              Latest articles <span style={{ flex: 1, height: 1, background: 'var(--border)' }}></span>
+              Latest published <span style={{ flex: 1, height: 1, background: 'var(--border)' }}></span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: 16 }}>
               {featured.map(p => <FeaturedCard key={p.id} post={p} />)}
