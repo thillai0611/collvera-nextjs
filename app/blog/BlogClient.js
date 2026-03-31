@@ -122,7 +122,7 @@ export default function BlogClient({ posts }) {
   // Featured = first 3 when on page 1 and no search
   const showFeatured = page === 1 && !search && category === 'All'
   const featured = showFeatured ? posts.slice(0, 3) : []
-  const listPosts = showFeatured ? paginated.slice(3) : paginated
+  const listPosts = paginated
 
   // Category counts
   const counts = useMemo(() => {
