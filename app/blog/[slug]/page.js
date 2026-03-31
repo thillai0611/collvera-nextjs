@@ -1,3 +1,5 @@
+export const revalidate = 3600
+
 import { getBlogPost } from '../../../lib/supabase'
 import BlogPostClient from './BlogPostClient'
 import { notFound } from 'next/navigation'
