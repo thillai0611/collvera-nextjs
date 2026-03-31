@@ -1,4 +1,6 @@
 'use client'
+// SEO: This page has a visible H1 in the chat section below
+// Schema injected via HomepageSchema component below
 import { useState } from 'react'
 import Nav from '../components/Nav'
 import LeadModal from '../components/LeadModal'
@@ -16,7 +18,25 @@ const urgColor={urgent:'#a32d2d',soon:'#854f0b',ok:'var(--teal)'}
 
 export default function HomePage(){
   const [leadOpen,setLeadOpen]=useState(false)
+  const websiteSchema = {
+    '@context':'https://schema.org','@type':'WebSite','name':'Collvera',
+    'url':'https://collvera.com',
+    'description':'AI-powered MBA college discovery for India',
+    'potentialAction':{'@type':'SearchAction','target':{'@type':'EntryPoint','urlTemplate':'https://collvera.com/blog?search={q}'},'query-input':'required name=q'}
+  }
+  const faqSchema = {
+    '@context':'https://schema.org','@type':'FAQPage',
+    'mainEntity':[
+      {'@type':'Question','name':'What is the CAT cutoff for IIM Ahmedabad?','acceptedAnswer':{'@type':'Answer','text':'IIM Ahmedabad requires 99 percentile overall in CAT with 85 percentile sectional minimum.'}},
+      {'@type':'Question','name':'What are the fees for IIM Ahmedabad 2025?','acceptedAnswer':{'@type':'Answer','text':'IIM Ahmedabad total fees are Rs 27.5 lakhs for the 2-year PGP program as of 2025.'}},
+      {'@type':'Question','name':'Which MBA college has the best ROI in India?','acceptedAnswer':{'@type':'Answer','text':'FMS Delhi has the best ROI — Rs 2.43 lakh fees with Rs 34 LPA average placement.'}},
+      {'@type':'Question','name':'Is 95 percentile enough for IIM?','acceptedAnswer':{'@type':'Answer','text':'At 95 percentile you can target IIM Kozhikode, MDI Gurgaon and SPJIMR Mumbai. Female and non-engineer candidates get effective 3-5 percentile relaxation.'}},
+    ]
+  }
   return(
+    <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema)}}/>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(faqSchema)}}/>
     <div style={{minHeight:'100vh'}}>
       <Ticker/>
       <Nav onLeadOpen={()=>setLeadOpen(true)}/>
@@ -40,7 +60,7 @@ export default function HomePage(){
                 <span style={{width:6,height:6,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite',display:'inline-block'}}></span>
                 AI MBA Counsellor · live · free
               </div>
-              <h2 style={{fontFamily:'var(--serif)',fontSize:'2.2rem',fontWeight:700,color:'#fff',marginBottom:14,lineHeight:1.1}}>Ask me anything about MBA in India</h2>
+              <h1 style={{fontFamily:'var(--serif)',fontSize:'2.2rem',fontWeight:700,color:'#fff',marginBottom:14,lineHeight:1.1}}>Ask me anything about MBA in India</h1>
               <p style={{fontSize:13.5,color:'rgba(255,255,255,.5)',lineHeight:1.75,marginBottom:20}}>College fees, placements, cutoffs, comparisons — instant answers from verified data. No humans. No bias.</p>
               <div style={{display:'flex',flexDirection:'column',gap:7}}>
                 {['"IIM A vs IIM B for consulting"','"Colleges for 95 percentile CAT"','"Is FMS better than IIM Lucknow?"','"Best MBA under ₹10 lakhs"'].map(q=>(
@@ -151,6 +171,7 @@ export default function HomePage(){
 
       <LeadModal open={leadOpen} onClose={()=>setLeadOpen(false)}/>
     </div>
+    </>
   )
 }
 

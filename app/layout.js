@@ -3,9 +3,51 @@ import { FloatingChat } from '../components/ChatBox'
 import Script from 'next/script'
 
 export const metadata = {
-  title: 'Collvera — India\'s AI MBA College Guide',
-  description: 'AI-powered MBA college discovery. Find the right college, check eligibility, compare fees and placements. 100% AI. Zero bias.',
-  verification: { google: 'Wz1N2UOjAJaLB_collvera' }
+  metadataBase: new URL('https://collvera.com'),
+  title: {
+    default: 'Collvera — India\'s AI MBA College Guide',
+    template: '%s | Collvera'
+  },
+  description: 'AI-powered MBA college discovery for India. Compare fees, placements and cutoffs across 20+ colleges. Check your eligibility in 2 minutes. 100% AI. Zero bias.',
+  keywords: ['MBA colleges India', 'IIM admissions', 'CAT 2025', 'MBA eligibility checker', 'IIM fees placements', 'best MBA India'],
+  authors: [{ name: 'Collvera AI' }],
+  creator: 'Collvera',
+  publisher: 'Collvera',
+  verification: { google: 'Wz1N2UOjAJaLB_collvera' },
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: 'https://collvera.com',
+    siteName: 'Collvera',
+    title: 'Collvera — India\'s AI MBA College Guide',
+    description: 'AI-powered MBA college discovery. Compare fees, placements and cutoffs. Check your eligibility in 2 minutes.',
+    images: [{
+      url: '/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'Collvera — India\'s AI MBA College Guide',
+    }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Collvera — India\'s AI MBA College Guide',
+    description: 'AI-powered MBA college discovery. Compare fees, placements and cutoffs across 20+ colleges.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://collvera.com',
+  },
 }
 
 export default function RootLayout({ children }) {
@@ -14,6 +56,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+        <link rel="icon" href="/favicon.ico"/>
       </head>
       <body>
         {children}
