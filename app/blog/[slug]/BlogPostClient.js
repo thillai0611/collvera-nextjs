@@ -312,7 +312,7 @@ export default function BlogPostClient({ post }) {
     <div style={{ minHeight:'100vh', background:'var(--cream)' }}>
       <Nav onLeadOpen={() => setLeadOpen(true)} />
 
-      <div style={{ maxWidth:760, margin:'0 auto', padding:'32px 24px 60px' }}>
+      <div style={{ maxWidth:760, margin:'0 auto', padding:'24px 16px 48px' }} className='blog-content'>
 
         <Link href="/blog" style={{ color:'var(--orange)', fontSize:13, fontWeight:500, textDecoration:'none', display:'flex', alignItems:'center', gap:6, marginBottom:24 }}>
           ← Back to Blog

@@ -173,7 +173,7 @@ export default function MBAGame() {
         )}
       </div>
 
-      <div style={{ maxWidth:600, margin:'0 auto', padding:'28px 24px 60px' }}>
+      <div style={{ maxWidth:600, margin:'0 auto', padding:'20px 16px 48px' }}>
 
         {/* ── STEP 1: Pick exam ── */}
         {step === 1 && (

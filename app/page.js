@@ -53,8 +53,8 @@ export default function HomePage(){
 
       {/* ── AI CHAT SECTION ── */}
       <div style={{background:'var(--ink)',borderBottom:'1px solid rgba(255,255,255,.06)'}}>
-        <div style={{maxWidth:900,margin:'0 auto',padding:'40px 32px'}}>
-          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:40,alignItems:'start'}}>
+        <div style={{maxWidth:900,margin:'0 auto',padding:'32px 16px'}} className='chat-section-wrapper'>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:32,alignItems:'start'}} className='chat-grid'>
             <div style={{paddingTop:8}}>
               <div style={{fontSize:10,fontFamily:'var(--mono)',color:'#1D9E75',textTransform:'uppercase',letterSpacing:'.12em',marginBottom:12,display:'flex',alignItems:'center',gap:6}}>
                 <span style={{width:6,height:6,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite',display:'inline-block'}}></span>
@@ -77,7 +77,7 @@ export default function HomePage(){
       <MiniCAT onLeadOpen={()=>setLeadOpen(true)}/>
 
       {/* Counter */}
-      <div style={{background:'var(--ink)',padding:'18px 32px',display:'flex',justifyContent:'center',gap:56,flexWrap:'wrap'}}>
+      <div style={{background:'var(--ink)',padding:'18px 16px',display:'flex',justifyContent:'center',gap:32,flexWrap:'wrap'}}>
         {[['312+','students guided today'],['20+','verified colleges'],['2,100+','AI queries answered'],['Free','always']].map(([n,l])=>(
           <div key={l} style={{textAlign:'center'}}>
             <div style={{fontFamily:'var(--serif)',fontSize:'1.7rem',fontWeight:700,color:'#fff'}}>{n}</div>

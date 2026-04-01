@@ -122,7 +122,7 @@ function CollegeCard({ college, slug }) {
       </div>
 
       {/* Stats */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:'1px',background:'rgba(255,255,255,.06)'}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'rgba(255,255,255,.06)'}}>
         {[['FEES',fmt(college.fees),'#fff'],['AVG PKG',fmt(college.avgPkg),'#1D9E75'],['CUTOFF',college.cutoff,'#d95f02']].map(([l,v,c])=>(
           <div key={l} style={{background:'#1a1a1a',padding:'9px 8px',textAlign:'center'}}>
             <div style={{fontSize:9,color:'rgba(255,255,255,.3)',fontFamily:'var(--mono)',marginBottom:3}}>{l}</div>
@@ -141,7 +141,7 @@ function CollegeCard({ college, slug }) {
 
       {/* Pros & Cons */}
       {intel && (intel.pros || intel.cons) && (
-        <div style={{padding:'11px 14px',borderBottom:'1px solid rgba(255,255,255,.06)',display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+        <div style={{padding:'11px 14px',borderBottom:'1px solid rgba(255,255,255,.06)',display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(120px,1fr))',gap:12}}>
           {intel.pros && (
             <div>
               <div style={{fontSize:9,color:'#1D9E75',fontFamily:'var(--mono)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:6}}>✓ Strong for</div>
@@ -259,7 +259,7 @@ export function FloatingChat() {
   const [open, setOpen] = useState(false)
   return (
     <>
-      <div style={{position:'fixed',bottom:24,right:24,zIndex:1000}}>
+      <div style={{position:'fixed',bottom:16,right:16,zIndex:1000}}>
         <button onClick={()=>setOpen(!open)}
           style={{width:52,height:52,borderRadius:'50%',background:'#0e0c08',color:'#fff',border:'2px solid rgba(255,255,255,.12)',cursor:'pointer',boxShadow:'0 4px 20px rgba(0,0,0,.4)',transition:'all .2s',display:'flex',alignItems:'center',justifyContent:'center',fontSize:open?16:22}}
           onMouseOver={e=>e.currentTarget.style.background='#d95f02'}
@@ -269,7 +269,7 @@ export function FloatingChat() {
         {!open&&<div style={{position:'absolute',top:-8,right:-4,background:'#1D9E75',borderRadius:10,padding:'1px 6px',fontSize:9,color:'#fff',fontFamily:'var(--mono)',fontWeight:600}}>AI</div>}
       </div>
       {open&&(
-        <div style={{position:'fixed',bottom:88,right:24,width:340,zIndex:1000,boxShadow:'0 8px 40px rgba(0,0,0,.5)',borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,.1)'}}>
+        <div style={{position:'fixed',bottom:80,right:8,left:8,width:'auto',maxWidth:400,margin:'0 auto',zIndex:1000,boxShadow:'0 8px 40px rgba(0,0,0,.5)',borderRadius:16,overflow:'hidden',border:'1px solid rgba(255,255,255,.1)'}}>
           <ChatWidget onClose={()=>setOpen(false)} height={460} compact/>
         </div>
       )}
@@ -400,7 +400,7 @@ export default function ChatWidget({ onClose, height=520, compact=false }) {
       </div>
 
       {showSug&&(
-        <div style={{padding:'8px 10px',borderTop:'1px solid rgba(255,255,255,.06)',overflowX:'auto',display:'flex',gap:6,flexShrink:0,scrollbarWidth:'none'}}>
+        <div style={{padding:'8px 10px',borderTop:'1px solid rgba(255,255,255,.06)',overflowX:'auto',display:'flex',gap:6,flexShrink:0,scrollbarWidth:'none',WebkitOverflowScrolling:'touch',msOverflowStyle:'none'}}>
           {SUGGESTIONS.slice(0,compact?3:6).map(s=>(
             <button key={s} onClick={()=>send(s)}
               style={{whiteSpace:'nowrap',padding:'5px 10px',borderRadius:20,border:'1px solid rgba(255,255,255,.1)',background:'rgba(255,255,255,.04)',fontSize:11,cursor:'pointer',color:'rgba(255,255,255,.6)',fontFamily:'var(--sans)',flexShrink:0,transition:'all .15s'}}
@@ -412,11 +412,11 @@ export default function ChatWidget({ onClose, height=520, compact=false }) {
         </div>
       )}
 
-      <div style={{padding:'10px 12px',borderTop:'1px solid rgba(255,255,255,.08)',background:'#0a0a0a',display:'flex',gap:8,flexShrink:0}}>
+      <div style={{padding:'10px 12px',borderTop:'1px solid rgba(255,255,255,.08)',background:'#0a0a0a',display:'flex',gap:8,flexShrink:0,minWidth:0}}>
         <input value={input} onChange={e=>setInput(e.target.value)}
           onKeyDown={e=>e.key==='Enter'&&!loading&&send()}
           placeholder="Ask about any MBA college..."
-          style={{flex:1,padding:'9px 14px',border:'1.5px solid rgba(255,255,255,.1)',borderRadius:8,fontSize:13,fontFamily:'var(--sans)',outline:'none',background:'rgba(255,255,255,.06)',color:'#fff',transition:'border-color .15s'}}
+          style={{flex:1,minWidth:0,padding:'9px 12px',border:'1.5px solid rgba(255,255,255,.1)',borderRadius:8,fontSize:13,fontFamily:'var(--sans)',outline:'none',background:'rgba(255,255,255,.06)',color:'#fff',transition:'border-color .15s'}}
           onFocus={e=>e.target.style.borderColor='#d95f02'}
           onBlur={e=>e.target.style.borderColor='rgba(255,255,255,.1)'}
         />

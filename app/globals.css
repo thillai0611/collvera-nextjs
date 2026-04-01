@@ -41,3 +41,71 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   .desktop-only{display:none!important}
   .mobile-hide{display:none!important}
 }
+
+/* ── MOBILE OPTIMISATION ─────────────────────────── */
+@media(max-width:768px){
+  /* Global padding */
+  .page-hero { padding: 28px 16px 24px !important; }
+
+  /* Blog post */
+  .blog-content { padding: 20px 16px 40px !important; }
+
+  /* Rankings, eligibility, game — full width grids */
+  [style*="grid-template-columns: 200px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: 220px"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="grid-template-columns: repeat(auto-fill, minmax(280px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* TOC sidebar hidden on mobile */
+  .toc-sidebar { display: none !important; }
+
+  /* Tables — horizontal scroll */
+  table { font-size: 12px !important; }
+  th, td { padding: 8px 10px !important; }
+
+  /* Hero headings */
+  h1 { font-size: clamp(1.4rem, 5vw, 2rem) !important; }
+
+  /* MBA Game steps */
+  [style*="grid-template-columns: 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Exams page cards */
+  [style*="repeat(auto-fill,minmax(280px,1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stat cards on rankings */
+  [style*="repeat(auto-fit, minmax(160px"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* CTA buttons stack */
+  [style*="display:'flex'"][style*="gap:12"] {
+    flex-wrap: wrap !important;
+  }
+
+  /* Quick summary grid */
+  [style*="repeat(auto-fill,minmax(240px,1fr))"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Blog listing grid */
+  [style*="repeat(auto-fill, minmax(300px"] {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media(max-width:480px){
+  /* Extra small — phones */
+  nav { padding: 0 12px !important; }
+  .blog-card { padding: 14px !important; }
+  table { font-size: 11px !important; }
+  th, td { padding: 6px 8px !important; }
+}
