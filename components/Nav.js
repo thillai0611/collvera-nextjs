@@ -8,6 +8,7 @@ const links = [
   { href:'/compare', label:'Compare' },
   { href:'/eligibility', label:'Eligibility' },
   { href:'/rankings', label:'Rankings' },
+    { href:'/mba-game', label:'🎮 MBA Game' },
   { href:'/blog', label:'Blog' },
 ]
 

@@ -1,7 +1,7 @@
 import { getBlogPosts } from '../../lib/supabase'
 import BlogClient from './BlogClient'
 
-export const revalidate = 3600 // re-fetch from Supabase every 1 hour
+export const revalidate = 300 // re-fetch from Supabase every 1 hour
 
 export const metadata = {
   title: 'MBA Blog — College Guides, CAT Tips, Rankings | Collvera',

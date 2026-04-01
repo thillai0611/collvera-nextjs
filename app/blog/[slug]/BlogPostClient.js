@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import Nav from '../../../components/Nav'
 import LeadModal from '../../../components/LeadModal'
@@ -27,6 +27,48 @@ function parseContent(raw) {
   }
 
   return { type: 'empty' }
+}
+
+// Parse TLDR from content
+function parseTLDR(text) {
+  const tldrMatch = text.match(/---TLDR---\n([\s\S]*?)\n---END TLDR---/)
+  if (!tldrMatch) return { tldr: null, body: text }
+  return {
+    tldr: tldrMatch[1].trim(),
+    body: text.replace(/---TLDR---[\s\S]*?---END TLDR---\n*/, '').trim()
+  }
+}
+
+// TLDR expandable summary box
+function TLDRBox({ tldr }) {
+  const [expanded, setExpanded] = React.useState(false)
+  const lines = tldr.split('\n').filter(l => l.trim())
+  const bullets = lines.filter(l => l.startsWith('-') || l.startsWith('•'))
+  const prose = lines.filter(l => !l.startsWith('-') && !l.startsWith('•'))
+  return (
+    <div style={{background:'var(--orange-lt)',border:'1.5px solid rgba(217,95,2,.2)',borderRadius:12,padding:'20px 22px',marginBottom:32}}>
+      <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:12}}>
+        <span style={{fontSize:10,fontFamily:'var(--mono)',color:'var(--orange2)',textTransform:'uppercase',letterSpacing:'.1em',fontWeight:600}}>TL;DR — Quick Summary</span>
+        <span style={{flex:1,height:1,background:'rgba(217,95,2,.2)'}}></span>
+        <span style={{fontSize:10,fontFamily:'var(--mono)',color:'var(--muted)'}}>2 min read</span>
+      </div>
+      {prose.map((p,i) => <p key={i} style={{fontSize:14,lineHeight:1.7,color:'var(--ink2)',marginBottom:8}}>{p}</p>)}
+      {bullets.length > 0 && (
+        <ul style={{margin:'10px 0',paddingLeft:0,listStyle:'none'}}>
+          {bullets.map((b,i) => (
+            <li key={i} style={{display:'flex',gap:8,marginBottom:6,fontSize:13.5,color:'var(--ink2)',lineHeight:1.6}}>
+              <span style={{color:'var(--orange)',flexShrink:0,marginTop:2}}>→</span>
+              <span>{b.replace(/^[-•]\s*/,'')}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <button onClick={() => setExpanded(!expanded)}
+        style={{marginTop:8,background:'none',border:'none',color:'var(--orange2)',fontSize:13,fontWeight:500,cursor:'pointer',display:'flex',alignItems:'center',gap:6,padding:0,fontFamily:'var(--sans)'}}>
+        {expanded ? '↑ Hide full article' : '↓ Read full article (18 min)'} 
+      </button>
+    </div>
+  )
 }
 
 // Render plain text content — handles ## headings and paragraphs
@@ -125,9 +167,15 @@ export default function BlogPostClient({ post }) {
         {/* Content */}
         <div style={{ fontSize:15, lineHeight:1.85, color:'var(--ink)' }}>
 
-          {parsed.type === 'text' && (
-            <RenderText text={parsed.data} />
-          )}
+          {parsed.type === 'text' && (() => {
+            const { tldr, body } = parseTLDR(parsed.data)
+            return (
+              <>
+                {tldr && <TLDRBox tldr={tldr} />}
+                <RenderText text={body} />
+              </>
+            )
+          })()}
 
           {parsed.type === 'structured' && (
             <>
