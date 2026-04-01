@@ -8,7 +8,7 @@ export const metadata = {
     default: 'Collvera — India\'s AI MBA College Guide',
     template: '%s | Collvera'
   },
-  description: 'AI-powered MBA college discovery for India. Compare fees, placements and cutoffs across 20+ colleges. Check your eligibility in 2 minutes. 100% AI. Zero bias.',
+  description: 'Claude-run MBA college discovery for India. Compare fees, placements and cutoffs across 20+ colleges. Check your eligibility in 2 minutes. 100% AI. Zero bias.',
   keywords: ['MBA colleges India', 'IIM admissions', 'CAT 2025', 'MBA eligibility checker', 'IIM fees placements', 'best MBA India'],
   authors: [{ name: 'Collvera AI' }],
   creator: 'Collvera',
@@ -20,7 +20,7 @@ export const metadata = {
     url: 'https://collvera.com',
     siteName: 'Collvera',
     title: 'Collvera — India\'s AI MBA College Guide',
-    description: 'AI-powered MBA college discovery. Compare fees, placements and cutoffs. Check your eligibility in 2 minutes.',
+    description: 'Claude-run MBA college discovery. Compare fees, placements and cutoffs. Check your eligibility in 2 minutes.',
     images: [{
       url: '/og-image.png',
       width: 1200,
@@ -31,7 +31,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Collvera — India\'s AI MBA College Guide',
-    description: 'AI-powered MBA college discovery. Compare fees, placements and cutoffs across 20+ colleges.',
+    description: 'Claude-run MBA college discovery. Compare fees, placements and cutoffs across 20+ colleges.',
     images: ['/og-image.png'],
   },
   robots: {

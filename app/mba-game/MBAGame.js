@@ -446,7 +446,7 @@ export default function MBAGame() {
               {unlocked && (
                 <div style={{ ...S.card, background:'var(--ink)', borderColor:'transparent', textAlign:'center' }}>
                   <div style={{ fontFamily:'var(--serif)', fontSize:'1.1rem', fontWeight:700, color:'#fff', marginBottom:6 }}>Want a personalised college shortlist?</div>
-                  <p style={{ fontSize:13, color:'rgba(255,255,255,.5)', marginBottom:16 }}>Our AI checks your full profile — academics, work exp, category — against all 20 colleges.</p>
+                  <p style={{ fontSize:13, color:'rgba(255,255,255,.5)', marginBottom:16 }}>Claude checks your full profile — academics, work exp, category — against all 20 colleges.</p>
                   <div style={{ display:'flex', gap:10, justifyContent:'center', flexWrap:'wrap' }}>
                     <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'10px 22px', borderRadius:9, fontSize:13, fontWeight:500, textDecoration:'none' }}>Full Eligibility Check →</Link>
                     <button onClick={() => { setStep(1); setExam(null); setUnlocked(false); setEmail('') }} style={{ ...S.btn, background:'rgba(255,255,255,.1)', border:'1px solid rgba(255,255,255,.15)' }}>Play Again</button>

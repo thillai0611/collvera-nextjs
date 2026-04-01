@@ -198,7 +198,7 @@ export default function RankingsClient() {
               {isExp && (
                 <div style={{ background:'rgba(217,95,2,.05)', border:'1px solid rgba(217,95,2,.2)', borderTop:'none', borderRadius:'0 0 10px 10px', padding:'16px 20px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:20 }}>
                   <div>
-                    <div style={{ fontSize:9.5, fontFamily:'var(--mono)', color:'rgba(255,255,255,.3)', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:8 }}>AI Verdict</div>
+                    <div style={{ fontSize:9.5, fontFamily:'var(--mono)', color:'rgba(255,255,255,.3)', textTransform:'uppercase', letterSpacing:'.06em', marginBottom:8 }}>Claude's Verdict</div>
                     <div style={{ fontSize:13, color:'rgba(255,255,255,.75)', lineHeight:1.65 }}>{c.verdict}</div>
                     <div style={{ display:'flex', gap:6, marginTop:10, flexWrap:'wrap' }}>
                       {c.speciality.split(' · ').map(s => (

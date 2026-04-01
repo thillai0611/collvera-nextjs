@@ -24,7 +24,7 @@ export default function Nav({ onLeadOpen }) {
           <span style={{ fontFamily:'var(--serif)',fontSize:'1.2rem',fontWeight:700,color:'#fff' }}>Collvera</span>
           <span style={{ fontSize:9,color:'#1D9E75',background:'rgba(29,158,117,.15)',padding:'3px 8px',borderRadius:20,letterSpacing:'.06em',fontFamily:'var(--mono)',border:'1px solid rgba(29,158,117,.25)',display:'flex',alignItems:'center',gap:4 }}>
             <span style={{ width:5,height:5,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite' }}></span>
-            AI · live
+            Claude · live
           </span>
         </Link>
 

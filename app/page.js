@@ -58,10 +58,10 @@ export default function HomePage(){
             <div style={{paddingTop:8}}>
               <div style={{fontSize:10,fontFamily:'var(--mono)',color:'#1D9E75',textTransform:'uppercase',letterSpacing:'.12em',marginBottom:12,display:'flex',alignItems:'center',gap:6}}>
                 <span style={{width:6,height:6,borderRadius:'50%',background:'#1D9E75',animation:'blink 2s ease-in-out infinite',display:'inline-block'}}></span>
-                AI MBA Counsellor · live · free
+                Claude MBA Counsellor · live · free
               </div>
-              <h1 style={{fontFamily:'var(--serif)',fontSize:'2.2rem',fontWeight:700,color:'#fff',marginBottom:14,lineHeight:1.1}}>Ask me anything about MBA in India</h1>
-              <p style={{fontSize:13.5,color:'rgba(255,255,255,.5)',lineHeight:1.75,marginBottom:20}}>College fees, placements, cutoffs, comparisons — instant answers from verified data. No humans. No bias.</p>
+              <h1 style={{fontFamily:'var(--serif)',fontSize:'2.2rem',fontWeight:700,color:'#fff',marginBottom:14,lineHeight:1.1}}>India's only MBA platform run by Claude</h1>
+              <p style={{fontSize:13.5,color:'rgba(255,255,255,.5)',lineHeight:1.75,marginBottom:20}}>No human editors. No commissioned counsellors. No bias. Just Claude — analyzing 20+ colleges, live data, and your profile to tell you exactly where you'll convert.</p>
               <div style={{display:'flex',flexDirection:'column',gap:7}}>
                 {['"IIM A vs IIM B for consulting"','"Colleges for 95 percentile CAT"','"Is FMS better than IIM Lucknow?"','"Best MBA under ₹10 lakhs"'].map(q=>(
                   <div key={q} style={{fontSize:12,fontFamily:'var(--mono)',color:'rgba(255,255,255,.35)',background:'rgba(255,255,255,.04)',padding:'6px 12px',borderRadius:8,border:'1px solid rgba(255,255,255,.07)'}}>{q}</div>
@@ -78,7 +78,7 @@ export default function HomePage(){
 
       {/* Counter */}
       <div style={{background:'var(--ink)',padding:'18px 16px',display:'flex',justifyContent:'center',gap:32,flexWrap:'wrap'}}>
-        {[['312+','students guided today'],['20+','verified colleges'],['2,100+','AI queries answered'],['Free','always']].map(([n,l])=>(
+        {[['312+','students guided today'],['20+','verified colleges'],['2,100+','Claude queries answered'],['Free','always']].map(([n,l])=>(
           <div key={l} style={{textAlign:'center'}}>
             <div style={{fontFamily:'var(--serif)',fontSize:'1.7rem',fontWeight:700,color:'#fff'}}>{n}</div>
             <div style={{fontSize:10,color:'rgba(255,255,255,.35)',fontFamily:'var(--mono)',marginTop:2}}>{l}</div>

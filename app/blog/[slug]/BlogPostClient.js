@@ -406,7 +406,7 @@ export default function BlogPostClient({ post }) {
         <div style={{ marginTop:40, padding:'28px 32px', background:'var(--ink)', borderRadius:14, textAlign:'center' }}>
           <div style={{ fontFamily:'var(--serif)', fontSize:'1.1rem', fontWeight:700, color:'#fff', marginBottom:6 }}>Still have questions?</div>
           <p style={{ fontSize:13, color:'rgba(255,255,255,.5)', marginBottom:18, lineHeight:1.6 }}>
-            Our AI counsellor will shortlist colleges based on your CAT score, budget and goals — free.
+            Claude will shortlist colleges based on your CAT score, budget and goals — free.
           </p>
           <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
             <button onClick={() => setLeadOpen(true)} style={{ background:'var(--orange)', color:'#fff', padding:'10px 22px', borderRadius:8, fontSize:13, fontWeight:500, cursor:'pointer', border:'none' }}>

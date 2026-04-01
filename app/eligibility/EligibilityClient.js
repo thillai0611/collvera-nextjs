@@ -73,7 +73,7 @@ export default function EligibilityClient() {
         <div style={{ marginBottom:32 }}>
           <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--orange)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>AI eligibility engine</div>
           <h1 style={{ fontFamily:'var(--serif)', fontSize:'2.2rem', fontWeight:700, marginBottom:10 }}>Check your MBA eligibility</h1>
-          <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.7, maxWidth:540 }}>Enter your scores and profile. AI calculates your match percentage for 15+ top colleges — weighted across exam, academics, work experience and diversity factors.</p>
+          <p style={{ fontSize:14, color:'var(--muted)', lineHeight:1.7, maxWidth:540 }}>Enter your scores and profile. Claude calculates your match percentage for 15+ top colleges — weighted across exam, academics, work experience and diversity factors.</p>
         </div>
 
         {/* Progress */}
