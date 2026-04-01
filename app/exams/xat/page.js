@@ -1,17 +1,16 @@
-import Link from 'next/link'
-import Nav from '../../../components/Nav'
-export const metadata = { title: 'XAT Exam Guide 2025-26 — Coming Soon | Collvera' }
-export default function Page() {
-  return (
-    <div style={{ minHeight:'100vh', background:'var(--cream)' }}>
-      <Nav />
-      <div style={{ maxWidth:600, margin:'80px auto', padding:'0 24px', textAlign:'center' }}>
-        <div style={{ fontSize:48, marginBottom:16 }}>📚</div>
-        <h1 style={{ fontFamily:'var(--serif)', fontSize:'2rem', fontWeight:700, marginBottom:12 }}>XAT Complete Guide</h1>
-        <p style={{ fontSize:14, color:'var(--muted)', marginBottom:24, lineHeight:1.7 }}>The comprehensive XAT guide is being prepared — syllabus, pattern, dates, preparation strategy and 40 FAQs.</p>
-        <Link href="/exams" style={{ background:'var(--orange)', color:'#fff', padding:'11px 24px', borderRadius:8, fontSize:13, fontWeight:500, textDecoration:'none', marginRight:10 }}>← All Exams</Link>
-        <Link href="/exams/cat" style={{ background:'var(--ink)', color:'#fff', padding:'11px 24px', borderRadius:8, fontSize:13, fontWeight:500, textDecoration:'none' }}>See CAT Guide →</Link>
-      </div>
-    </div>
-  )
+import XATGuide from './XATGuide'
+
+export const metadata = {
+  title: 'XAT Exam 2027 — Complete Guide (Syllabus, Pattern, Dates, XLRI Cutoff) | Collvera',
+  description: 'Complete XAT 2027 guide — Decision Making syllabus, exam pattern, XLRI cutoff, preparation strategy, 40 FAQs. Updated March 2026.',
+  alternates: { canonical: 'https://collvera.com/exams/xat' },
+  openGraph: {
+    title: 'XAT Exam 2027 — The Complete Guide | Collvera',
+    description: 'Everything about XAT 2027 — syllabus, pattern, XLRI cutoff, Decision Making preparation and 40 FAQs.',
+    url: 'https://collvera.com/exams/xat',
+  },
+}
+
+export default function XATPage() {
+  return <XATGuide />
 }
