@@ -9,7 +9,9 @@ const links = [
   { href:'/eligibility', label:'Eligibility' },
   { href:'/rankings', label:'Rankings' },
     { href:'/mba-game', label:'🎮 MBA Game' },
-  { href:'/blog', label:'Blog' },
+  { href:'/exams', label:'Exams' },
+    { href:'/exams', label:'Exams' },
+    { href:'/blog', label:'Blog' },
 ]
 
 export default function Nav({ onLeadOpen }) {

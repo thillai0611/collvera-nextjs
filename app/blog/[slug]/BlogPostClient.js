@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Nav from '../../../components/Nav'
 import LeadModal from '../../../components/LeadModal'
