@@ -32,11 +32,12 @@ function ScoreCollegeWidget() {
     { name:'KJ Somaiya Mumbai', cutoff:223, fees:'₹18L', pkg:'₹13 LPA', tag:'Strong Mumbai network', color:'#1565c0' },
     { name:'SDA Bocconi India', cutoff:220, fees:'₹22L', pkg:'₹15 LPA', tag:'International brand', color:'#534AB7' },
     { name:'TAPMI Manipal', cutoff:220, fees:'₹17.3L', pkg:'₹11 LPA', tag:'Banking specialisation', color:'#1565c0' },
-    { name:'Great Lakes Chennai', cutoff:210, fees:'₹17L', pkg:'₹12 LPA', tag:'South India leader', color:'#1565c0' },
+    { name:'Great Lakes Chennai (PGPM)', cutoff:210, fees:'₹21L', pkg:'₹12 LPA', tag:'1-yr PGPM for experience', color:'#1565c0' },
     { name:'NMIMS Bangalore', cutoff:205, fees:'₹18L', pkg:'₹12 LPA', tag:'Tech hub location', color:'#666' },
     { name:'NMIMS Hyderabad', cutoff:200, fees:'₹17L', pkg:'₹11 LPA', tag:'Newer campus', color:'#666' },
     { name:'IFMR Chennai', cutoff:200, fees:'₹14L', pkg:'₹10 LPA', tag:'Finance focus', color:'#666' },
     { name:'Shiv Nadar University', cutoff:200, fees:'₹15L', pkg:'₹10 LPA', tag:'NCR location', color:'#666' },
+    { name:'SOIL Gurgaon', cutoff:205, fees:'₹17L', pkg:'₹11 LPA', tag:'Gurgaon — NCR access', color:'#1565c0' },
     { name:'Woxsen University', cutoff:190, fees:'₹12L', pkg:'₹8 LPA', tag:'Hyderabad campus', color:'#888' },
   ]
 

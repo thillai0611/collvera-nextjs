@@ -187,7 +187,7 @@ This is the most important section for college selection.
 | 250-360 | 99%ile+ | NMIMS Mumbai SBM (premium), SPJIMR, ISB AMPBA |
 | 230-249 | 90-99%ile | NMIMS Mumbai (main program), KJ Somaiya top programs |
 | 215-229 | 80-90%ile | NMIMS Mumbai (lower programs), Great Lakes, TAPMI |
-| 200-214 | 70-80%ile | KJ Somaiya, VIT Vellore, ICFAI, Shiv Nadar |
+| 200-214 | 70-80%ile | KJ Somaiya, SOIL Gurgaon, VIT Vellore, ICFAI, Shiv Nadar |
 | 180-199 | 55-70%ile | TAPMI (lower threshold), Woxsen, Amity |
 | Below 180 | Below 55%ile | Tier-3 and online programs |
 
@@ -200,10 +200,11 @@ This is the most important section for college selection.
 | SPJIMR Mumbai | 230+ | Rs 26.5L | Rs 32 LPA |
 | KJ Somaiya Mumbai | 223-230 | Rs 18L | Rs 13 LPA |
 | TAPMI Manipal | 220+ | Rs 17.3L | Rs 11 LPA |
-| Great Lakes Chennai | 210+ | Rs 17L | Rs 12 LPA |
+| Great Lakes Chennai (PGPM only) | 210+ | Rs 21L | Rs 12 LPA |
 | ISB AMPBA | 230+ | Rs 28L | Executive program |
 | IFMR Chennai | 200+ | Rs 14L | Rs 10 LPA |
 | Shiv Nadar University | 200+ | Rs 15L | Rs 10 LPA |
+| SOIL Gurgaon | 205-210 | Rs 17L | Rs 11 LPA |
 | Woxsen University | 190+ | Rs 12L | Rs 8 LPA |
 | NMIMS Bangalore | 205+ | Rs 18L | Rs 12 LPA |
 | NMIMS Hyderabad | 200+ | Rs 17L | Rs 11 LPA |
