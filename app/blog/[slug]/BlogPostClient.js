@@ -248,8 +248,7 @@ function generateFAQs(post) {
   return faqs
 }
 
-function FAQSection({ post }) {
-  const faqs = generateFAQs(post)
+function FAQSection({ faqs }) {
   const [open, setOpen] = useState(null)
   const [visible, setVisible] = useState(5)
   const sectionRef = useRef(null)
@@ -304,7 +303,7 @@ function FAQSection({ post }) {
   )
 }
 
-export default function BlogPostClient({ post }) {
+export default function BlogPostClient({ post, faqs = [] }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const parsed = parseContent(post.content)
 
@@ -348,7 +347,7 @@ export default function BlogPostClient({ post }) {
 
           {parsed.type === 'text' && (() => {
             const { tldr, body } = parseTLDR(parsed.data)
-            const allFAQs = generateFAQs(post)
+            const allFAQs = faqs.length > 0 ? faqs : []
             const { inline1, inline2, inline3 } = splitFAQsForInline(allFAQs)
             return (
               <>
@@ -400,7 +399,7 @@ export default function BlogPostClient({ post }) {
         </div>
 
         {/* FAQ Section */}
-        <FAQSection post={post} />
+        <FAQSection faqs={faqs} />
 
         {/* Bottom CTA */}
         <div style={{ marginTop:40, padding:'28px 32px', background:'var(--ink)', borderRadius:14, textAlign:'center' }}>
