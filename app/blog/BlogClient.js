@@ -49,22 +49,25 @@ function CategoryBadge({ cat, small }) {
 }
 
 function FeaturedCard({ post }) {
+  if (!post.slug) return null
   const s = getCatStyle(post.category)
   return (
-    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', height: '100%', transition: 'all .2s', cursor: 'pointer' }}
-        onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(14,12,8,.1)' }}
-        onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none' }}>
-        <div style={{ height: 4, background: s.dot }}></div>
-        <div style={{ padding: '20px 22px' }}>
-          <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center', flexWrap:'wrap' }}>
-            <CategoryBadge cat={post.category} small />
+    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+      <div style={{ background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', height: '100%', transition: 'all .2s', cursor: 'pointer', display: 'flex', flexDirection: 'column' }}
+        onMouseOver={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(14,12,8,.1)'; e.currentTarget.style.borderColor = 'var(--orange)' }}
+        onMouseOut={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)' }}>
+        <div style={{ height: 4, background: s.dot, flexShrink: 0 }}></div>
+        <div style={{ padding: '20px 22px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: 9.5, padding: '2px 8px', borderRadius: 20, background: s.bg, color: s.color, fontFamily: 'var(--mono)', fontWeight: 500 }}>{post.category}</span>
             <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>{post.read_time}</span>
-            {post.published_at && <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily:'var(--mono)' }}>{new Date(post.published_at).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>}
+            {post.published_at && <span style={{ fontSize: 10, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>{new Date(post.published_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</span>}
           </div>
-          <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.35, marginBottom: 10, color: 'var(--ink)' }}>{post.title}</h3>
-          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.65, marginBottom: 14 }}>{post.description}</p>
-          <div style={{ fontSize: 12, color: s.dot, fontWeight: 600 }}>Read article →</div>
+          <h3 style={{ fontFamily: 'var(--serif)', fontSize: '1.05rem', fontWeight: 700, lineHeight: 1.35, marginBottom: 10, color: 'var(--ink)', flex: 1 }}>{post.title}</h3>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.65, marginBottom: 16 }}>{post.description}</p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#fff', background: s.dot, padding: '7px 14px', borderRadius: 8, fontWeight: 600, alignSelf: 'flex-start' }}>
+            Read article →
+          </div>
         </div>
       </div>
     </Link>
@@ -72,30 +75,43 @@ function FeaturedCard({ post }) {
 }
 
 function ListRow({ post, index }) {
+  if (!post.slug) return null
   const s = getCatStyle(post.category)
   return (
-    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}>
-      <div style={{ padding: '16px 0', borderBottom: '1px solid var(--border2)', display: 'flex', gap: 16, alignItems: 'flex-start', cursor: 'pointer', transition: 'background .15s' }}
-        onMouseOver={e => e.currentTarget.style.background = 'var(--cream)'}
-        onMouseOut={e => e.currentTarget.style.background = 'transparent'}>
+    <Link href={`/blog/${post.slug}`} style={{ textDecoration: 'none', display: 'block' }}
+      onMouseOver={e => {
+        const title = e.currentTarget.querySelector('.list-title')
+        const arrow = e.currentTarget.querySelector('.list-arrow')
+        e.currentTarget.style.background = 'var(--cream)'
+        if (title) title.style.color = 'var(--orange)'
+        if (arrow) { arrow.style.color = 'var(--orange)'; arrow.style.transform = 'translateX(3px)' }
+      }}
+      onMouseOut={e => {
+        const title = e.currentTarget.querySelector('.list-title')
+        const arrow = e.currentTarget.querySelector('.list-arrow')
+        e.currentTarget.style.background = 'transparent'
+        if (title) title.style.color = 'var(--ink)'
+        if (arrow) { arrow.style.color = 'var(--muted)'; arrow.style.transform = 'none' }
+      }}>
+      <div style={{ padding: '16px 0', borderBottom: '1px solid var(--border2)', display: 'flex', gap: 16, alignItems: 'center', cursor: 'pointer', transition: 'background .15s' }}>
         <div style={{ width: 36, height: 36, borderRadius: 8, background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: s.color, flexShrink: 0, fontFamily: 'var(--mono)' }}>
           {String(index).padStart(2, '0')}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', gap: 6, marginBottom: 5, alignItems: 'center', flexWrap: 'wrap' }}>
-            <CategoryBadge cat={post.category} small />
+            <span style={{ fontSize: 9.5, padding: '2px 7px', borderRadius: 20, background: s.bg, color: s.color, fontFamily: 'var(--mono)', fontWeight: 500 }}>{post.category}</span>
             <span style={{ fontSize: 10.5, color: 'var(--muted)', fontFamily: 'var(--mono)' }}>{post.read_time}</span>
           </div>
-          <h3 style={{ fontFamily: 'var(--serif)', fontSize: '.95rem', fontWeight: 700, marginBottom: 4, color: 'var(--ink)', lineHeight: 1.35, transition: 'color .15s' }}>{post.title}</h3>
+          <h3 className="list-title" style={{ fontFamily: 'var(--serif)', fontSize: '.95rem', fontWeight: 700, marginBottom: 4, color: 'var(--ink)', lineHeight: 1.35, transition: 'color .2s' }}>{post.title}</h3>
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{post.description}</p>
         </div>
-        <div style={{ fontSize: 18, color: 'var(--muted)', flexShrink: 0, alignSelf: 'center' }}>→</div>
+        <div className="list-arrow" style={{ fontSize: 18, color: 'var(--muted)', flexShrink: 0, transition: 'all .2s' }}>→</div>
       </div>
     </Link>
   )
 }
 
-export default function BlogClient({ posts }) {
+export default function BlogClient({ posts = [] }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const [category, setCategory] = useState('All')
   const [page, setPage] = useState(1)
@@ -123,7 +139,8 @@ export default function BlogClient({ posts }) {
   // Featured = first 3 when on page 1 and no search
   const showFeatured = page === 1 && !search && category === 'All'
   const featured = showFeatured ? posts.slice(0, 3) : []
-  const listPosts = paginated
+  const featuredIds = new Set(featured.map(p => p.id))
+  const listPosts = showFeatured ? paginated.filter(p => !featuredIds.has(p.id)) : paginated
 
   // Category counts
   const counts = useMemo(() => {
@@ -190,7 +207,7 @@ export default function BlogClient({ posts }) {
       </div>
 
       {/* Category filters */}
-      <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--border)', position: 'sticky', top: 54, zIndex: 100 }}>
+      <div style={{ background: 'var(--white)', borderBottom: '1px solid var(--border)', position: 'sticky', top: 54, zIndex: 50 }}>
         <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 32px' }}>
           <div style={{ display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', padding: '12px 0' }}>
             {CATEGORIES.map(cat => {
@@ -300,7 +317,7 @@ export default function BlogClient({ posts }) {
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
             <Link href="/eligibility" style={{ background: 'var(--orange)', color: '#fff', padding: '10px 20px', borderRadius: 8, fontSize: 13, fontWeight: 500, textDecoration: 'none' }}>Check Eligibility →</Link>
-            <button onClick={() => setLeadOpen(true)} style={{ background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.7)', padding: '10px 20px', borderRadius: 8, fontSize: 13, cursor: 'pointer', border: '1px solid rgba(255,255,255,.12)' }}>Free Counselling</button>
+            <button onClick={() => setLeadOpen(true)} style={{ background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.7)', padding: '10px 20px', borderRadius: 8, fontSize: 13, cursor: 'pointer', border: '1px solid rgba(255,255,255,.12)' }}>Get Free Counselling →</button>
           </div>
         </div>
       </div>
