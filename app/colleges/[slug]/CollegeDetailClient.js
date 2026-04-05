@@ -13,7 +13,7 @@ const COLLEGE_DATA = {
     founded: 1961,
     director: 'Prof. Bharat Bhasker',
     accreditations: ['EQUIS', 'Institute of National Importance'],
-    campus: '107 acres · Louis Kahn architecture · Heritage site',
+    campusLabel: '107 acres · Louis Kahn architecture · Heritage site',
     color: '#1D9E75',
     emoji: '🏛️',
     tagline: "India's #1 MBA for consulting and FMCG. The IIM A brand opens doors no other Indian B-school can match.",
@@ -325,7 +325,7 @@ export default function CollegeDetailClient({ college }) {
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Quick facts</div>
               {[
                 ['Accreditations', d.accreditations.join(', ')],
-                ['Campus', d.campus],
+                ['Campus', d.campusLabel],
                 ['Programs', d.programs.map(p=>p.name).join(' · ')],
                 ['Website', 'iima.ac.in'],
               ].map(([k,v]) => (
