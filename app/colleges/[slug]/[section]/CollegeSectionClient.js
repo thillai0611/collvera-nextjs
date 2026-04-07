@@ -34,416 +34,443 @@ function T({ headers, rows }) {
   )
 }
 
-function P({ children }) {
-  return <p style={{ fontSize:15.5, lineHeight:1.95, color:'var(--ink2)', marginBottom:22 }}>{children}</p>
+function P({ children }) { return <p style={{ fontSize:15.5, lineHeight:1.95, color:'var(--ink2)', marginBottom:22 }}>{children}</p> }
+function H2({ children }) { return <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', marginBottom:18, lineHeight:1.2, paddingBottom:14, borderBottom:'2px solid var(--border2)', marginTop:48 }}>{children}</h2> }
+
+function FeesPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>What the Rs 27.5 Lakh Fee Covers at IIM Ahmedabad</H2>
+      <P>IIM Ahmedabad charges Rs 27.5 lakhs as total programme fees for the PGP 2025-27 batch. This covers tuition (Rs 20.1 lakhs) plus library, computing, sports, health, and alumni access fees (Rs 7.15 lakhs). It does not include mess charges of Rs 8,000-12,000 per month or personal expenses. Total cost of attendance over two years is realistically Rs 30-31 lakhs. Fees are disbursed across four semesters — structure your loan accordingly.</P>
+      <T headers={['Fee Component','Amount (Rs)','Notes']} rows={[
+        ['Tuition fee','20,10,000','Academic instruction, faculty, case materials'],
+        ['Library, computing, sports, welfare','7,15,000','All non-tuition academic fees'],
+        ['Total Programme Fee','27,50,000','Official quoted amount'],
+        ['Mess charges (est. 2 years)','2,00,000','Rs 8,000-10,000/month'],
+        ['Personal expenses (est. 2 years)','1,30,000','Rs 4,000-7,000/month'],
+        ['Total Cost of Attendance','30,80,000','Use this for loan sizing'],
+      ]} />
+      <H2>IIM Ahmedabad Fee ROI</H2>
+      <P>At Rs 35.22 LPA mean placement, take-home after tax is approximately Rs 1.88 lakhs/month. Fee recovery takes approximately 15 months. At BCG/Bain levels (Rs 45-55 LPA), recovery is under 11 months. Over 5 years, IIM A alumni in consulting reach Rs 60-90 LPA — making the investment highly efficient for this career track.</P>
+      <T headers={['College','Fees','Avg Package','Fee Recovery']} rows={[
+        ['FMS Delhi','Rs 2.43L','Rs 34 LPA','Under 2 months'],
+        ['IIM Ahmedabad','Rs 27.5L','Rs 35.22 LPA','~15 months'],
+        ['IIM Bangalore','Rs 26L','Rs 34.88 LPA','~14 months'],
+        ['ISB Hyderabad','Rs 43L','Rs 34 LPA','~24 months'],
+      ]} />
+      <H2>Scholarships at IIM Ahmedabad</H2>
+      <P>IIMA Need-Based Scholarship for income below Rs 15 LPA (Rs 1-5 lakhs). Government schemes for SC/ST and minorities. Alumni Endowment Fund up to Rs 3 lakhs. Apply September-October — not automatically awarded.</P>
+      <T headers={['Scholarship','Eligibility','Amount']} rows={[
+        ['IIMA Need-Based','Family income below Rs 15 LPA','Rs 1L-5L'],
+        ['SC/ST Govt Scheme','SC/ST students','Rs 1,500/year'],
+        ['PGP Alumni Endowment','Merit + need','Up to Rs 3,00,000'],
+        ['GC Mital Entrepreneurship Aid','Startup interest','Varies'],
+      ]} />
+      <H2>Education Loans for IIM Ahmedabad</H2>
+      <P>SBI Scholar Loan: up to Rs 40 lakhs at 8.5-9.5%, no collateral up to Rs 20 lakhs, moratorium covers 2 years + 12 months. Section 80E gives full interest deduction for 8 years — saves Rs 70,000-1,50,000/year at the 30% tax bracket.</P>
+      <T headers={['Lender','Max','Rate','Collateral']} rows={[
+        ['SBI Scholar Loan','Rs 40L','8.5-9.5%','No (up to Rs 20L)'],
+        ['Bank of Baroda','Rs 30L','9-10%','No (up to Rs 20L)'],
+        ['HDFC Credila','Rs 50L','10.5-12%','Flexible'],
+        ['Avanse','Rs 50L','11-13%','Flexible'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore Fees 2025 — What Rs 26 Lakhs Covers</H2>
+      <P>IIM Bangalore charges Rs 26,00,000 as total programme fees for the PGP 2025-27 batch. Unlike IIM Ahmedabad's separate hostel component, IIM B's fee explicitly includes hostel room rent and service charge alongside tuition, library, internet, case permission royalty, course material, medical insurance, personal accident insurance, and alumni activity. This makes the IIM B fee more all-inclusive than the stated IIM A fee.</P>
+      <P>In addition to the programme fee, students pay a caution deposit of Rs 30,000 (one-time, refundable at programme end) and a mess advance of Rs 30,000 per term. Students in Year 2 have the option to live off-campus, reducing living costs if they find cheaper accommodation in Bengaluru. Total cost of attendance is Rs 30-32 lakhs over two years — Bengaluru's higher cost of living (Rs 15,000-25,000/month personal expenses) makes the gap with IIM A's lower Ahmedabad living costs narrower than the Rs 1.5 lakh fee difference suggests.</P>
+      <T headers={['Fee Component','Amount (Rs)','Included']} rows={[
+        ['Programme fees (2 years)','26,00,000','Tuition, library, internet, cases, hostel, insurance, alumni'],
+        ['Caution deposit (one-time)','30,000','Refundable at programme end'],
+        ['Mess advance (per term, 6 terms)','1,80,000','Approximately Rs 30,000 per trimester'],
+        ['Total Fees + Deposits','28,10,000','Excluding personal expenses'],
+        ['Personal expenses (est. 2 years)','2,00,000','Higher in Bengaluru; Rs 15,000-25,000/month'],
+        ['Total Cost of Attendance','30,10,000','Realistic planning figure'],
+      ]} />
+      <H2>IIM Bangalore vs IIM Ahmedabad — Fee ROI Comparison</H2>
+      <P>At Rs 34.88 LPA mean salary, IIM B's fee of Rs 26 lakhs is recovered in approximately 14 months. The median of Rs 32.61 LPA means median graduates recover fees in approximately 16 months. The Rs 2.27 lakh gap between mean and median at IIM B is wider than at IIM A (Rs 0.69 lakh gap), indicating more salary variance — the top placements are very high but the typical outcome is lower than the mean suggests.</P>
+      <P>IIM B's 22 overseas placements versus IIM A's 2 changes the ROI calculation significantly for internationally-oriented candidates. International roles in Singapore, Dubai, and Western markets typically start at USD 80,000-120,000 (Rs 67-100 LPA at current rates) — dramatically higher than domestic Indian starting salaries. For candidates targeting international careers, IIM B's lower fee combined with better overseas placement access makes it the stronger ROI choice.</P>
+      <T headers={['Metric','IIM Ahmedabad','IIM Bangalore']} rows={[
+        ['Total fees','Rs 27.5L','Rs 26L'],
+        ['Mean salary 2025','Rs 35.22 LPA','Rs 34.88 LPA'],
+        ['Median salary 2025','Rs 34.53 LPA','Rs 32.61 LPA'],
+        ['Fee recovery (mean)','~15 months','~14 months'],
+        ['Overseas placements','2','22'],
+        ['Bengaluru living premium','N/A','Rs 5,000-10,000/month higher'],
+      ]} />
+      <H2>Financial Aid and Scholarships at IIM Bangalore</H2>
+      <P>IIM Bangalore's financial aid programme is more structured than IIM A's. Students with household income below Rs 8 LPA are eligible. The Financial Aid Committee uses a two-step evaluation — financial status scoring followed by faculty panel interaction — and awards graduated aid at 20%, 40%, 60%, 80%, or 100% of fees. This graduated structure means more students receive some aid at different levels, compared to IIM A's more binary scholarship approach.</P>
+      <T headers={['Scholarship / Aid','Eligibility','Amount','Type']} rows={[
+        ['Financial Aid Programme','Income below Rs 8 LPA','20%-100% of fees','Need-based (graduated)'],
+        ['Aditya Birla Scholarship','Top performers Year 1 and 2','Rs 1,75,000/student','Merit-based'],
+        ['OPJEMS Scholarship','Top 10 academic performers Year 2','Rs 1,50,000','Merit-based'],
+        ['NTPC Scholarship','SC/ST/PwD Year 2','Rs 48,000/year','Category-based'],
+        ['Ministry of Tribal Affairs (ST)','ST students Year 1','Full tuition','Govt scheme'],
+        ['Ministry of Social Justice (SC)','Meritorious SC Year 1','Full tuition','Govt scheme'],
+        ['Social Sector Scholarship','Graduates joining social sector','One-third fees/year for 3 years','Outcome-based'],
+      ]} />
+      <H2>Education Loans for IIM Bangalore Students</H2>
+      <P>An IIM Bangalore offer letter has the same loan approval weight as IIM A. Nationalised banks offer up to Rs 20 lakhs unsecured. SBI Scholar Loan goes up to Rs 40 lakhs at 8.5-9.5% with a moratorium covering the full programme plus 12 months after. Private lenders process faster if you are near the admission deadline. Section 80E gives full interest deduction for 8 years.</P>
+      <T headers={['Lender','Max','Rate','Collateral']} rows={[
+        ['SBI Scholar Loan','Rs 40L','8.5-9.5%','No (up to Rs 20L)'],
+        ['Bank of Baroda','Rs 30L','9-10%','No (up to Rs 20L)'],
+        ['HDFC Credila','Rs 50L','10.5-12%','Flexible'],
+        ['Avanse','Rs 50L','11-13%','Flexible'],
+      ]} />
+    </>
+  )
 }
 
-function H2({ children }) {
-  return <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', marginBottom:18, lineHeight:1.2, paddingBottom:14, borderBottom:'2px solid var(--border2)', marginTop:48 }}>{children}</h2>
+function PlacementsPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad Placements 2025 — Key Numbers</H2>
+      <P>395 out of 406 eligible students placed (11 opted out). Mean Rs 35.22 LPA, median Rs 34.53 LPA — tight gap signals even distribution. Highest domestic Rs 1.10 crore. 178 companies, 122 PPOs accepted. 2 international offers. Consulting at 40% is the dominant sector with BCG making 35 offers — highest by any single firm at any Indian B-school.</P>
+      <T headers={['Metric','2025','2024']} rows={[
+        ['Mean salary','Rs 35.22 LPA','Rs 34.5 LPA'],
+        ['Median salary','Rs 34.53 LPA','Rs 33.8 LPA'],
+        ['Highest package','Rs 1.10 Crore','Rs 1.05 Crore'],
+        ['Companies','178','188'],
+        ['PPOs accepted','122','110'],
+        ['International offers','2','3'],
+      ]} />
+      <H2>IIM Ahmedabad Sector Breakdown and Top Recruiters 2025</H2>
+      <T headers={['Sector','Share','Key Recruiters']} rows={[
+        ['Consulting','40%','BCG (35), Accenture Strategy (31), Bain (17), McKinsey'],
+        ['BFSI / PE / VC','25%','Goldman Sachs (9), Blackstone, General Atlantic, AmEx'],
+        ['FMCG','15%','HUL, P&G, ITC, Marico, Dabur'],
+        ['Technology','12%','Google, Amazon, Microsoft, Flipkart'],
+        ['Others','8%','Manufacturing, healthcare, social sector'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore Final Placements 2025 — Complete Report</H2>
+      <P>IIM Bangalore placed the PGP + PGPBA 2023-25 batch of 602 students with 660 offers from 177 companies. 208 Pre-Placement Offers were accepted — 34.5% of placed students had jobs before formal placements began. 89 lateral placement offers were accepted for experienced-hire roles. 22 overseas offers were made — the highest international placement count among IIMs and significantly more than IIM Ahmedabad's 2 overseas offers. 7 students opted out voluntarily.</P>
+      <T headers={['Metric','2025 Data']} rows={[
+        ['Total students','602 (PGP + PGPBA 2023-25)'],
+        ['Total offers made','660'],
+        ['Companies participated','177'],
+        ['PPOs accepted','208 (34.5% of placed batch)'],
+        ['Lateral offers accepted','89'],
+        ['Overseas offers','22'],
+        ['Mean salary','Rs 34.88 LPA'],
+        ['Median salary','Rs 32.61 LPA'],
+        ['Students opted out','7'],
+      ]} />
+      <H2>IIM Bangalore Placement 2025 — Sector Breakdown</H2>
+      <P>Consulting leads at 41%. Technology is the major differentiator — IT/Analytics/PM at 13% plus Ecommerce/Payments/Telecom/Logistics at 12% gives 25% combined technology sector placements, significantly higher than IIM A's 12%. This technology strength directly reflects the Bengaluru location. FMCG at 6% is lower than IIM A's 15% — candidates targeting HUL, P&G, or ITC brand management will find a stronger track record at IIM A.</P>
+      <T headers={['Sector','Share','Key Recruiters']} rows={[
+        ['Consulting','41%','Accenture Strategy (75), BCG (25), TCS MC (24), Bain (17), McKinsey (14)'],
+        ['IT / Analytics / Product Mgmt','13%','Amazon (8), Google, Microsoft, tech startups'],
+        ['Finance / Banking','13%','American Express (20), Goldman Sachs, JP Morgan, Kotak (6)'],
+        ['Ecommerce / Payments / Logistics','12%','Zomato (8), Pine Labs (5), Delhivery, BrowserStack'],
+        ['Manufacturing / Energy','6%','Tata Steel, Vedanta, JSW (6), Aditya Birla'],
+        ['FMCG / Retail','6%','HUL (10), P&G (7), ITC (4), Asian Paints (4), Kraft Heinz (5)'],
+        ['Conglomerates','4%','RPG (3), Tata Group'],
+        ['Healthcare / Education','4%','EXL Services (5), Manipal, healthcare startups'],
+      ]} />
+      <H2>IIM Bangalore Top Recruiters 2025 — Final Placements</H2>
+      <P>Accenture Strategy made 75 final placement offers — largest single recruiter at any Indian B-school. Note: this concentration means approximately 12.5% of placed students go to one firm. BCG made 25 offers, TCS Management Consulting 24, American Express 20, Bain 17, PwC 16, EY Parthenon 15, McKinsey 14. Zomato with 8 offers and Pine Labs with 5 represent the technology-adjacent placements unique to IIM B. 22 overseas offers span Singapore, Dubai, Europe, and Southeast Asia.</P>
+      <T headers={['Company','Offers','Type']} rows={[
+        ['Accenture Strategy','75','Management Consulting'],
+        ['Boston Consulting Group','25','Strategy Consulting'],
+        ['TCS Management Consulting','24','Consulting'],
+        ['American Express','20','Financial Services'],
+        ['Bain & Company','17','Strategy Consulting'],
+        ['PwC India','16','Consulting'],
+        ['EY Parthenon India','15','Consulting'],
+        ['McKinsey & Company','14','Strategy Consulting'],
+        ['Zomato','8','E-commerce / Strategy'],
+        ['Amazon','8','Technology / Business'],
+        ['Kotak Mahindra Bank','6','Banking'],
+        ['Goldman Sachs','Top 10','Investment Banking'],
+      ]} />
+    </>
+  )
 }
 
-function FeesPage() {
-  return (<>
-    <H2>What the Rs 27.5 Lakh Fee Actually Covers</H2>
-    <P>When IIM Ahmedabad says the total programme fee is Rs 27.5 lakhs, it is referring to a specific set of costs — and it is important to understand both what is included and what is not, because the number you will actually spend over two years is closer to Rs 30-31 lakhs. Many candidates are surprised by this gap when they arrive and begin incurring living costs that the programme fee does not cover.</P>
-    <P>The fee breaks down into two components. The tuition fee is Rs 20,10,000. This covers core academic instruction — faculty salaries, case licensing from Harvard Business School and other publishers, curriculum development, and academic administration. The second component, totalling approximately Rs 7,15,000, covers library and digital resource access, computing infrastructure, sports and health facilities, student welfare services, alumni network access fees, and other institutional overheads.</P>
-    <P>What the programme fee does not cover is equally important. Mess charges for food run approximately Rs 8,000-12,000 per month, adding Rs 2-2.5 lakhs over the full two years. Personal expenses — toiletries, clothing, entertainment, travel home during breaks — typically add another Rs 60,000-80,000 per year. Stationery, printing, and study materials not bundled in course fees add a smaller amount. Students who participate in inter-campus competitions, international conferences, or who choose to take optional international exchange programmes face additional costs not included in the base fee.</P>
-    <P>The total cost of attendance — programme fee plus living costs — is realistically Rs 30-31 lakhs for most students over the two-year residential period. This is the number you should use for financial planning and education loan sizing, not the Rs 27.5 lakh programme fee headline figure.</P>
-    <P>It is also worth noting that the fee has increased consistently year on year. The PGP 2024-26 batch paid slightly less than the 2025-27 batch. Candidates applying for 2026-28 should budget for fees in the Rs 28-29 lakh range based on historical trends, with the total cost of attendance correspondingly higher. IIM Ahmedabad has not published a multi-year fee schedule, so exact 2026-28 fees will be confirmed at the time of the admissions offer.</P>
-    <P>One practical detail many candidates overlook: IIM Ahmedabad does not charge the full Rs 27.5 lakhs upfront. Fees are disbursed across the four semesters — you pay before each semester begins. Your education loan should be structured to release funds in alignment with this schedule rather than as a single lump sum disbursement at the programme start. Coordinating the loan disbursement schedule with the IIM A fee payment schedule requires a conversation with your lender before the programme begins.</P>
-    <P>International students pay US$50,000 inclusive of all academic fees. At current exchange rates this is approximately Rs 41-43 lakhs — significantly higher than the domestic fee. International students are eligible for financial assistance through a separate process and should contact the Financial Aid office directly.</P>
-    <T headers={['Fee Component','Amount (Rs)','Notes']} rows={[
-      ['Tuition fee','20,10,000','Core academic instruction, faculty, case materials'],
-      ['Library and digital resources','3,50,000','VSL library, online databases, academic software'],
-      ['Computing and IT infrastructure','1,50,000','Campus Wi-Fi, hardware access, computing labs'],
-      ['Sports and health facilities','75,000','Gym, sports courts, on-campus medical centre'],
-      ['Alumni and other academic fees','1,65,000','Alumni membership, student welfare, miscellaneous'],
-      ['Total Programme Fee','27,50,000','Official quoted amount — does not include living costs'],
-      ['Mess charges (estimated, 2 years)','2,00,000','Rs 8,000-10,000 per month on average'],
-      ['Personal expenses (estimated, 2 years)','1,30,000','Rs 4,000-7,000 per month for most students'],
-      ['Total Cost of Attendance (estimated)','30,80,000','Realistic planning figure; use this for loan sizing'],
-    ]} />
-
-    <H2>Fee ROI — Is the Rs 27.5 Lakh Investment Worth It?</H2>
-    <P>The return on investment question for IIM Ahmedabad is genuinely more tractable than for most management education decisions, primarily because the placement outcomes are consistently documented, the salary distribution is unusually tight for an institution at this level, and the career trajectory post-graduation is well-established across decades of alumni data.</P>
-    <P>At the 2025 average placement of Rs 35.22 LPA, a graduate earns approximately Rs 2.93 lakhs per month gross. After income tax at the 30% slab applicable at this income level, professional tax, and PF deductions, the monthly take-home is approximately Rs 1.85-1.95 lakhs. The total programme fee of Rs 27.5 lakhs is recovered in approximately 14-15 months of take-home salary. Adding the additional Rs 3 lakhs of living costs brings the full cost of attendance recovery timeline to approximately 16-17 months.</P>
-    <P>The picture improves significantly for graduates in consulting roles. BCG and Bain starting packages at IIM A are Rs 40-55 LPA CTC. At Rs 50 LPA, the take-home after tax is approximately Rs 2.5 lakhs per month, and the Rs 27.5 lakh programme fee alone is recovered in under 11 months. Including living costs, full cost of attendance recovery is approximately 12-13 months. Given that approximately 40% of the IIM A batch enters consulting, this is a relevant data point for a substantial portion of admitted students.</P>
-    <P>The five-year trajectory is where the investment case becomes compelling beyond simple fee recovery. IIM A alumni in consulting typically reach Rs 60-90 LPA by Year 5, often with significant international exposure and clear paths toward senior manager or partner track. In PE and VC, Year 5 compensation regularly exceeds Rs 1 crore per annum for those who have transitioned from consulting or banking into investment roles. In FMCG, brand management roles at HUL and P&G typically reach Rs 35-45 LPA by Year 5 with strong general management trajectory.</P>
-    <P>The comparison with alternatives helps contextualise the IIM A fee proposition. FMS Delhi offers comparable average placements at Rs 2.43 lakh total fees — a dramatically better fee ROI in simple terms. But FMS accepts roughly 220 students versus IIM A's 414, requires near-identical CAT scores, and has a narrower recruiter base that is less strong in PE/VC, international consulting, and senior corporate roles. The question is not which has better paper ROI — FMS wins that calculation easily — but which offers the specific career outcomes you are targeting.</P>
-    <P>IIM Bangalore at Rs 26.3 lakh fees and Rs 34.9 LPA average is comparable to IIM A in fee terms. The sector composition differs: IIM B is stronger in technology and product management given the Bangalore ecosystem, while IIM A dominates in consulting and FMCG. Fee ROI is nearly identical; the career trajectory depends on which sectors you are targeting. ISB Hyderabad at Rs 43 lakh fees with Rs 34 LPA average has the weakest fee ROI among tier-1 Indian B-schools — its advantages lie in the one-year format, GMAT pathway, and executive cohort composition rather than in fee efficiency.</P>
-    <T headers={['College','Total Fees','Avg Package','Monthly Take-home (est.)','Fee Recovery']} rows={[
-      ['FMS Delhi','Rs 2.43L','Rs 34 LPA','Rs 1.80L/month','Under 2 months'],
-      ['JBIMS Mumbai','Rs 4.5L','Rs 28 LPA','Rs 1.48L/month','Under 3 months'],
-      ['IIM Ahmedabad','Rs 27.5L','Rs 35.22 LPA','Rs 1.88L/month','~15 months'],
-      ['IIM Bangalore','Rs 26.3L','Rs 34.9 LPA','Rs 1.85L/month','~14 months'],
-      ['IIM Calcutta','Rs 27L','Rs 34.2 LPA','Rs 1.82L/month','~15 months'],
-      ['XLRI Jamshedpur','Rs 28.5L','Rs 29.9 LPA','Rs 1.58L/month','~18 months'],
-      ['ISB Hyderabad','Rs 43L','Rs 34 LPA','Rs 1.80L/month','~24 months'],
-    ]} />
-
-    <H2>Scholarships at IIM Ahmedabad — Every Option</H2>
-    <P>IIM Ahmedabad offers multiple scholarship programmes, but the honest assessment is that scholarship coverage is limited relative to the Rs 27.5 lakh fee. Most scholarships are need-based rather than merit-based, and amounts rarely cover more than 10-20% of total fees even in generous cases. Despite this limitation, every eligible student should apply — even Rs 1-2 lakhs in scholarship reduces your loan burden and the interest you pay over the repayment period by a meaningful amount.</P>
-    <P>The IIMA Special Need-Based Scholarship is the primary internal scholarship and the one with the highest potential award amount. It is open to all PGP and PGP-FABM students whose gross annual family income is below Rs 15 lakhs. The amount is not fixed — it is determined by the Financial Aid Committee on a case-by-case basis after reviewing individual financial circumstances, family size, and other financial obligations. Amounts have ranged from Rs 1 lakh to Rs 5 lakhs based on available information, with higher amounts possible in genuinely exceptional financial hardship cases.</P>
-    <P>The scholarship application process is critically important to understand. Scholarships at IIM A are not automatically awarded to eligible students upon admission. Students must separately apply during a specific window that typically opens in September-October of the first year. The Financial Aid office does not proactively remind all admitted students of this window — students who do not seek out the process may miss funding they were entitled to receive. The recommendation is to contact the Financial Aid office immediately upon arriving on campus and request the scholarship application schedule for the current academic year.</P>
-    <P>The government-funded SC/ST scholarship is a central government scheme available to all SC and ST students enrolled in higher education institutions. The amount of Rs 1,500 per year is nominal relative to the IIM A fee, but it is an automatic entitlement that should be claimed. The application is processed through the institution with government verification. SC and ST students from states with additional state-level scholarship schemes should investigate those separately — state schemes vary significantly in amount and eligibility criteria.</P>
-    <P>The alumni-funded scholarships represent the most significant opportunity for larger amounts. The PGP Alumni Endowment Fund, the Class of 2001 Scholarship, the Shri GC Mital Entrepreneurship Aid, and the Smt. J Nagamma Memorial Award are among the named scholarships funded by alumni contributions over the decades. These scholarships range from Rs 15,000 to Rs 3 lakhs and have varying criteria — some are purely need-based, some combine need and merit, and some are oriented toward specific interests such as entrepreneurship or social impact. Application timelines and criteria are published by the Financial Aid office at the start of each academic year.</P>
-    <T headers={['Scholarship','Income Eligibility','Potential Amount','Application Timing']} rows={[
-      ['IIMA Need-Based Scholarship','Family income below Rs 15 LPA','Rs 1L-Rs 5L (case by case)','September-October annually'],
-      ['SC/ST Government Scholarship','Any SC/ST enrolled student','Rs 1,500 per year','Start of academic year'],
-      ['Minority Community Scholarship','Family income below Rs 2.5 LPA','Varies','September-October'],
-      ['Disability Scholarship (PWD)','Income below Rs 6 LPA + disability certificate','Varies','September-October'],
-      ['PGP Alumni Endowment Fund','Merit plus financial need','Up to Rs 3,00,000','Published by Financial Aid office'],
-      ['Class of 2001 Scholarship','Academic merit-based','Varies by year','Merit assessment process'],
-      ['GC Mital Entrepreneurship Aid','Entrepreneurship interest and need','Varies','Separate application required'],
-    ]} />
-
-    <H2>Education Loans — Complete Lender Guide</H2>
-    <P>Education loans are the primary funding mechanism for most IIM Ahmedabad students. An IIM A offer letter is one of the most effective collateral documents available in the Indian banking system — virtually every nationalised bank has a specific IIM-friendly loan product with terms that are more favourable than standard education loans. Understanding the options, the trade-offs between lenders, and the tax implications of each structure can save you Rs 2-3 lakhs over the full repayment period.</P>
-    <P>The most important fact for loan planning: loans up to Rs 20 lakhs are typically available without collateral from nationalised banks for IIM A admits. Banks consider the institution's placement track record and the student's future earning potential sufficient security for this amount. For amounts above Rs 20 lakhs — which most students need given the Rs 30+ lakh total cost of attendance — a co-applicant with income, typically a parent or guardian, is required. The approval rate for IIM A admits across all income levels of co-applicants is very high, as banks have long experience with the institution's 100% placement record.</P>
-    <P>State Bank of India's Scholar Loan scheme is specifically designed for students at premier institutions including all IIMs and IITs. IIM A students can borrow up to Rs 40 lakhs with interest rates in the 8.5-9.5% range, depending on the specific loan variant and the applicant's credit profile. The moratorium period under the Scholar Loan covers the entire 2-year programme plus 12 months after completion — meaning the first EMI is due approximately 36 months after the loan is first disbursed. This is one of the most borrower-friendly moratorium structures available from any Indian lender and is a significant advantage of the SBI product relative to private lenders.</P>
-    <P>HDFC Credila and Avanse are the most commonly used private education loan providers among IIM students when the nationalised bank loan amount is insufficient or the processing timeline is too slow for the admission deadline. Private lenders offer higher loan amounts — up to Rs 50 lakhs — faster approval processes, and more flexible documentation requirements than nationalised banks. These advantages come at the cost of higher interest rates, typically 10.5-13% versus 8.5-9.5% at nationalised banks.</P>
-    <P>The interest rate difference matters significantly over the typical 7-year repayment period. On Rs 27.5 lakhs borrowed at 9% versus 11.5%, the total interest paid over 7 years differs by approximately Rs 2.3-2.5 lakhs. This difference is large enough to justify the additional documentation effort and processing time required for a nationalised bank application. The recommended approach for most students: apply to SBI or Bank of Baroda first, use a private lender only for the incremental amount above what the nationalised bank will sanction without collateral.</P>
-    <P>Section 80E of the Income Tax Act provides a full deduction on education loan interest — no upper limit — for 8 years from the year repayment begins. At the 30% tax bracket applicable to most IIM A graduates in their first job, this provides effective annual tax savings of Rs 70,000-1,50,000 in the early repayment years when the interest component of each EMI is highest. The after-tax cost of an 8.5% education loan is approximately 5.95% for someone in the 30% bracket — lower than expected equity returns and lower than fixed deposit rates for shorter tenors. This is why most financial advisors suggest not prepaying education loans aggressively when equity investment returns are available at significantly higher rates.</P>
-    <T headers={['Lender','Max Loan','Rate','Collateral','Best For']} rows={[
-      ['SBI Scholar Loan','Up to Rs 40L','8.5-9.5%','Not required up to Rs 20L','Best rate; preferred first choice for most students'],
-      ['Bank of Baroda','Up to Rs 30L','9-10%','Not required up to Rs 20L','Strong alternative to SBI; good service'],
-      ['Punjab National Bank','Up to Rs 25L','9-10%','Not required up to Rs 20L','Faster processing in some cases'],
-      ['Central Bank of India','Up to Rs 20L','9-10%','Not required','Smaller amounts; easier processing'],
-      ['HDFC Credila','Up to Rs 50L','10.5-12%','Flexible co-applicant structure','When nationalised bank amount is insufficient'],
-      ['Avanse','Up to Rs 50L','11-13%','Flexible','Fast approval; flexible documentation'],
-      ['Propelld','Up to Rs 40L','10-12%','Not required','Income-share alternative; startup-friendly'],
-    ]} />
-  </>)
+function AdmissionsPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad CAT Cutoff 2025</H2>
+      <P>Minimum qualifying cutoff: 80%ile overall, 70%ile sectional (General). Realistic shortlisting: 98.5-99.5%ile for General male engineers. Sectional minimum of 85%ile is a hard filter — 99.8 overall with 82 in DILR = rejected. Female non-engineers with 96%ile may outrank male engineers at 98%ile due to diversity bonus.</P>
+      <T headers={['Category','Min Overall','Sectional Min','Realistic PI Call']} rows={[
+        ['General (Male, Engineering)','80%ile','70%ile','98.5-99.5%ile'],
+        ['General (Female)','80%ile','70%ile','96-98%ile'],
+        ['OBC-NCL','75%ile','75%ile','93-96%ile'],
+        ['SC','75%ile','75%ile','85-92%ile'],
+        ['ST','75%ile','75%ile','80-88%ile'],
+      ]} />
+      <H2>IIM Ahmedabad Selection Formula</H2>
+      <P>Composite Score = CAT (65%) + Application Rating (35%). AR = academics (normalised by stream/category) + work exp (0.20 x months-11, capped at 36 months) + 3 fixed points for non-male. Final: PI 50%, CAT 25%, AR 15%, AWT 10%.</P>
+      <T headers={['Stage','Component','Weight']} rows={[
+        ['Shortlisting','CAT Score','65%'],
+        ['Shortlisting','Application Rating (AR)','35%'],
+        ['Final','Personal Interview','50%'],
+        ['Final','CAT Score','25%'],
+        ['Final','Application Rating','15%'],
+        ['Final','AWT','10%'],
+      ]} />
+      <H2>IIM Ahmedabad Batch Profile 2025-27</H2>
+      <T headers={['Attribute','2025-27']} rows={[
+        ['Total','414 students'],
+        ['Female','30.6%'],
+        ['Engineering','50%'],
+        ['With work experience','73%'],
+        ['Average work experience','25 months'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore CAT Cutoff 2026 — Official Minimum Percentiles</H2>
+      <P>IIM Bangalore publishes exact minimum cutoffs for each CAT section — more transparent than most IIMs. These are the thresholds for the first shortlist. Candidates actually called for interviews score significantly higher. Additionally, the raw score must be positive in all three sections — a zero or negative raw score in any section disqualifies regardless of aggregate percentile.</P>
+      <T headers={['Category','VARC','DILR','QA','Aggregate']} rows={[
+        ['General','80%ile','75%ile','75%ile','85%ile'],
+        ['NC-OBC','70%ile','65%ile','65%ile','75%ile'],
+        ['EWS','70%ile','65%ile','65%ile','75%ile'],
+        ['SC','65%ile','60%ile','60%ile','70%ile'],
+        ['ST','55%ile','55%ile','55%ile','65%ile'],
+        ['PwD','50%ile','50%ile','50%ile','60%ile'],
+      ]} />
+      <H2>IIM Bangalore Pre-PI Shortlisting Formula</H2>
+      <P>Pre-PI score out of 100: CAT 55 points (VARC 19, DILR 21, QA 15), Class 10 board 10 points, Class 12 board 10 points, Bachelor's degree 10 points, Work experience or professional course (CA/CS/ICWA) 10 points, Gender diversity 5 points. Work experience score = 10x/36 if months (x) between 0-36; capped at 10 if above 36 months. The 5-point gender diversity component is used only for shortlisting, not in final selection.</P>
+      <T headers={['Pre-PI Component','Points','How Calculated']} rows={[
+        ['CAT — VARC','19','Normalised verbal performance'],
+        ['CAT — DILR','21','Normalised analytical performance'],
+        ['CAT — QA','15','Normalised quantitative performance'],
+        ['Class 10 marks','10','Normalised within board and category'],
+        ['Class 12 marks','10','Normalised within stream and category'],
+        ["Bachelor's degree","10",'Normalised within discipline'],
+        ['Work experience (0-36 months)','Up to 10','10x/36; capped at 10 for 36+ months'],
+        ['Gender diversity (non-male)','5','Fixed; shortlisting only, not in final'],
+      ]} />
+      <H2>IIM Bangalore Final Selection — Post-PI Weights</H2>
+      <P>PI carries 40 points — the largest single component. WAT is 10 points. CAT drops to 25 points. Academics reduce to 5 points each. Work experience is 10 points multiplied by a quality score (0.25-2.0) from the interview panel — quality and relevance of experience matter beyond just duration.</P>
+      <T headers={['Post-PI Component','Weight']} rows={[
+        ['Personal Interview (PI)','40 points'],
+        ['CAT Score','25 points'],
+        ['Work Experience x Quality Score','10 points'],
+        ['WAT (Written Ability Test)','10 points'],
+        ['Class 10 + 12 + Bachelor\'s','15 points (5 each)'],
+      ]} />
+      <H2>IIM Bangalore Batch Profile 2025</H2>
+      <T headers={['Attribute','2025 Data']} rows={[
+        ['Total enrolled','544 students (PGP 480 + PGPBA 64)'],
+        ['Female','204 (37.5%)'],
+        ['Engineering background','383 (70.4%)'],
+        ['Commerce background','94 (17.3%)'],
+        ['No experience (freshers)','81 students'],
+        ['13-24 months experience','135 students'],
+        ['25-36 months experience','169 students (largest group)'],
+        ['Professional qualification (CA/CS/ICWA)','22 students'],
+      ]} />
+    </>
+  )
 }
 
-function PlacementsPage() {
-  return (<>
-    <H2>IIM Ahmedabad Placements 2025 — The Complete Data</H2>
-    <P>The IIM Ahmedabad PGP Class of 2025 completed placements with 395 students placed out of 406 eligible. Eleven students voluntarily opted out of the formal placement process — some had secured entrepreneurship funding or personal network roles, others had firm plans to join family businesses. The formal placement rate is 100% of participating students.</P>
-    <P>The mean domestic salary is Rs 35.22 LPA. The median is Rs 34.53 LPA. The gap between mean and median — less than Rs 1 LPA — is one of the most informative figures in the entire placement report. At most business schools, the mean significantly exceeds the median because a small number of very high packages pull the average up above what most graduates actually receive. At IIM A, the distribution is tight enough that both the mean and median are realistic expectations for the median student, not averages distorted by outliers.</P>
-    <P>The highest domestic package was Rs 1.10 Crore per annum, offered in the consulting and PE segments. This figure receives significant media coverage but is useful primarily as a ceiling reference rather than a typical outcome. The more informative figures for planning purposes are the mean and median, and the sector-wise salary ranges which give a realistic picture of what specific career choices produce.</P>
-    <P>A total of 178 companies participated in the 2025 final placement process, slightly fewer than the 188 in 2024. This decline does not reflect reduced corporate interest in IIM A graduates — it reflects consolidation in recruiting, where firms that previously sent separate teams for different functions now coordinate through a single campus relationship. The quality of companies at IIM A has not declined; the count is a function of how companies organise their recruiting rather than how many want IIM A graduates.</P>
-    <P>Pre-Placement Offers deserve separate emphasis because they significantly affect the picture the headline numbers present. Of the 395 placed students, 122 had accepted PPOs before the formal final placement season began — approximately 31% of placed students. This means the effective final placement competition was for 273 positions among approximately 284 actively participating students, not for 414 positions among 414 students as one might infer from the batch size. Understanding PPOs is essential to understanding how the IIM A placement process actually works and how to prepare for it effectively.</P>
-    <T headers={['Metric','2025','2024','2023']} rows={[
-      ['Mean domestic salary','Rs 35.22 LPA','Rs 34.5 LPA','Rs 32.8 LPA'],
-      ['Median domestic salary','Rs 34.53 LPA','Rs 33.8 LPA','Rs 31.5 LPA'],
-      ['Highest domestic package','Rs 1.10 Crore','Rs 1.05 Crore','Rs 1.15 Crore'],
-      ['Students eligible for placements','406','400','395'],
-      ['Students formally placed','395','380','375'],
-      ['Voluntary opt-outs','11','20','20'],
-      ['Companies participated','178','188','183'],
-      ['PPOs accepted (before final placements)','122','110','105'],
-      ['International placements','2','3','5'],
-    ]} />
-
-    <H2>Sector Breakdown — Where IIM A Graduates Actually Go</H2>
-    <P>Consulting dominates IIM Ahmedabad placements in a way that is structurally different from any other Indian business school. Approximately 40% of all offers — roughly 158-165 in 2025 — went into management consulting. This dominance is not cyclical or coincidental; it reflects four decades of relationship building between IIM A and the major consulting firms, alumni concentration in consulting leadership, and a campus culture that actively supports consulting preparation.</P>
-    <P>The MBB presence at IIM A is worth understanding in its full context. BCG alone made 35 offers in 2025 — more than most other Indian campuses receive from all consulting firms combined. Multiple BCG India partners are IIM A alumni. Accenture Strategy made 31 offers, Bain made 17, and McKinsey is consistently among the top 5 by offer volume. The total MBB offer count at IIM A is substantially higher than at any other Indian campus, and the difference is structural rather than marginal.</P>
-    <P>This consulting dominance has important implications for candidates who are not targeting consulting. The preparation culture, the peer conversations, and the alumni mentoring at IIM A all skew toward consulting. Students targeting technology, healthcare, the social sector, or niche financial services will find that they need to be more self-directed in their preparation and outreach than students on the consulting track, who have an established institutional support system.</P>
-    <P>BFSI is the second major sector at approximately 25% of offers. The BFSI category at IIM A has expanded significantly over the past decade beyond traditional investment banking. It now includes private equity firms at the senior level — Blackstone, General Atlantic, ChrysCapital, and Temasek all recruit from IIM A for PE roles — as well as venture capital, family offices, sovereign wealth fund representatives, and financial advisory. The PE/VC segment within BFSI carries the highest packages on campus at Rs 50-70 LPA and above, making the BFSI category simultaneously the most varied and the most sought-after beyond consulting.</P>
-    <P>FMCG accounts for approximately 15% of offers. HUL, P&G, ITC, Marico, Dabur, Colgate-Palmolive, and Britannia are the primary recruiters. FMCG roles at IIM A are almost exclusively in brand management and general management — strategic positions with significant cross-functional responsibility from Day 1, not sales or field management roles. The FMCG track offers the combination of strong brand building exposure, early general management responsibility, and one of the densest alumni networks in any single sector — IIM A alumni from the 1980s, 1990s, and 2000s hold senior roles throughout the FMCG sector and actively recruit and mentor from the campus.</P>
-    <T headers={['Sector','Share','Key Companies','Typical Starting CTC']} rows={[
-      ['Management Consulting','~40%','BCG (35), Accenture Strategy (31), Bain (17), McKinsey, Kearney, AT Kearney','Rs 28-55 LPA'],
-      ['BFSI (Banking, PE/VC, Finance)','~25%','Goldman Sachs (9), Blackstone, General Atlantic, Temasek, AmEx, ChrysCapital','Rs 28-70 LPA'],
-      ['FMCG / Consumer Goods','~15%','HUL, P&G, ITC, Marico, Dabur, Colgate, Britannia','Rs 22-32 LPA'],
-      ['Technology and E-commerce','~12%','Google, Amazon, Microsoft, Flipkart, Adobe, Meesho, Zepto','Rs 25-42 LPA'],
-      ['Conglomerates / Diversified','~5%','Tata Group, Mahindra, Aditya Birla Group, Reliance Industries','Rs 20-30 LPA'],
-      ['Others','~3%','Healthcare, education, social sector, manufacturing, government-adjacent','Rs 15-25 LPA'],
-    ]} />
-
-    <H2>Top Recruiters — In-Depth Analysis</H2>
-    <P>Boston Consulting Group's 35 offers in 2025 make it the single largest recruiter at any Indian business school. BCG's relationship with IIM A is self-reinforcing: the firm's India leadership is dense with IIM A alumni, who recruit from their alma mater, who then become alumni who recruit from their alma mater in the next generation. BCG recruits for India offices in Gurgaon, Mumbai, and Bengaluru, and occasionally for regional positions in Singapore, Dubai, and London. Starting compensation ranges from Rs 40-55 LPA CTC depending on the specific role and performance in the recruiting process. Performance bonuses of 10-20% in Year 1 can add Rs 4-11 lakhs above base.</P>
-    <P>Accenture Strategy with 31 offers is the highest-volume non-MBB recruiter. These are management consulting roles with an industry or technology focus — distinct from the technology services and IT consulting roles that Accenture offers to engineering campus recruits. Accenture Strategy at IIM A involves client-facing work from Year 1, strong training investment, and a clear internal progression track. The brand is less prestigious than MBB in consulting circles, but entry-level role quality and learning opportunity are strong.</P>
-    <P>Goldman Sachs with 9 offers represents the investment banking segment. Roles span investment banking coverage — M&A advisory, equity capital markets, debt capital markets — as well as equity research, securities trading, and private wealth management. The Goldman Sachs process at IIM A is among the most technically rigorous on campus: financial modelling tests, technical finance questions, deal analysis exercises, and multiple rounds of interviews with increasingly senior bankers. Summer internship conversion is the dominant pathway to a Goldman offer — direct final placement recruiting is possible but significantly more competitive than the PPO route.</P>
-    <P>The PE/VC segment — Blackstone, General Atlantic, ChrysCapital, Temasek, and others — represents the most selective and highest-compensating roles available through the IIM A placement process. These firms typically hire 2-5 students each and do not publish offer counts. Total compensation including base salary and carry expectations can exceed Rs 1 crore per annum within 3-5 years for strong performers. Access to these roles typically requires exceptional academic performance throughout the programme and either a consulting or investment banking internship that demonstrates deal analysis capability.</P>
-    <T headers={['Recruiter','Offers 2025','Role Type','Starting CTC (est.)','What Makes It Distinctive']} rows={[
-      ['Boston Consulting Group','35','Strategy Consulting','Rs 40-55 LPA','Largest recruiter at any Indian B-school; deep alumni base in India offices'],
-      ['Accenture Strategy','31','Management Consulting','Rs 28-35 LPA','High volume; strong training programme; good entry-level responsibility'],
-      ['Bain & Company','17','Strategy Consulting','Rs 40-52 LPA','Strong PE advisory practice; collaborative culture; global mobility'],
-      ['McKinsey & Company','Top 5','Strategy Consulting','Rs 45-60 LPA','Highest prestige; global offices accessible; selective final round'],
-      ['Goldman Sachs','9','Investment Banking / Research','Rs 35-50 LPA','Best IB brand in India; most technical process on campus'],
-      ['American Express','Top 10','Financial Services / Strategy','Rs 28-38 LPA','Strong general management development; good culture'],
-      ['Blackstone','2-4 (selective)','Private Equity','Rs 50-80 LPA+','Highest package PE firm; most selective; requires PE-relevant profile'],
-      ['General Atlantic','2-4 (selective)','Growth Equity','Rs 45-70 LPA','Tech-focused PE; rapidly growing India practice'],
-      ['Hindustan Unilever','Top 10','Brand Management / General Management','Rs 25-32 LPA','Best FMCG training programme; dense IIM A alumni network in FMCG sector'],
-      ['Google','Selective','Strategy / Business Development / PM','Rs 30-45 LPA','Best tech brand; roles include global responsibilities'],
-    ]} />
-
-    <H2>The IIM A Placement Process — How It Actually Works</H2>
-    <P>IIM Ahmedabad uses a cohort-based placement system that is structurally different from the day-based system used by IIM Bangalore, IIM Calcutta, and most other top Indian business schools. The difference matters significantly for how you should prepare, what to expect psychologically, and how the experience unfolds across the two years.</P>
-    <P>In a day-based system, companies are assigned specific days on campus. Companies recruiting for similar roles arrive on the same designated day — typically Day 1 for the most sought-after firms, Day 2 and beyond for others. Students can only accept offers from companies on their assigned day. All decisions are made within a 12-24 hour window per day, creating intense, compressed pressure where your entire placement outcome is determined in one or two days of interviews. The anxiety is acute and time-limited. Students who do not receive offers on Day 1 compete from a structurally weaker position on subsequent days, creating visible and stressful status dynamics.</P>
-    <P>IIM A's cohort system organises students by domain interest and pairs them with recruiters over an extended period of several weeks. A consulting cohort interacts with BCG, Bain, McKinsey, and other consulting firms through multiple rounds of interviews over 2-4 weeks. Students and companies have more time for mutual assessment — companies can run multiple interview rounds, and students can participate in pre-placement talks and networking events before the formal interviews. The process is less chaotic than the day-based system, but the anxiety is prolonged rather than compressed. Students describe the cohort system as producing sustained low-level anxiety over weeks rather than acute high-level anxiety over hours.</P>
-    <P>Summer placements happen in December-January of Year 1 — approximately three to four months into the programme. This timeline creates the most consistently challenging experience in the IIM A programme: students are simultaneously managing the heaviest academic load of the two years and preparing for internship interviews. The overlap is not an oversight in the programme design; it is a deliberate condition that tests prioritisation and sustained performance under multiple simultaneous demands. Faculty are aware of the overlap and generally maintain academic expectations fully through this period.</P>
-    <P>Pre-Placement Offers are the mechanism through which 31% of the 2025 batch secured their final employment before formal final placements began. After the 8-10 week summer internship, companies assess performance and offer PPOs to students they want to hire full-time. Students who receive PPOs can accept them before final placements, opting out of the formal process entirely. The psychological consequence of PPO acceptance is significant — Year 2 post-PPO is described by virtually every recipient as the most enjoyable phase of the IIM A experience, free from the placement anxiety that dominates non-PPO students' Year 2 experience.</P>
-  </>)
+function CampusPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad — Louis Kahn Campus</H2>
+      <P>Designed by Louis I. Kahn in 1962, the 107-acre campus is a UNESCO-linked heritage site. Red-brick buildings with dramatic arched openings, thick load-bearing walls, and tearoom-centred dormitory floors (10 rooms per tearoom) designed to create informal learning communities. 27 dormitories house 740 students in single-occupancy rooms with TV, fridge, washing machine, Wi-Fi, and AC. Gujarat is a dry state — alcohol prohibited.</P>
+      <T headers={['Feature','Detail']} rows={[
+        ['Area','107 acres'],
+        ['Architect','Louis I. Kahn, 1963-1974'],
+        ['Heritage','AMC heritage site; Ahmedabad UNESCO World Heritage City'],
+        ['Dormitories','27 blocks, 740 students, single occupancy'],
+        ['Room amenities','TV, fridge, washing machine, Wi-Fi, AC'],
+        ['Student clubs','50+ active clubs including FII (consulting, since 1978)'],
+        ['Dry state','Gujarat prohibits alcohol; campus and city events are alcohol-free'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore Campus — Bengaluru Location Advantage</H2>
+      <P>IIM Bangalore's campus is on Bannerghatta Road in southern Bengaluru — 12-15km from the city centre and 20km from Electronic City and Whitefield tech parks. This places it in India's startup and technology capital with spontaneous access to company visits, investor meetups, technology conferences, and founder talks that no other IIM location can provide. The green, lush 100-acre campus has a temperate Bengaluru climate year-round (15-30°C) — significantly more comfortable than Ahmedabad's extreme summers.</P>
+      <H2>Off-Campus Living — IIM B's Unique Flexibility</H2>
+      <P>Students in Year 2 can choose to live off-campus — a flexibility unique among IIMs. Off-campus apartments near Bannerghatta Road cost Rs 15,000-25,000/month. Students who take this option describe building urban professional habits — commuting, independent living, social life outside the campus bubble — that campus-only experiences do not provide. Most students stay on campus for community; the option is valued for those who want city exposure.</P>
+      <H2>International Exposure at IIM Bangalore</H2>
+      <P>IIM B collaborates with 95 international partner institutions across 30 countries. Over 200 MBA students go on exchange annually to 50 partner universities in 25 nations. 100+ international students come to IIM B from 32 partner schools. IIM B is the only Indian B-school in the Global Network for Advanced Management — a 32-school network convened by Yale. In 2024-25, 45 inbound and 203 outbound exchange students participated.</P>
+      <T headers={['International Feature','Detail']} rows={[
+        ['Partner universities','95 institutions in 30 countries'],
+        ['Annual outbound exchange','200+ students to 50 universities in 25 nations'],
+        ['Inbound exchange students','100+ from 32 schools'],
+        ['Global Network (Yale GNAM)','Only Indian B-school member'],
+        ['Dual degree partners','Bocconi Italy, ESCP, and others'],
+        ['Overseas placements 2025','22 confirmed offers'],
+        ['Alumni chapters abroad','Dubai, Singapore, Stockholm, Amsterdam, London, San Francisco'],
+      ]} />
+      <H2>NSRCEL — India's Top Campus Incubator</H2>
+      <P>The N.S. Raghavan Centre for Entrepreneurial Learning (NSRCEL) is one of India's most prominent startup incubators and is physically located on the IIM B campus. NSRCEL has incubated 400+ startups and manages multiple cohorts annually across sectors. IIM B students have direct access to NSRCEL's mentor network, investor connections, and incubation programmes — making IIM B the strongest campus in India for entrepreneurship aspirants who want on-campus incubation support alongside an MBA.</P>
+    </>
+  )
 }
 
-function AdmissionsPage() {
-  return (<>
-    <H2>CAT Cutoff for IIM Ahmedabad — The Two Levels</H2>
-    <P>IIM Ahmedabad applies a two-level cutoff system that is widely misunderstood by candidates and that causes both over-optimism and under-confidence depending on which cutoff they encounter in their research. The first level is a minimum qualifying cutoff — the percentile below which your application is not considered at all. The second level is the realistic shortlisting cutoff — the percentile at which you are genuinely competitive for a Personal Interview call. These two numbers are significantly different, and conflating them leads to poor planning.</P>
-    <P>The minimum qualifying cutoff for General and EWS category is 80 percentile overall with 70 percentile in each of the three CAT sections — Verbal and Reading Comprehension (VARC), Data Interpretation and Logical Reasoning (DILR), and Quantitative Ability (QA). Meeting this minimum means your application is processed through the Composite Score calculation. It is the beginning of being considered, not a meaningful signal of competitiveness.</P>
-    <P>The realistic shortlisting percentile for the most competitive demographic — General category male engineering graduates — is 98.5 to 99.5 percentile overall, with no section below 85 percentile. At 98 percentile overall, a General male engineer has a meaningful but not guaranteed shortlisting probability. At 97 percentile, the probability drops significantly depending on Application Rating. Below 96, the chance of a PI call for this demographic is very low in most years. These are empirical observations based on the patterns of shortlisted and rejected candidates across multiple years; IIM A does not publish the actual composite scores at which shortlisting occurs.</P>
-    <P>For non-traditional profiles, the calculation changes significantly. Female candidates receive a 3-point bonus in the Application Rating component. Non-engineering background candidates benefit from diversity weighting in the normalisation of academic scores. A female non-engineer with strong academics and 96 percentile may have a higher Composite Score for shortlisting than a General male engineer at 98 percentile with average academic scores. This is not a small margin — it can represent a meaningful probability shift at the boundary of shortlisting.</P>
-    <P>The sectional cutoff of 85 percentile in each of the three sections is a hard filter for General and EWS category, applied before any Composite Score is calculated. A candidate with 99.8 overall percentile but 82 in DILR is rejected at this filter stage without any assessment of their Application Rating. The sectional filter is designed to prevent admission of students who are exceptional in one area but weak in others — IIM A's case method requires engagement across analytical, verbal, and quantitative dimensions simultaneously, and the institution does not admit students who score below 85 in any dimension regardless of their overall strength.</P>
-    <T headers={['Category','Min Overall','Min Each Section','Realistic for PI Call']} rows={[
-      ['General (Male, Engineering)','80%ile','70%ile each section','98.5-99.5%ile'],
-      ['General (Female)','80%ile','70%ile each section','96-98%ile (diversity bonus applied)'],
-      ['General (Non-Engineering Background)','80%ile','70%ile each section','96-98.5%ile (diversity benefit)'],
-      ['EWS','80%ile','70%ile each section','97-99%ile (similar to General)'],
-      ['OBC-NCL','75%ile','75%ile each section','93-96%ile'],
-      ['SC','75%ile','75%ile each section','85-92%ile'],
-      ['ST','75%ile','75%ile each section','80-88%ile'],
-    ]} />
-
-    <H2>The Shortlisting Formula Explained</H2>
-    <P>IIM Ahmedabad uses a Composite Score to rank candidates for PI shortlisting. The Composite Score is calculated from two inputs: CAT Score at 65% weight and Application Rating at 35% weight. IIM A discloses this formula publicly. Understanding it in detail allows candidates to assess their realistic competitive position rather than relying on anecdotal information or generic cutoff lists.</P>
-    <P>The CAT Score component at 65% weight is the dominant input. Your normalised CAT percentile is the primary determinant of your shortlisting composite, and no amount of profile strength in the Application Rating can fully compensate for a very low CAT score. A candidate at 97 percentile with an exceptional profile is likely to be outranked in the composite by a candidate at 99 percentile with an average profile in most cases, given that the CAT component carries nearly two-thirds of the composite weight.</P>
-    <P>The Application Rating (AR) at 35% weight is calculated from five components. Academic performance across Class 10, Class 12, and graduation forms the base. Each academic stage is normalised within your academic stream and your category — your marks are compared against other candidates from the same stream and category, not against all applicants. This normalisation means that a 90% in Commerce may rank equivalent to an 85% in Science, or differently, depending on the distribution of scores in each stream-category combination in the applicant pool for that year.</P>
-    <P>Work experience is scored through the formula D = 0.20 multiplied by (months of experience minus 11), for candidates with 12 to 36 months of experience. D is zero for fewer than 12 months. D is capped at 5 for more than 36 months. The cap at 36 months is important: candidates considering whether to work one more year before applying should know that work experience beyond 3 years does not increase the Composite Score through the work experience component. The quality of work experience matters for the Personal Interview stage, but not for the shortlisting composite beyond the 36-month cap.</P>
-    <P>Gender diversity adds 3 fixed points for non-male candidates. This is not a percentage of another component — it is an absolute addition to the AR score. At 35% weight of the Composite Score, 3 fixed AR points shift the composite by approximately 1 composite point for most candidates. In a shortlisting environment where the boundary between shortlisted and rejected candidates may be a fraction of a composite point, this 1-point shift changes outcomes for candidates near the margin.</P>
-    <T headers={['AR Component','How Scored','Key Insight for Candidates']} rows={[
-      ['Class 10 marks','Normalised within stream and category','Cannot change; ensure accurate reporting in application'],
-      ['Class 12 marks','Normalised within stream and category','Stream matters in comparison; Science vs Commerce vs Arts normalised separately'],
-      ['Graduation marks','80th percentile threshold within academic category','Final year marks still contribute; worth maximising if programme ongoing'],
-      ['Work experience 12-36 months','D = 0.20 x (months minus 11)','Each additional month up to 36 adds 0.20 AR points'],
-      ['Work experience above 36 months','D = 5 (capped)','No benefit to additional experience beyond 3 years for shortlisting'],
-      ['Gender diversity (non-male)','3 fixed AR points','Shifts composite by approximately 1 point; meaningful at shortlisting margin'],
-    ]} />
-
-    <H2>The Personal Interview — What to Expect</H2>
-    <P>The Personal Interview carries 50% weight in the final selection decision — the largest single component and significantly higher than the PI weight at most other top business schools. The IIM A PI is designed and conducted differently from generic MBA interview preparation suggests, and candidates who prepare using standard frameworks are typically underprepared for the specific style of interrogation IIM A employs.</P>
-    <P>IIM A PIs are academic in character rather than competency-based. They do not ask you to describe your greatest leadership challenge, explain your greatest strength and weakness, or walk through a structured situation-task-action-result story. The IIM A PI probes the depth of your existing knowledge — in your undergraduate academic field, in your work domain if you have professional experience, or in the intellectual interests you have described in your application form. The interviewers are not assessing whether you have prepared smart answers to predictable questions; they are assessing how deep your knowledge actually goes and how honestly you acknowledge the boundaries of that knowledge.</P>
-    <P>The interview typically begins with the interviewer reading your application form in silence for several minutes while you sit opposite them. This is deliberate. The interviewer is identifying the specific anchors they want to probe — a course you mention enjoying, a project you describe in detail, a company you worked at, a book you reference, or sometimes simply your undergraduate institution or hometown. The subsequent interview unfolds from these anchors through Socratic questioning: the interviewer makes a statement or asks a question, probes your response with follow-up questions, and continues drilling until they find the natural boundary of your knowledge. Where that boundary is, and how you behave when you reach it, is as much the assessment as the content of your answers.</P>
-    <P>For engineering candidates, technical questions from your undergraduate specialisation are common. A mechanical engineering graduate may be asked to explain the working of a heat pump, a Carnot cycle, or the principles behind material fatigue. A computer science graduate may be asked about memory management, sorting algorithm complexity, or database normalisation. These questions are not designed to trick or embarrass — they are designed to assess whether you understood your own field at a conceptual level, not just as a set of procedures and formulas. Saying you do not know something is acceptable and expected at the edge of your knowledge. Attempting to bluff through a technical question is recognisable and consistently penalised.</P>
-    <P>The Analytical Writing Test, conducted before the PI on the same day at the PI venue, requires a 30-minute written analysis of a topic provided at the venue. Topics from recent years have included questions on bank privatisation, AI regulation, the gig economy, urban planning policy, and competition in digital markets. The AWT is evaluated on clarity of argument, logical structure, quality of reasoning, and writing precision — not on technical expertise or knowledge of specific facts. A 400-500 word essay with a stated position, two or three well-developed supporting arguments, and honest acknowledgment of the counterargument consistently outperforms longer essays that are information-dense but lack clear argumentative structure.</P>
-    <T headers={['Selection Stage','Weight','Duration','What Is Evaluated']} rows={[
-      ['Personal Interview (PI)','50%','25-40 minutes','Academic depth, analytical reasoning, self-awareness, intellectual honesty'],
-      ['CAT Score','25%','N/A — from exam','Normalised composite across VARC, DILR, QA'],
-      ['Application Rating (AR)','15%','N/A — profile assessment','Academics, work experience, gender diversity'],
-      ['Analytical Writing Test (AWT)','10%','30 minutes','Argument clarity, logical structure, writing quality'],
-    ]} />
-
-    <H2>Batch Profile — Your Future Classmates</H2>
-    <P>The PGP 2025-27 batch of 414 students represents the most compositionally diverse class in IIM A's history across gender, academic background, and work experience. Understanding the batch composition is important both for understanding what you are competing against in the admissions process and for understanding the peer learning environment you will enter if admitted.</P>
-    <P>The gender composition of 30.6% female is the highest in IIM A's history. A decade ago, the batch was approximately 20% female. The steady increase directly reflects the 3-point gender diversity bonus in the AR component of the shortlisting formula, which IIM A introduced deliberately to address the historical gender imbalance. The institute has signalled continued commitment to this trajectory — future batches are likely to have higher female representation than the current 30.6%.</P>
-    <P>The engineering versus non-engineering split of 50-50 is the most significant compositional change over the past five years. Engineering graduates historically dominated IIM batches — in some years accounting for 80% or more. The current parity is a direct consequence of the diversity scoring in the AR normalisation. In practice, the 50-50 split changes the classroom experience in strategy, marketing, and general management cases in ways that students and faculty both describe as enriching — the economics graduate, the chartered accountant, and the humanities student approach the same case from different analytical starting points, producing richer discussion than a more homogeneous class.</P>
-    <T headers={['Batch Attribute','2025-27','2024-26','Direction']} rows={[
-      ['Total batch size (PGP)','414','400','Slowly increasing'],
-      ['Female students','30.6%','28%','Consistently increasing'],
-      ['Engineering background','50%','55%','Decreasing'],
-      ['Non-engineering background','50%','45%','Increasing'],
-      ['With work experience','73%','70%','Gradually increasing'],
-      ['Average work experience (among those with experience)','25 months','23 months','Increasing'],
-      ['Freshers (no work experience)','27%','30%','Slowly decreasing'],
-    ]} />
-  </>)
+function AlumniPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad Notable Alumni</H2>
+      <T headers={['Alumni','Batch','Known For']} rows={[
+        ['Raghuram Rajan','PGP 1987','Former RBI Governor; Prof. University of Chicago Booth; Gold medalist'],
+        ['Ajay Banga','Alumnus','President, World Bank; Former CEO Mastercard'],
+        ['Sanjeev Bikhchandani','PGP 1989','Founder, Info Edge (Naukri.com, 99acres); first Indian internet IPO'],
+        ['Deep Kalra','Alumnus','Founder, MakeMyTrip; NASDAQ listed'],
+        ['Chetan Bhagat','PGP 1997','Bestselling author; Five Point Someone, 2 States'],
+        ['C. K. Prahalad','PGP 1966','Bottom of Pyramid concept; Padma Shri; University of Michigan'],
+        ['Mallika Sarabhai','PGP 1974','Padma Bhushan; classical dancer; Director Darpana Academy'],
+        ['Prabhjeet Singh','PGP 2006','President, Uber India and South Asia'],
+        ['Ashish Nanda','PGP 1983','Former Director IIMA; Former Prof. Harvard Law School'],
+      ]} />
+      <H2>The IIM A Network in Practice</H2>
+      <P>IIM A's alumni network is densest in consulting, FMCG, and PE/VC leadership. The dormitory bond creates unusually durable relationships — alumni from the 1980s and 1990s maintain active professional relationships decades later. When reaching out to an IIM A alumnus, you are connecting through shared formative experience that creates warmth beyond typical professional networking.</P>
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore Notable Alumni — Technology and Entrepreneurship Leaders</H2>
+      <P>IIM Bangalore's alumni have made their most distinctive mark in technology and entrepreneurship — directly reflecting the institution's Bengaluru location and its role in building India's technology industry. Where IIM A alumni dominate consulting and FMCG leadership, IIM B alumni are most prominent in technology founding, venture capital, and global corporate leadership in the technology sector.</P>
+      <T headers={['Alumni','Known For','Impact']} rows={[
+        ['Nandan Nilekani','Co-founder Infosys; Architect of Aadhaar','Built India\'s IT industry; Aadhaar serves 1.3B people; Padma Bhushan'],
+        ['Kiran Mazumdar-Shaw','Founder, Biocon','India\'s largest biopharma; Padma Bhushan; pioneering woman founder from Rs 10,000 seed capital'],
+        ['S. D. Shibulal','Co-founder and Former CEO, Infosys','Co-built India\'s second largest IT services company'],
+        ['Aroon Purie','Founder, India Today Group','Built India\'s largest English magazine group'],
+        ['T. V. Mohandas Pai','Former CFO Infosys; Chairman Manipal Group','Key figure in Infosys scaling; higher education transformation'],
+        ['Anuradha Aggarwal','Director Marketing and Growth, Amazon India','Senior marketing leadership at global tech company'],
+        ['Sanjeev Aggarwal','Co-founder, Helion Venture Partners','Pioneer of venture capital in India; early investor in multiple unicorns'],
+        ['Anand Daniel','Partner, Accel Partners India','Early investor in Flipkart, Swiggy, and major Indian startups'],
+        ['Sanjay Nayar','Founding Partner Sorin Investments; Former CEO KKR India','Built PE and alternative investment ecosystem in India'],
+        ['Rashmi Bansal','Author, Stay Hungry Stay Foolish','Documented India\'s entrepreneurship ecosystem; influential startup writer'],
+        ['Revathy Ashok','CEO B.PAC; Former MD Yahoo India','Technology leadership and civic impact in Bengaluru'],
+      ]} />
+      <H2>The IIM Bangalore Network — Technology and Startup Access</H2>
+      <P>The IIM B alumni network is strongest in technology companies, venture capital, and the startup ecosystem — complementary to IIM A's consulting and FMCG strength. In Bengaluru specifically, the network is exceptionally accessible: thousands of IIM B alumni work at Google, Amazon, Flipkart, Zomato, and hundreds of startups within the city. Reaching an alumni for coffee, mentoring, or introductions is typically a week-long effort rather than a month-long one.</P>
+      <P>For entrepreneurship, the IIM B alumni network provides specific advantages. Multiple prominent Indian VCs are IIM B alumni — Anand Daniel at Accel (early Flipkart, Swiggy), Sanjeev Aggarwal at Helion. NSRCEL alumni who have gone through the incubator form their own sub-network of IIM B founders who actively support each other. Alumni chapters in Dubai, Singapore, London, Amsterdam, Stockholm, and San Francisco create international professional access for graduates building global careers.</P>
+    </>
+  )
 }
 
-function ReviewsPage() {
-  return (<>
-    <H2>Academics at IIM A — What Students Actually Experience</H2>
-    <P>The academic experience at IIM Ahmedabad generates more varied and emotionally charged testimonials than almost any other aspect of the institution. Alumni describe it simultaneously as the most intellectually transformative experience of their professional lives and as a period of genuine psychological pressure. Both characterisations are consistent with the evidence, and they are not contradictory — they describe the same experience from different vantage points and at different time horizons.</P>
-    <P>The case method is the source of both the most positive and most challenging aspects of the academic experience. When it works at its best — 80 students who have each independently analysed the same business decision arriving at different conclusions and defending them against intelligent challenge from peers and faculty — the quality of learning is qualitatively different from anything most students have encountered in undergraduate programmes. A pricing decision, a market entry strategy, or an organizational restructuring looks fundamentally different when analysed simultaneously by an investment banker, a software product manager, an FMCG brand manager, a rural development officer, and a fresh engineering graduate — all from the same case facts. This multidisciplinary analysis is not something that can be replicated in a lecture format and is one of the genuine comparative advantages of the case method at IIM A specifically.</P>
-    <P>The challenge of the case method is the continuous public performance requirement it creates. Class participation is graded at 30-50% of the final grade in most courses. This means that every session is a public intellectual exercise where your analysis, your reasoning, and your ability to defend your position under challenge from both faculty and peers are visible and consequential to your grade. Students who are intellectually confident and comfortable with public engagement find this energising. Students who prefer to observe, process, and synthesise before speaking find the first semester's continuous cold-calling and participation pressure genuinely difficult. The adaptation period — developing the reflexes and confidence required to engage publicly under pressure — is described as taking 4-8 weeks for most students.</P>
-    <P>Faculty reviews are consistently bimodal. A small group of professors in Strategy, Finance, Organisational Behaviour, and Marketing are described in reverential terms — academics who have spent decades at the intersection of research and practice, who remember individual students' analytical patterns and probe them across the semester, who create classroom environments where genuinely new thinking emerges from the combination of their design and the students' engagement. These professors are mentioned by name in IIM A alumni accounts from batches spanning decades, which represents genuine consensus rather than individual preference.</P>
-    <P>A different group of faculty receives significantly less positive reviews. Common criticisms are: prioritising research publication over teaching quality, running sessions that feel like lectures despite the case format, using cases that have not been updated in years and reference business contexts that no longer exist, and designing courses where the connection between individual case discussions and any overarching conceptual framework is unclear to students. These are not fringe views — they represent a consistent pattern across student review sources.</P>
-    <P>The forced curve grading generates the most consistent and strong negative reaction in student reviews across all years. The mechanism mandates approximately 10-15% of students receive a C or below in any course regardless of absolute performance. Students who work intensively, prepare cases thoroughly, and contribute substantively in discussions can receive a C because the curve rewards relative performance within the class distribution rather than absolute quality. The institutional rationale — preventing grade inflation and maintaining rigour — is understood but not accepted by most students as adequate justification for a mechanism they experience as arbitrary. The psychological effect of the forced curve on classroom dynamics — creating competitive anxiety between students who would otherwise collaborate — is identified as a significant negative by both current students and recent alumni.</P>
-
-    <H2>Placements — The Student Perspective</H2>
-    <P>Placement reviews at IIM Ahmedabad are overwhelmingly positive on outcomes and significantly mixed on the process experience. The 100% placement rate is real and consistent across years. The average and median salaries are genuine and not distorted by outliers. The quality of companies and roles at the top of the distribution — BCG, Bain, Goldman Sachs, Blackstone — is genuinely exceptional. But the experience of navigating from admission to placement offer is more psychologically demanding than the headline outcomes suggest.</P>
-    <P>Summer placement anxiety is the most universally described difficult experience across IIM A student and alumni accounts, regardless of batch year, sector, or final placement outcome. The anxiety begins within weeks of the programme starting. Consulting preparation groups form in October of Year 1, barely three months into the programme. Students who are simultaneously managing 5-7 cases per day for coursework and preparing case interview responses for consulting recruiters describe a cognitive and psychological load that exceeds what they experienced at any previous point in their careers.</P>
-    <P>The December-January window of Year 1 — when summer placements happen — is described by virtually every IIM A student as the most stressful period of their lives. The combination of end-semester examinations, which count toward the forced curve grades, and summer placement interviews from BCG, Bain, McKinsey, Goldman Sachs, HUL, and other major recruiters happening simultaneously creates conditions that several alumni describe as producing the closest thing to genuine burnout they have experienced before or after IIM A.</P>
-    <P>The PPO pathway changes the experience significantly. Students who perform well in their summer internship and receive a PPO spend Year 2 in a fundamentally different psychological state from non-PPO peers. They attend electives for intellectual interest rather than career positioning, take on club and committee roles without the overlay of placement anxiety, and maintain social relationships with peers without the undercurrent of competitive anxiety. The 31% PPO rate in 2025 means approximately one in three placed students had this significantly better second-year experience. Many alumni who received PPOs describe Year 2 as one of the most intellectually free and personally fulfilling periods of their lives — a stark contrast to Year 1.</P>
-    <T headers={['Placement Aspect','Rating /5','Honest Summary']} rows={[
-      ['Consulting and FMCG placement quality','4.9','Best in India; no comparable alternative for these sectors'],
-      ['Overall placement rate and salary level','4.8','100% consistent; strong average and median without distortion'],
-      ['Summer placement process experience','3.1','Most stressful experience; timing with academics is very difficult'],
-      ['Final placement process experience','3.8','Better than summer; cohort system preferred to day-based'],
-      ['Non-consulting sector institutional support','3.5','Significantly less supported; self-direction essential'],
-      ['PPO opportunity quality and rate','4.5','31% in 2025; dramatically changes Year 2 experience for recipients'],
-      ['Alumni recruiter network quality','4.8','Exceptional depth; alumni pull is a genuine material advantage'],
-      ['International placement opportunities','2.7','Declining; only 2 international offers in 2025'],
-    ]} />
-
-    <H2>Campus Life, Community and the Ahmedabad Question</H2>
-    <P>Campus life reviews at IIM Ahmedabad consistently describe a community dimension that students did not anticipate and that many identify as the most enduring and valued aspect of the two-year experience. Students arrive expecting an intense academic environment and discover a social and community structure — built around dormitory culture, inter-dorm competition, and club life — that is qualitatively different from any educational experience they have had before.</P>
-    <P>The dormitory bond is the most consistently cited positive in IIM A alumni accounts spanning the 1970s through the 2020s. Multiple alumni describe being in regular contact with their dorm floor-mates 20 or 30 years after graduation, reaching out to them in professional contexts with expectations of warmth and reciprocity that would be unusual for most professional relationships. The durability of these bonds reflects the specific intensity of the shared Year 1 experience — the midnight case preparation sessions, the summer placement anxiety, the dorm cricket competitions, the tea sessions in the Kahn-designed tearoom — that creates a shared formative experience few institutions can replicate.</P>
-    <P>The Ahmedabad location generates the most complex and nuanced responses in student reviews. The city itself is generally appreciated — Gujarati food is excellent, infrastructure is functional, and cost of living is reasonable relative to Mumbai or Bangalore. The specific complaint is what Ahmedabad lacks: the density of corporate interaction, the proximity to the industries reshaping the Indian economy, and the spontaneity of professional networking that characterises being in a corporate hub city.</P>
-    <P>In Bangalore, IIM B students can attend startup events, investor meetups, and technology conferences on weekends within minutes of campus. Company founders and senior executives visit organically because they live and work in the city. At IIM A, all such interaction requires deliberate organisation — companies and speakers must travel to Ahmedabad, which reduces frequency and spontaneity. This is a real limitation that is most consequential for students interested in technology, startups, or industries concentrated in specific cities. For students targeting consulting or FMCG, where firms recruit to campus and alumni support is available regardless of location, the Ahmedabad limitation is substantially less consequential.</P>
-    <P>Mental health has become an increasingly prominent topic in IIM A discussions over the past five years, reflecting both a broader cultural shift in how educational institutions address student wellbeing and a genuine recognition that the structural conditions of the programme create elevated mental health risk. The institute has expanded counselling resources and established student peer support networks. But the structural pressures — academic intensity, forced curve competition, summer placement anxiety — have not been reduced, and the resources address the symptoms rather than the conditions. Candidates who have a personal history of anxiety or depression under sustained high-pressure competitive environments should take this seriously in their institution decision, not dismiss it as a general disclaimer.</P>
-    <T headers={['Aspect','Rating /5','Student Consensus']} rows={[
-      ['Placements (consulting, FMCG, PE/VC)','4.9','Best in India for these sectors; genuinely no comparable alternative'],
-      ['Intellectual quality of academic experience','4.5','Transformative for most; demanding for all; uneven faculty'],
-      ['Campus architecture and physical environment','4.4','Genuinely beautiful; Louis Kahn buildings are exceptional'],
-      ['Dormitory community and peer bonds','4.7','Strongest aspect; bonds last decades; unexpected depth'],
-      ['Location (Ahmedabad)','3.2','Not a corporate hub; dry state; but comfortable and affordable'],
-      ['Work-life balance during programme','2.5','Year 1 is genuinely extreme; Year 2 post-placement is excellent'],
-      ['International placement and exposure','2.7','Declining; limited to 2 offers in 2025; IIP in PGPX helps'],
-      ['Mental health infrastructure','3.6','Resources improving; structural pressure remains unchanged'],
-      ['Fee value for target sectors','4.3','Strong ROI for consulting and FMCG; weaker for technology or social sector'],
-      ['Overall programme experience','4.5','Most alumni would choose IIM A again; hardship and quality are inseparable'],
-    ]} />
-
-    <H2>Is IIM Ahmedabad Worth It — The Honest Assessment</H2>
-    <P>The worth-it question for IIM Ahmedabad is not binary and does not have a universal answer. It depends on your specific career objectives, which companies and roles you are targeting, how you perform under sustained pressure, and what you are willing to experience in exchange for the outcomes IIM A provides. Honest answers to these questions produce different decisions for different candidates.</P>
-    <P>IIM A is unambiguously worth it for consulting at BCG, McKinsey, Bain, or comparable tier-1 consulting firms. No other institution in India — including IIM B, IIM C, and ISB — provides equivalent access to MBB recruiting. The alumni concentration in consulting leadership, the institutional relationships with MBB partners, the preparation ecosystem, and the brand recognition within consulting circles all point to IIM A as the optimal choice for this career objective. The Rs 27.5 lakh fee is recovered in under 11 months of BCG or Bain salary. The two years of pressure are finite; the consulting career they enable is not.</P>
-    <P>IIM A is very likely worth it for FMCG brand management, PE/VC roles, and senior finance careers at leading Indian institutions. The placement outcomes are consistently strong, the alumni network is dense in these sectors, and the brand opens doors a decade after graduation in ways that few other Indian credentials sustain. The peer quality and community experience are genuine positives that outlast the programme period.</P>
-    <P>IIM A requires more careful analysis for technology product management, international careers, or roles in industries concentrated in cities other than Ahmedabad. For technology, IIM B's Bangalore ecosystem creates meaningful advantages in recruiter relationships and proximity to the technology community during the programme. For international careers, ISB's GMAT pathway and global alumni network, or international business schools themselves, may provide better returns despite higher fees. For startup ecosystems, both IIM A and IIM B alumni networks are strong, but IIM B's location provides more spontaneous access during the programme itself.</P>
-    <P>IIM A is the wrong choice if work-life balance during the programme is a significant priority, if sustained high-pressure competitive environments are genuinely difficult for your mental health, or if strong personal or geographic reasons require you to be in a specific city during the two years. The programme is designed for people who find intellectual competition energising rather than depleting, who perform well under sustained pressure rather than flourishing in sustainable work environments, and who are willing to sacrifice two intense years for the career outcomes that follow. Students who do not fit this profile are not less capable — they fit a different programme design rather than this one.</P>
-    <P>The most honest summary across alumni accounts is consistent: IIM A is frequently described as the hardest two years of people's professional lives and simultaneously among the most valuable. The hardness and the quality are structurally connected rather than coincidentally coexisting. The peer learning is rich because the peer competition is intense. The consulting placements are accessible because the preparation culture is demanding. The alumni network is warm because the shared formative experience is genuinely difficult. These aspects cannot be separated — you cannot have the outcomes without the conditions, and the conditions produce the outcomes. The question is whether the specific transformation IIM A provides is the transformation your career and your life trajectory actually need.</P>
-  </>)
+function ProgramsPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad Programs 2025</H2>
+      <T headers={['Program','Duration','Fees','Admission','Key Feature']} rows={[
+        ['PGP (MBA)','2 years','Rs 27.5L','CAT (98-99%ile)','Flagship; Harvard case method; PGDM degree'],
+        ['PGP-FABM','2 years','Rs 27.5L','CAT','Only tier-1 agri-business MBA in India'],
+        ['PGPX (Executive)','1 year','Rs 35-37L','GMAT/GRE','FT ranked #31; min 4 years experience'],
+        ['ePGP (Online)','2-3 years','Not disclosed','CAT','For working professionals'],
+        ['FPM (PhD)','4-5 years','Fully funded','CAT/GMAT/GATE','Stipend Rs 42,000-50,000/month'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore PGP — Full MBA Degree</H2>
+      <P>The PGP at IIM Bangalore leads to a full Master of Business Administration (MBA) degree — not a diploma. Under the IIM Act 2017, IIM B is authorised to grant MBA degrees with direct international recognition. This distinguishes IIM B from IIM Ahmedabad's PGDM (diploma equivalent to MBA) and IIM Calcutta's similar structure. For international career purposes, the MBA degree carries clearer credential recognition.</P>
+      <P>The programme is two years, full-time, residential, with six trimesters. Year 1 is core courses; Year 2 is primarily electives with the option to go on exchange to 50+ partner universities worldwide. The 2025 enrolled batch of 544 students includes 480 PGP and 64 PGPBA students who share placement infrastructure. Faculty of 140+ members from global universities and industries provides a strong research-and-practice teaching combination.</P>
+      <T headers={['PGP Detail','Information']} rows={[
+        ['Degree awarded','Master of Business Administration (MBA) — full degree'],
+        ['Duration','2 years, 6 trimesters, full-time residential'],
+        ['Total fees (2025-27)','Rs 26,00,000 (all-inclusive including hostel)'],
+        ['Enrolled 2025','544 students'],
+        ['Faculty','140+ from global universities and industries'],
+        ['Accreditation','EQUIS; Global Network for Advanced Management (Yale)'],
+        ['Year 2 option','Exchange at 50+ partner universities in 25 countries'],
+        ['Off-campus living','Permitted in Year 2; unique flexibility among IIMs'],
+      ]} />
+      <H2>IIM Bangalore PGPBA — Business Analytics MBA</H2>
+      <P>The PGPBA is a 2-year MBA with an analytics focus — covering data science applications in management, machine learning for business decisions, and quantitative strategy. PGPBA participates jointly with PGP in placements, giving students access to all 177 companies and 660 offers from the combined batch. The programme creates a strong pathway to product management, analytics consulting, and data science leadership roles at technology companies.</P>
+      <H2>IIM Bangalore EPGP — Executive MBA (FT Ranked #34 Globally)</H2>
+      <P>The EPGP is IIM Bangalore's one-year full-time executive MBA, ranked #34 globally by Financial Times in 2026 — the highest global ranking of any Indian executive MBA. The 2024-25 batch of 82 students had 177 companies recruiting with mean salary Rs 35.5 LPA and median Rs 33.1 LPA. Consulting dominates EPGP placements at 44%, IT/Technology at 31%. Minimum 5 years work experience required; GMAT or CAT accepted for admission.</P>
+      <T headers={['Program','Duration','Fees','Admission','Key Feature']} rows={[
+        ['PGP (MBA)','2 years','Rs 26L','CAT (85%ile+ aggregate)','Full MBA degree; joint placement with PGPBA'],
+        ['PGPBA (Analytics MBA)','2 years','Rs 26L','CAT','Analytics-focused MBA; product and data science placements'],
+        ['EPGP (Executive MBA)','1 year','Rs 35L (est.)','GMAT/CAT + experience','FT ranked #34 globally; #1 India per FT'],
+        ['PGPEM (Part-time Executive)','2 years','Rs 35L (est.)','GMAT','No residential requirement; working professionals'],
+        ['FPM (PhD)','4-5 years','Fully funded + stipend','CAT/GMAT/GATE/NET','Academic career; faculty placements at IIMs and international schools'],
+      ]} />
+    </>
+  )
 }
 
-function CampusPage() {
-  return (<>
-    <H2>The Louis Kahn Campus — Architecture and Heritage</H2>
-    <P>Louis Isadore Kahn was commissioned to design IIM Ahmedabad in 1962, and the campus that emerged is considered alongside the Salk Institute for Biological Studies in California and the National Assembly Building in Dhaka as his greatest realised works. Understanding why the IIM A campus is architecturally significant requires understanding Kahn's design philosophy, which was fundamentally different from the functional institutional architecture that dominated campus design in the 1960s.</P>
-    <P>Kahn believed that the quality of learning in an institution depended as much on the quality of informal spaces — the corridors, courtyards, common rooms, and transitional areas — as on the formal classroom spaces. His design for IIM A was structured around this belief: the campus is arranged so that movement between dormitories, the library, and the lecture halls passes through spaces that invite lingering, encounter, and spontaneous conversation. You cannot walk from your dormitory to class without passing through the Louis Kahn Plaza, under the dramatic arched openings of the administration building, or through the shaded walkways that connect the residential and academic zones. This spatial design creates community as a consequence of physical movement rather than requiring deliberate effort to convene.</P>
-    <P>The materials are locally sourced red brick and reinforced concrete. Kahn insisted on using materials available in Gujarat, both for cost reasons and to root the architecture in its geographical and cultural context. The brickwork is structural and load-bearing — the walls are thick enough to moderate Ahmedabad's extreme summer heat, reaching over 40 degrees Celsius, without mechanical cooling in the circulation areas. The circular and semicircular arched openings — Kahn's signature formal element at IIM A — create patterns of light and shadow that shift through the day in ways that have been studied by architects from around the world and reproduced in architectural education curricula.</P>
-    <P>The original complex includes 18 dormitories (D1 to D18), the Vikram Sarabhai Library, the main lecture hall block, the administration building, and the Louis Kahn Plaza. Subsequent construction added dormitory blocks D19-D27, faculty housing, married student apartments, and additional academic spaces. The newer construction is more conventional in its architecture and does not have the same quality as the Kahn buildings, but the newer dormitory blocks have been updated more recently and offer comparable or better functional quality for residents.</P>
-    <P>The campus was declared a heritage site by the Ahmedabad Municipal Corporation. Ahmedabad's designation as a UNESCO World Heritage City in 2017 — the first city in India to receive this recognition — brought additional international visibility to the campus within the context of Ahmedabad's broader architectural heritage, which includes a remarkable collection of step wells, mosques, Hindu temples, and colonial-era structures. The IIM A campus is regularly cited in international architecture publications as one of the most significant examples of post-Independence Indian institutional architecture.</P>
-    <P>A major restoration and conservation project has been underway for several years. Several original Kahn buildings developed structural challenges — a consequence of the construction methods used in the 1960s and 1970s, the geological conditions of the Vastrapur site, and physical stresses from Ahmedabad's climate over five decades. The restoration project aims to preserve the buildings to their original design specifications while addressing structural issues. During any given period, some sections of the campus may be under scaffolding or temporarily restricted, which is worth knowing as an incoming student.</P>
-    <T headers={['Feature','Detail']} rows={[
-      ['Total area','107 acres (approximately 25 hectares)'],
-      ['Architect','Louis I. Kahn; commission 1962, construction 1963-1974'],
-      ['Architectural style','Brutalist red brick; dramatic circular and semicircular arches; thick load-bearing walls'],
-      ['Heritage status','Ahmedabad Municipal Corporation heritage site'],
-      ['UNESCO connection','Part of Ahmedabad UNESCO World Heritage City (2017; first Indian city designated)'],
-      ['Original Kahn dormitories','18 blocks (D1-D18)'],
-      ['Total dormitory blocks','27 (including newer additions)'],
-      ['Restoration project','Active; some sections may be restricted during construction phases'],
-      ['Named landmark spaces','Vikram Sarabhai Library; Louis Kahn Plaza; main lecture hall block'],
-    ]} />
-
-    <H2>Hostels and Residential Life</H2>
-    <P>IIM Ahmedabad has 27 student dormitories accommodating approximately 740 students in single-occupancy rooms. The residential structure is central to the IIM A experience in ways that go beyond comfortable accommodation — the specific design of the original Kahn dormitories, and the social dynamics that design produces, is part of what makes IIM A's community different from other business schools.</P>
-    <P>Each floor of the original 18 Kahn dormitories has 10 rooms grouped around a common tearoom and stairwell. The tearoom was a deliberate Kahn design decision to create a domestic-scale social space within the residential structure — a place where floor-mates gather informally outside the pressures of academic and placement preparation. In practice, the tearoom becomes the site of midnight case preparation sessions, celebration of placement offers, support after difficult days, and the spontaneous conversations that form the bonds alumni maintain for decades. The physical design of the tearoom is not incidental to IIM A's community strength; it is a contributing mechanism.</P>
-    <P>All rooms in all dormitory blocks are single-occupancy with TV, refrigerator, washing machine, campus-wide Wi-Fi access, and air conditioning. The inclusion of these appliances is unusual among Indian residential educational programmes — most IIMs and IITs provide substantially more basic facilities. The single-occupancy structure provides genuine privacy, which matters for studying, for managing stress, and for the psychological sustainability of two years of intensive residential education. Students who have previously shared rooms in undergraduate programmes or in working life consistently report that the single-occupancy rooms significantly improve their ability to manage the academic intensity.</P>
-    <P>The newer dormitory blocks (D19-D27) are architecturally more conventional — lower ceilings, more functional corridors, and institutional rather than monumental finishes. They have been updated more recently and some students prefer them for this reason. Assignment to dormitory blocks is typically by random allocation — students cannot select their preferred block, and requests based on personal preference are not generally accommodated. Requests based on medical or disability-related needs are accommodated where possible.</P>
-    <P>120 apartments are available for married students and students who have family members accompanying them. These are located in a separate residential zone on campus and provide additional space — typically a bedroom, living room, and cooking facilities. Married student housing is allocated by application and is limited in quantity; students planning to bring family members should apply immediately after admission confirmation rather than waiting until closer to the programme start.</P>
-    <T headers={['Facility','Detail']} rows={[
-      ['Dormitory blocks','27 total (D1-D18 are original Kahn; D19-D27 newer additions)'],
-      ['Room type','Single occupancy, fully furnished'],
-      ['Room amenities','TV, refrigerator, washing machine, high-speed Wi-Fi, air conditioning'],
-      ['Married student housing','120 apartments available; apply immediately after admission'],
-      ['Mess facilities','Multi-cuisine vegetarian and non-vegetarian; included in programme fee'],
-      ['Internet','High-speed Wi-Fi across entire campus; fibre infrastructure'],
-      ['Medical facilities','On-campus health centre; doctor and nurse available daily'],
-      ['Security','24-hour guarded perimeter; ID card access system'],
-      ['Dry state note','Gujarat prohibits alcohol; campus events and social life are alcohol-free'],
-    ]} />
-
-    <H2>Student Clubs and Campus Culture</H2>
-    <P>IIM Ahmedabad has more than 50 active student clubs and committees. In a two-year programme with the heaviest academic load of most students' lives, clubs serve multiple functions: professional development through consulting projects and industry interface, psychological balance through creative and sporting outlets, community building through cultural events and competitions, and career support through specialised preparation communities. The club ecosystem is one of the institutional assets that makes the IIM A experience more than the sum of its case discussions and placement outcomes.</P>
-    <P>The Forum for Industry Interaction (FII) has been operating since 1978 and is ISO 9001:2008 certified — unusual credentials for a student organisation. FII functions as a genuine student consulting organisation, accepting assignments from client companies across strategy, marketing, operations, and finance domains, and delivering professional-quality deliverables that are presented to actual client teams. Admission to FII is competitive rather than open, and the work is expected to meet professional standards. The experience provides consulting exposure before the internship season and helps students develop the analytical, hypothesis-driven, and communication skills that MBB interview processes specifically assess.</P>
-    <P>The Placement Committee manages the placement process with a degree of student ownership that is unusual among Indian business schools. PlaCom negotiates directly with company HR and recruiting teams on the specific terms of campus recruitment — the number of slots, the compensation disclosure requirements, the sequencing of interviews, and the timelines for offer acceptance. They manage conflicts when companies breach agreed terms. This responsibility is significant and provides genuine professional development in negotiation, relationship management, and high-stakes decision-making. Being on PlaCom is one of the most demanding and professionally valuable club roles at IIM A.</P>
-    <P>The dormitory competition culture is one of IIM A's most distinctive and most fondly remembered features in alumni accounts. Dormitories compete against each other in cricket, football, basketball, tennis, quizzes, debating, and cultural events throughout the academic year. The competitions are organised with genuine effort and are taken with a degree of seriousness that surprises incoming students who arrive expecting to focus exclusively on case discussions and placement preparation. Dorm pride is a real social phenomenon — alumni from decades past mention their dormitory number with the same specificity and loyalty with which people mention their school house. The competitions create bonds between students who might not otherwise interact across different academic programmes, course sections, or years.</P>
-  </>)
-}
-
-function AlumniPage() {
-  return (<>
-    <H2>IIM Ahmedabad Alumni — Sixty Years of Leaders</H2>
-    <P>IIM Ahmedabad began producing management graduates in 1964, a year after its founding. In the six decades since, more than 45,000 students have completed programmes at IIM A, and the alumni represent one of the most concentrated networks of management talent in Asia. The network spans global institutions, Indian corporations across every major sector, pioneering entrepreneurial ventures, prestigious academic faculties, and significant public service roles.</P>
-    <P>Raghuram Rajan (PGP 1987) graduated with a gold medal — the highest academic distinction in the programme — before completing a PhD in Finance at MIT. His career at the intersection of academic economics and central banking produced some of the most significant contributions to monetary policy thinking of the past three decades. As Chief Economist and Director of Research at the International Monetary Fund from 2003 to 2007, he produced research that warned of the financial fragility that preceded the 2008 global crisis — research that was initially dismissed by mainstream economists and later acknowledged as prescient. As Governor of the Reserve Bank of India from 2013 to 2016, he introduced inflation targeting as India's formal monetary framework, significantly tightened bank supervision, and maintained the RBI's institutional independence under substantial political pressure. He returned to Chicago and is currently the Katherine Dusak Miller Distinguished Service Professor of Finance at the Booth School of Business.</P>
-    <P>Ajay Banga built a career spanning Nestle India, PepsiCo, and Citigroup before his decade as President and CEO of Mastercard, which he transformed from a declining payments network into one of the world's most valuable financial technology companies. His appointment as President of the World Bank in 2023 — the first person of Indian origin to lead the institution — generated significant international attention. His IIM A background was specifically highlighted in coverage of the appointment as part of the narrative of Indian management talent's growing global influence.</P>
-    <P>Sanjeev Bikhchandani (PGP 1989) founded Info Edge in 1995, beginning with Naukri.com as an online jobs portal at a time when fewer than one million Indians had internet access. Naukri.com grew to become India's dominant jobs platform. Info Edge subsequently developed 99acres.com and Jeevansathi.com, and became the first Indian internet company to list on BSE and NSE when it went public in 2006. Bikhchandani's early investments in Zomato and Policybazaar — at times when neither was well-known — have since been cited as among the most significant early-stage investments in India's internet economy. He remains one of India's most active and respected angel investors.</P>
-    <P>C. K. Prahalad (PGP 1966) developed the Bottom of the Pyramid concept — the idea that low-income populations at the economic base represent a significant and underserved market for corporations — which fundamentally changed how corporations, development organisations, and governments think about inclusive growth. His book The Fortune at the Bottom of the Pyramid, published in 2004, is one of the most widely read management books of the 21st century. He was awarded the Padma Shri by the Government of India and held the Distinguished University Professorship at the University of Michigan Ross School of Business until his death in 2010. His intellectual legacy is among the most significant produced by any IIM A graduate.</P>
-    <T headers={['Alumni','Batch','Organisation / Role','Domain']} rows={[
-      ['Raghuram Rajan','PGP 1987','Former RBI Governor; Prof. University of Chicago Booth','Monetary economics / Finance'],
-      ['Ajay Banga','Alumnus','President, World Bank; Former CEO Mastercard','Global finance / Development'],
-      ['Sanjeev Bikhchandani','PGP 1989','Founder, Info Edge (Naukri.com, 99acres, Jeevansathi)','Entrepreneurship / Internet'],
-      ['Deep Kalra','Alumnus','Founder, MakeMyTrip (NASDAQ-listed)','Entrepreneurship / Travel technology'],
-      ['Chetan Bhagat','PGP 1997','Bestselling author; Five Point Someone, 2 States','Media / Popular culture'],
-      ['C. K. Prahalad','PGP 1966','Bottom of Pyramid concept; Padma Shri; University of Michigan','Management theory'],
-      ['Mallika Sarabhai','PGP 1974','Padma Bhushan; classical dancer; Director Darpana Academy','Arts / Social activism'],
-      ['Chandrika Tandon','PGP 1975','First Indian-American woman McKinsey partner; Grammy-winner','Consulting / Arts / Philanthropy'],
-      ['Salil Shetty','PGP 1983','Former Secretary-General, Amnesty International','Human rights / International development'],
-      ['Prabhjeet Singh','PGP 2006','President, Uber India and South Asia','Technology / Mobility'],
-      ['Ashish Nanda','PGP 1983','Former Director IIMA; Former Prof. Harvard Law School','Education / Management'],
-      ['Nachiket Mor','PGP 1987','Former National Director India, Gates Foundation','Development finance / Public health'],
-      ['Vijay Mahajan','PGP 1980','Founder CEO, BASIX (microfinance and livelihood)','Development / Rural finance'],
-      ['Marti G. Subrahmanyam','PGP 1969','Charles E. Merrill Professor of Finance, NYU Stern','Academic finance'],
-      ['Ravi Jagannathan','PGP 1972','CME/Sandner Professor of Finance, Kellogg Northwestern','Academic finance'],
-    ]} />
-
-    <H2>How the IIM A Network Works — In Practice</H2>
-    <P>The IIM A alumni network is cited as one of the institution's greatest competitive advantages. Strong alumni networks are a claim made by every business school, and the claim is more aspirational than operational at many institutions. Understanding what makes IIM A's network genuinely functional requires examining the specific structural mechanisms that produce network value rather than accepting a general assertion.</P>
-    <P>The dormitory bond is the first and most important structural mechanism. IIM A's residential design — specifically the Kahn-designed floor tearoom structure — creates social intensity within cohorts that is qualitatively different from classroom-based educational relationships. Students who lived on the same dormitory floor in 1987 or 1995 or 2010 maintain active personal relationships decades later and report that encountering a floor-mate in a professional context activates warmth and reciprocity that is closer to friendship than to professional networking. When a current student reaches out to an IIM A alumnus, they are connecting through a shared cultural shorthand — of the Kahn campus, the summer placement anxiety, the dorm competitions, the late-night case preparation — that creates immediate common ground.</P>
-    <P>The second structural mechanism is alumni engagement with the institution itself. IIM A has unusually active alumni involvement in institutional governance and operations. Board of Governors positions include prominent alumni. Senior alumni who are partners at BCG, Goldman Sachs, and HUL help design the recruiting processes for their firms' campus relationships. Alumni-funded scholarships, prizes, and infrastructure projects create ongoing financial and emotional engagement. This institutional involvement keeps alumni connected to IIM A in ongoing ways rather than the periodic reunion model that characterises less engaged alumni networks.</P>
-    <P>The third structural mechanism is density in senior positions. Because IIM A has been producing highly selective graduates for over 60 years, alumni are disproportionately represented in senior leadership at major organisations. When a current student or recent graduate needs to reach a consulting firm partner, an investment bank Managing Director, a PE fund senior partner, or a senior government official, the probability that person is an IIM A alumnus is meaningfully higher than at most other institutions. This density creates practical network effects: outreach finds warm recipients more often, introductions land with more credibility, and career transitions find smoother pathways.</P>
-    <P>In concrete career terms, the network produces several specific and measurable advantages. In recruiting decisions, an IIM A alumni interviewer who is uncertain between two equally capable candidates resolves that uncertainty in favour of the IIM A candidate — not from institutional loyalty but from an implicit confidence in the rigour of the programme that produced them. In career transitions, reaching out to an IIM A alumnus in a target role or industry returns a response with significantly higher probability than equivalent cold outreach. In entrepreneurship, the concentration of IIM A alumni in venture capital means that fundraising conversations for IIM A founder companies begin with a meaningful warm network in a domain where warm introductions determine who gets meetings and who does not. These are probabilistic advantages, not certainties, but they compound in meaningful ways across a 30-40 year career.</P>
-  </>)
-}
-
-function ProgramsPage() {
-  return (<>
-    <H2>PGP — The Two-Year MBA in Full Detail</H2>
-    <P>The Post Graduate Programme is IIM Ahmedabad's defining programme — the one that has built the institution's reputation over six decades and that carries more brand recognition in Indian and increasingly global management education than any comparable programme. Understanding the PGP beyond the ranking and placement statistics requires understanding the programme's design logic, its teaching method, and the specific kind of professional it produces.</P>
-    <P>The PGP is a two-year full-time residential programme with no part-time or distance learning option. The residential requirement is structural rather than incidental. The learning model depends on peer interaction outside classroom hours, on the dormitory community as a site of informal learning and psychological support, and on the total immersion in a shared intellectual environment that makes the case method work at the intensity IIM A requires. You cannot do the IIM A PGP while living outside campus and commuting in for classes — the programme architecture requires you to be fully inside the community for it to function as designed.</P>
-    <P>The academic model is adapted from Harvard Business School's case method, which IIM A adopted at founding in 1964 with HBS's institutional support and has refined over six decades to reflect Indian business contexts, industry structures, and management challenges. Approximately 70% of teaching uses case studies as the primary vehicle — the remainder includes lectures, simulations, field projects, and guest sessions. A case is a document that presents a real business situation at a decision point, providing the information available to the decision-maker at that moment without revealing the outcome. The pedagogical purpose is to develop comfort with making decisions under uncertainty with incomplete information, which is the characteristic condition of management practice rather than the characteristic condition of academic study.</P>
-    <P>Class participation contributes 30-50% of the final grade in most courses. The precise contribution varies by course and professor — some professors weight participation at 50% with no written examinations, others weight it at 30% and rely more on written assignments and examinations. The common feature is that passive attendance does not produce the same grade as active engagement, and the grading mechanism creates institutional pressure to participate even when you are not fully prepared or not confident in your analysis. This pressure is part of the learning design: in management practice, the absence of certainty is not an excuse for silence. Developing the capacity to engage analytically under conditions of partial knowledge and time pressure is what the participation grading structure is designed to build.</P>
-    <P>The forced curve grading mechanism mandates a fixed distribution of grades in each course regardless of the absolute quality of performance. Approximately 10-15% of students receive a C or below in any given course even if the absolute standard of their work is acceptable. This mechanism is the most controversial aspect of the IIM A academic structure. Students experience it as creating competitive anxiety and sometimes arbitrary outcomes — good work that happens to be in the lower portion of a strong class distribution receives a lower grade than mediocre work in a weaker class. The institutional rationale — preventing grade inflation and creating a valid rank ordering for employer differentiation — is understood but not accepted by most students as adequate justification for the psychological costs of the mechanism.</P>
-    <P>Year 1 covers mandatory core courses in all major management disciplines: Marketing Management, Financial Accounting and Control, Business Statistics, Managerial Economics, Organisational Behaviour, Business Communication, Business Law, Operations Management, Corporate Finance, and Business Policy and Strategy. All students take these courses regardless of prior academic background or career objectives. A chartered accountant with a decade of finance experience takes the same Corporate Finance course as a humanities graduate with no financial exposure. The case method accommodates this diversity by presenting business situations that can be approached from multiple disciplinary angles — each brings genuine analytical contribution to the discussion from their different starting points.</P>
-    <P>Year 2 is primarily elective courses, allowing meaningful specialisation in the domains relevant to your career objectives. Students targeting consulting concentrate electives in Advanced Strategy, Negotiation, Business Analytics, and applied strategy courses. Finance-focused students take Corporate Finance electives, Private Equity, Investment Banking, and Financial Modelling. Marketing and FMCG-focused students take Consumer Behaviour, Brand Management, Pricing Strategy, and marketing analytics courses. Entrepreneurship-focused students combine Strategy, Organisational Design, and entrepreneurship-specific electives. The range of electives at IIM A is wider than at most comparable programmes — the faculty size and decades of curriculum development mean that more specialised courses are available than at newer or smaller institutions.</P>
-    <T headers={['PGP Attribute','Detail']} rows={[
-      ['Format','Full-time, residential, 2 years — no part-time or distance option'],
-      ['Total fees (2025-27)','Rs 27,50,000 (tuition Rs 20.1L + other academic fees Rs 7.15L)'],
-      ['Intake','414 students'],
-      ['Eligibility','Bachelor\'s degree with minimum 50% marks from any recognised university'],
-      ['Admission','CAT; realistic cutoff for General category: 98-99%ile overall, 85%ile each section'],
-      ['Teaching method','Harvard case method; approximately 70% case-based instruction'],
-      ['Class participation','Graded; 30-50% of final grade depending on course and professor'],
-      ['Grading','Forced curve; approximately 10-15% receive C or below per course'],
-      ['Year 1 structure','All core courses — mandatory regardless of background or objectives'],
-      ['Year 2 structure','Primarily electives; meaningful specialisation by career track'],
-      ['Degree','Post Graduate Diploma in Management (PGDM) — equivalent to MBA in Indian and international employment'],
-      ['Accreditation','EQUIS; Institute of National Importance (Government of India, 2017)'],
-      ['NIRF Management ranking','#1 for 6 consecutive years through 2025'],
-    ]} />
-
-    <H2>PGPX — The One-Year Executive MBA</H2>
-    <P>The Post Graduate Programme for Executives is a one-year full-time residential programme designed for professionals with significant management experience who want the IIM A credential and network in a format compatible with mid-career transition. The PGPX was established in 2006 and has developed a distinct reputation that in some dimensions exceeds the two-year PGP in international recognition.</P>
-    <P>The Financial Times Global MBA Rankings listed PGPX at #31 globally in 2025. This ranking places IIM Ahmedabad's executive programme alongside institutions including HEC Paris, IE Business School, and Rotterdam School of Management — a level of international recognition that the two-year PGP, while domestically dominant, has not achieved consistently in global rankings designed for Western institutions. The FT ranking criteria weight salary progression, career mobility, and alumni outcomes in ways that benefit experienced professional cohorts, and the PGPX's 8-12 year average work experience cohort performs well on these dimensions.</P>
-    <P>The minimum work experience requirement is 4 years full-time post-graduation. The actual average in the batch is 8-12 years, and participants range from mid-level managers making lateral transitions to senior executives seeking credentials for board-level roles to entrepreneurs seeking structured management frameworks. This creates a cohort dynamic significantly different from the two-year PGP — peer learning is oriented around executive-level decision-making rather than foundational management concepts, and the combined industry experience of the batch creates case discussions that draw on decades of real management practice.</P>
-    <P>Admission requires GMAT or GRE scores rather than CAT. A competitive GMAT is 700 or above, though the admissions process is more holistic than the CAT-weighted two-year PGP — the committee assesses leadership potential, clarity of career transition objective, and the value the applicant would contribute to the cohort alongside the GMAT score. The Statement of Purpose, letters of recommendation from direct supervisors, and the detailed work history review are substantive inputs rather than formalities.</P>
-    <P>The International Immersion Programme — a 2-3 week residential component at a partner institution outside India, typically in Europe, North America, or East Asia — provides international exposure that the two-year PGP does not formally include. The IIP involves classroom sessions with local faculty and students, company visits, and cultural engagement. For professionals targeting international roles or organisations with global operations, the IIP provides context, network seeds, and credential credibility that the purely India-based two-year PGP cannot offer.</P>
-
-    <H2>PGP-FABM — Food and Agri-Business Management</H2>
-    <P>The PGP in Food and Agri-Business Management is a two-year residential programme focused on food, agriculture, rural development, and allied sectors. It is genuinely unique among top-tier Indian business school programmes — no IIT, IIM, or other premier institution offers a dedicated management programme in agricultural business at this institutional level and with this depth of specialisation.</P>
-    <P>The programme is relevant for a specific and growing set of career contexts. Agri-commodity companies — ITC Agribusiness, Cargill India, Louis Dreyfus, and others — recruit from FABM for management and trading roles that require combined understanding of agricultural markets and business management. Rural finance institutions including NABARD, Small Industries Development Bank, and various state rural development corporations recruit for roles requiring agricultural sector knowledge alongside financial management. The rapidly growing agri-tech startup ecosystem — companies building technology for farm input procurement, precision agriculture, market linkages, and supply chain — is increasingly visible as a FABM employer and is where the most entrepreneurially inclined FABM graduates are heading.</P>
-    <P>The programme is open to graduates from any academic stream, not exclusively agricultural science or biological sciences. Students from economics, engineering, commerce, and humanities backgrounds are regularly admitted when they can demonstrate genuine interest in the agricultural sector and the intellectual capability to engage with complex management challenges. The multi-disciplinary cohort enriches the case discussions, which sit at the intersection of economics, ecology, technology, public policy, and business management.</P>
-
-    <H2>FPM — The Fully-Funded PhD Programme</H2>
-    <P>The Fellow Programme in Management is IIM Ahmedabad's doctoral programme — a 4-5 year full-time residential research degree equivalent to a PhD and fully funded. Admitted students pay no fees and receive monthly stipends, on-campus housing, and research allowances. The FPM is the appropriate pathway for candidates whose objective is an academic or research career rather than management practice.</P>
-    <P>The programme admits approximately 25-30 students per year across 8-9 research areas: Finance and Accounting, Marketing Management, Organisational Behaviour, Production and Quantitative Methods, Strategic Management, Economics, Information Systems, and Public Policy. The programme accommodates diverse research methodologies — theoretical modelling, empirical quantitative analysis, qualitative field research, and mixed methods — depending on the research question and the supervisor's expertise.</P>
-    <P>FPM graduates primarily pursue academic faculty positions. Placements from the IIM A FPM programme include faculty positions at the older IIMs, IITs, XLRI, and IIFT, as well as increasingly at international business schools in the US, Europe, Singapore, and Hong Kong. The combination of IIM A's research training quality and brand recognition has improved FPM graduates' access to international faculty market opportunities over the past decade. A smaller proportion enter non-academic research roles at consulting firms, think tanks, regulatory institutions, and policy organisations.</P>
-    <T headers={['Programme','Duration','Fees','Admission Exam','Primary Career Path']} rows={[
-      ['PGP (MBA)','2 years','Rs 27.5 lakhs','CAT (98-99%ile General)','Consulting, FMCG, Finance, Technology'],
-      ['PGPX (Executive MBA)','1 year','Rs 35-37.1 lakhs','GMAT/GRE','Senior management transition; international roles'],
-      ['PGP-FABM','2 years','Rs 27.5 lakhs','CAT','Agri-business, rural finance, agri-tech'],
-      ['ePGP (Online)','2-3 years (flexible)','Not publicly disclosed','CAT','Working professionals; online delivery'],
-      ['FPM (PhD)','4-5 years','Fully funded + stipend Rs 42-50K/month','CAT/GMAT/GRE/GATE/NET','Faculty positions; academic and research careers'],
-    ]} />
-  </>)
+function ReviewsPage({ slug }) {
+  const isB = slug === 'iim-bangalore'
+  if (!isB) return (
+    <>
+      <H2>IIM Ahmedabad — Honest Student Reviews</H2>
+      <P>Year 1 is described as the hardest two years of most students' lives. The case method creates genuinely transformative discussions. Summer placement anxiety beginning in October Year 1 is universal. Louis Kahn campus and dormitory bonds are consistently cited as the most valued aspects. Gujarat dry state and Ahmedabad's corporate distance are the most cited limitations. Most alumni would choose IIM A again.</P>
+      <T headers={['Aspect','Rating /5','Comment']} rows={[
+        ['Placements (consulting, FMCG, PE)','4.9','Best in India for these sectors'],
+        ['Academic quality','4.5','Transformative; uneven faculty'],
+        ['Campus (Louis Kahn)','4.4','Heritage, genuinely special'],
+        ['Community and dorm bonds','4.7','Exceptional; last decades'],
+        ['Location (Ahmedabad)','3.2','Not corporate hub; dry state'],
+        ['Work-life balance Year 1','2.5','Extreme; manageable Year 2'],
+        ['International exposure','2.7','2 overseas offers in 2025'],
+        ['Overall','4.5','Most alumni would choose IIM A again'],
+      ]} />
+    </>
+  )
+  return (
+    <>
+      <H2>IIM Bangalore — Bengaluru Location: The Real Differentiator</H2>
+      <P>The most consistent positive in IIM B student reviews is the Bengaluru location. Students describe spontaneous access to startup events, technology company visits, investor meetups, and founder talks that simply do not exist at other IIM locations. Firms like Google, Amazon, Flipkart, and Zomato are not just recruiters — they are neighbours. Alumni who live and work in the city can visit campus with minimal logistics friction, creating a density of professional interaction that campus-only environments at Ahmedabad, Calcutta, or Lucknow cannot replicate.</P>
+      <P>The off-campus Year 2 option is consistently mentioned as valuable. Students who live in Bengaluru apartments describe developing professional independence, urban navigation skills, and a social life that extends beyond the campus community — preparation for working life that residential-only campuses do not provide. Most students still choose to stay on campus for community; the option is valued by those who want city exposure.</P>
+      <H2>IIM Bangalore — Academics and Placement Process</H2>
+      <P>Academic pressure at IIM B is described as rigorous but less extreme than IIM A. The absence of IIM A's most aggressive forced-curve dynamics makes the collaborative learning environment somewhat more functional. Faculty with global research backgrounds are generally well-regarded; the analytics integration in courses reflects the Bengaluru technology ecosystem in ways that other IIMs have not matched.</P>
+      <P>Summer placement anxiety exists at IIM B but is described as less overwhelming than at IIM A. The higher PPO rate (208 accepted in 2025 versus IIM A's 122), the longer placement window, and the Bengaluru networking context reduce the compressed anxiety of the IIM A experience. Students who do consulting or technology internships and receive PPOs describe Year 2 as genuinely enjoyable — a stark contrast to IIM A's sustained placement pressure.</P>
+      <H2>IIM Bangalore — International Exposure Reviews</H2>
+      <P>The 22 overseas placements and exchange programme are frequently described as genuine differentiators that students did not fully appreciate before joining. Students who go on exchange to European or American B-schools describe significant changes in global professional perspective — meeting MBA students from different educational systems, experiencing different business cultures, and building international professional networks. The GNAM membership gives access to courses at Yale, Bocconi, HEC Paris, and other elite schools during exchange terms.</P>
+      <H2>IIM Bangalore — Is It Worth It? Honest Assessment</H2>
+      <P>IIM B is clearly the right choice for technology and product management roles, international placements, entrepreneurship with access to India's best campus incubator, and consulting in a city with the strongest corporate networking density among all IIM locations.</P>
+      <P>IIM B is worth reconsidering if you specifically want FMCG brand management (IIM A has stronger HUL and P&G relationships), PE/VC roles (IIM A's MBB pipeline feeds more naturally into private equity), or the intense dormitory community experience that defines IIM A. The wider mean-median salary gap at IIM B (Rs 2.27 lakhs vs Rs 0.69 lakhs at IIM A) suggests that median outcomes are lower — the floor is similar but the typical result depends more on which track you pursue.</P>
+      <T headers={['Aspect','Rating /5','Honest Comment']} rows={[
+        ['Placements (tech, consulting, international)','4.6','Strong; Accenture volume may overstate MBB depth'],
+        ['International placements','4.7','Best among IIMs; 22 overseas vs IIM A\'s 2'],
+        ['Bengaluru location advantage','4.8','Genuine differentiator; unmatched ecosystem access'],
+        ['Academic quality','4.3','Rigorous; less extreme than IIM A'],
+        ['Entrepreneurship ecosystem (NSRCEL)','4.8','Best campus incubator in India'],
+        ['Work-life balance','3.2','Better than IIM A; still demanding'],
+        ['FMCG placements specifically','3.4','Weaker than IIM A; HUL/P&G track is thinner'],
+        ['Dormitory community culture','3.8','Good; less iconic than IIM A\'s Kahn buildings'],
+        ['Fee value for money','4.4','Rs 26L for Rs 34.88 LPA mean; strong ROI'],
+        ['Overall','4.4','Best choice for tech, international, startup careers'],
+      ]} />
+    </>
+  )
 }
 
 export default function CollegeSectionClient({ slug, section }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const basePath = `/colleges/${slug}`
+  const isB = slug === 'iim-bangalore'
+  const collegeName = isB ? 'IIM Bangalore' : 'IIM Ahmedabad'
+  const accentColor = isB ? '#C0392B' : 'var(--orange)'
+  const accentBg = isB ? '#fdecea' : 'var(--orange-lt)'
+  const accentBorder = isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)'
 
-  const PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
   const METAS = {
-    fees:       { title:'IIM Ahmedabad Fees 2025 — Complete Guide', sub:'Total cost, ROI analysis, scholarships and education loans' },
-    placements: { title:'IIM Ahmedabad Placements 2025 — Full Report', sub:'Average package, sector breakdown, top recruiters and process guide' },
-    admissions: { title:'IIM Ahmedabad Admission 2026 — Complete Guide', sub:'CAT cutoff, shortlisting formula, PI process and batch profile' },
-    reviews:    { title:'IIM Ahmedabad Reviews 2025 — Honest Student Feedback', sub:'What students and alumni actually say about academics, placements and campus life' },
-    campus:     { title:'IIM Ahmedabad Campus — Complete Guide', sub:'Louis Kahn architecture, hostels, clubs, sports and Ahmedabad life' },
-    alumni:     { title:'IIM Ahmedabad Notable Alumni', sub:'Leaders, founders and public figures from six decades of IIM A graduates' },
-    programs:   { title:'IIM Ahmedabad Programs 2025', sub:'PGP, PGPX, FABM, ePGP and FPM — fees, eligibility and structure' },
+    fees:       { title:`${collegeName} Fees 2025 — Complete Guide`, sub:`Total cost, ROI, scholarships and education loans` },
+    placements: { title:`${collegeName} Placements 2025 — Full Report`, sub:`Average package, sector breakdown, top recruiters and process` },
+    admissions: { title:`${collegeName} Admission 2026 — Complete Guide`, sub:`CAT cutoff, shortlisting formula, PI process and batch profile` },
+    reviews:    { title:`${collegeName} Reviews 2025 — Honest Student Feedback`, sub:`What students and alumni say about academics, placements and campus life` },
+    campus:     { title:`${collegeName} Campus — Complete Guide`, sub:isB ? 'Bengaluru location, international exchange, NSRCEL and student life' : 'Louis Kahn architecture, hostels, clubs and Ahmedabad life' },
+    alumni:     { title:`${collegeName} Notable Alumni`, sub:`Leaders, founders and public figures from ${collegeName}` },
+    programs:   { title:`${collegeName} Programs 2025`, sub:isB ? 'PGP MBA, PGPBA, EPGP, PGPEM and FPM' : 'PGP, PGPX, FABM, ePGP and FPM' },
   }
 
+  const PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
   const Page = PAGES[section]
   const meta = METAS[section]
 
@@ -452,7 +479,7 @@ export default function CollegeSectionClient({ slug, section }) {
       <Nav onLeadOpen={() => setLeadOpen(true)} />
       <div style={{ maxWidth:700, margin:'80px auto', textAlign:'center', padding:'0 24px' }}>
         <h1 style={{ fontFamily:'var(--serif)', fontSize:'1.8rem', marginBottom:12 }}>Content Coming Soon</h1>
-        <Link href={basePath} style={{ background:'var(--orange)', color:'#fff', padding:'12px 24px', borderRadius:10, textDecoration:'none', fontSize:14 }}>Back to overview</Link>
+        <Link href={basePath} style={{ background:accentColor, color:'#fff', padding:'12px 24px', borderRadius:10, textDecoration:'none', fontSize:14 }}>Back to overview</Link>
       </div>
       <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} />
     </div>
@@ -461,56 +488,53 @@ export default function CollegeSectionClient({ slug, section }) {
   return (
     <div style={{ minHeight:'100vh', background:'var(--cream)' }}>
       <Nav onLeadOpen={() => setLeadOpen(true)} />
-
       <div style={{ background:'var(--ink)', borderBottom:'1px solid rgba(255,255,255,.07)' }}>
         <div style={{ maxWidth:960, margin:'0 auto', padding:'18px 24px 0' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16, flexWrap:'wrap' }}>
             <Link href="/colleges" style={{ color:'rgba(255,255,255,.3)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>Colleges</Link>
             <span style={{ color:'rgba(255,255,255,.2)' }}>›</span>
-            <Link href={basePath} style={{ color:'rgba(255,255,255,.45)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>{slug.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}</Link>
+            <Link href={basePath} style={{ color:'rgba(255,255,255,.45)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>{collegeName}</Link>
             <span style={{ color:'rgba(255,255,255,.2)' }}>›</span>
             <span style={{ color:'#fff', fontSize:11.5, fontFamily:'var(--mono)' }}>{meta?.title?.split('—')[0]?.trim()}</span>
           </div>
           <div style={{ display:'flex', overflowX:'auto', scrollbarWidth:'none' }}>
             {SUB_PAGES.map(p => (
               <Link key={p.id} href={`${basePath}${p.href}`}
-                style={{ padding:'11px 16px', fontSize:12.5, fontFamily:'var(--mono)', textDecoration:'none', color:p.id===section?'#fff':'rgba(255,255,255,.38)', borderBottom:p.id===section?'2px solid #1D9E75':'2px solid transparent', whiteSpace:'nowrap' }}>
+                style={{ padding:'11px 16px', fontSize:12.5, fontFamily:'var(--mono)', textDecoration:'none', color:p.id===section?'#fff':'rgba(255,255,255,.38)', borderBottom:p.id===section?`2px solid ${accentColor}`:'2px solid transparent', whiteSpace:'nowrap' }}>
                 {p.label}
               </Link>
             ))}
           </div>
         </div>
       </div>
-
       <div style={{ maxWidth:960, margin:'0 auto', padding:'44px 24px 80px' }}>
         <div style={{ marginBottom:40 }}>
-          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.9rem,3.5vw,2.5rem)', fontWeight:700, color:'var(--ink)', lineHeight:1.12, marginBottom:12 }}>{meta?.title?.replace('IIM Ahmedabad', slug==='iim-bangalore'?'IIM Bangalore':'IIM Ahmedabad') || meta?.title}</h1>
+          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.9rem,3.5vw,2.5rem)', fontWeight:700, color:'var(--ink)', lineHeight:1.12, marginBottom:12 }}>{meta?.title}</h1>
           <p style={{ fontSize:15.5, color:'var(--muted)', lineHeight:1.75 }}>{meta?.sub}</p>
-          <div style={{ height:3, width:56, background:'var(--orange)', borderRadius:2, marginTop:18 }} />
+          <div style={{ height:3, width:56, background:accentColor, borderRadius:2, marginTop:18 }} />
         </div>
-
-        <Page />
-
+        <Page slug={slug} />
         <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px', marginTop:48, marginBottom:24 }}>
-          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:16 }}>More on IIM Ahmedabad</div>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:16 }}>More on {collegeName}</div>
           <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
             {SUB_PAGES.filter(p => p.id !== section && p.id !== 'overview').map(p => (
-              <Link key={p.id} href={`${basePath}${p.href}`} style={{ fontSize:13, color:'var(--orange)', textDecoration:'none', background:'var(--orange-lt)', padding:'8px 18px', borderRadius:20, border:'1px solid rgba(217,95,2,.15)', fontWeight:500 }}>{p.label} →</Link>
+              <Link key={p.id} href={`${basePath}${p.href}`}
+                style={{ fontSize:13, color:accentColor, textDecoration:'none', background:accentBg, padding:'8px 18px', borderRadius:20, border:`1px solid ${accentBorder}`, fontWeight:500 }}>{p.label} →</Link>
             ))}
             <Link href={basePath} style={{ fontSize:13, color:'var(--muted)', textDecoration:'none', background:'var(--cream)', padding:'8px 18px', borderRadius:20, border:'1px solid var(--border)', fontWeight:500 }}>← Overview</Link>
           </div>
         </div>
-
         <div style={{ background:'var(--ink)', borderRadius:16, padding:'32px', textAlign:'center' }}>
-          <div style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'#fff', marginBottom:10 }}>Check if IIM Ahmedabad is right for your profile</div>
-          <p style={{ fontSize:14, color:'rgba(255,255,255,.48)', marginBottom:22, maxWidth:480, margin:'0 auto 22px', lineHeight:1.8 }}>Enter your percentile and background. Claude shows your real conversion chance at IIM A and 20+ other colleges.</p>
+          <div style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'#fff', marginBottom:10 }}>Check if {collegeName} is right for your profile</div>
+          <p style={{ fontSize:14, color:'rgba(255,255,255,.48)', marginBottom:22, maxWidth:480, margin:'0 auto 22px', lineHeight:1.8 }}>Enter your percentile and background. Claude shows your real conversion chance at {collegeName} and 20+ other colleges.</p>
           <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
-            <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'12px 24px', borderRadius:10, fontSize:14, fontWeight:600, textDecoration:'none' }}>Check my eligibility →</Link>
-            <Link href={`/compare?a=${slug}&b=${slug==='iim-ahmedabad'?'iim-bangalore':'iim-ahmedabad'}`} style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>Compare →</Link>
+            <Link href="/eligibility" style={{ background:accentColor, color:'#fff', padding:'12px 24px', borderRadius:10, fontSize:14, fontWeight:600, textDecoration:'none' }}>Check my eligibility →</Link>
+            <Link href={`/compare?a=${slug}&b=${isB?'iim-ahmedabad':'iim-bangalore'}`} style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>
+              {isB ? 'IIM B vs IIM A →' : 'IIM A vs IIM B →'}
+            </Link>
           </div>
         </div>
       </div>
-
       <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} />
       <style>{`@media(max-width:768px){ table{font-size:12px!important} th,td{padding:8px 10px!important} }`}</style>
     </div>
