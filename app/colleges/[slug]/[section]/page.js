@@ -33,7 +33,7 @@ const META = {
       title: 'IIM Ahmedabad Reviews 2025: Students on Academics, Placements & Campus Life | Collvera',
       description: 'Honest IIM Ahmedabad student reviews 2025: transformative academics, extreme first-year pressure, 100% placements, isolated Ahmedabad location, Gujarat dry state, limited international offers.',
     },
-  }
+  },
 
   'iim-bangalore': {
     fees: {
