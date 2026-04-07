@@ -1,29 +1,23 @@
-import { getCollege } from '../../../lib/supabase'
+import { COLLEGE_MAP } from '../../../lib/colleges/index'
 import CollegeDetailClient from './CollegeDetailClient'
-import { notFound } from 'next/navigation'
 
 export async function generateMetadata({ params }) {
-  if (params.slug === 'iim-ahmedabad') return {
-    title: 'IIM Ahmedabad — Fees, Placements, Cutoffs 2025 | Collvera',
-    description: 'IIM Ahmedabad complete guide: Rs 27.5L fees, Rs 35.22 LPA avg package, 99%ile CAT cutoff, NIRF #1. Placements 2025, batch profile, scholarships.',
-  }
-  const college = await getCollege(params.slug)
+  const college = COLLEGE_MAP[params.slug]
   if (!college) return { title: 'College Not Found | Collvera' }
+
+  const title = `${college.name} MBA 2026: Fees ₹${college.fees.total}L, Placements ₹${college.placements.avg} LPA, CAT Cutoff ${college.admissions.cutoff_general}%ile | Collvera`
+  const description = `${college.name} complete guide 2026: fees ₹${college.fees.total} lakhs, average placement ₹${college.placements.avg} LPA, NIRF rank #${college.nirf}. Admissions, scholarships, campus life, student reviews.`
+
   return {
-    title: `${college.name} — Fees, Placements, Cutoffs 2025 | Collvera`,
-    description: `${college.name} complete guide — fees, placements, CAT cutoff and admission criteria.`,
+    title,
+    description,
+    openGraph: { title, description, type: 'website', url: `https://collvera.com/colleges/${params.slug}` },
+    twitter: { card: 'summary_large_image', title, description },
+    alternates: { canonical: `https://collvera.com/colleges/${params.slug}` },
   }
 }
 
-export default async function CollegePage({ params }) {
-  let dbCollege = null
-  try { dbCollege = await getCollege(params.slug) } catch {}
-
-  const college = {
-    id: dbCollege?.id || params.slug,
-    slug: params.slug,
-    name: dbCollege?.name || params.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-  }
-
+export default function CollegePage({ params }) {
+  const college = COLLEGE_MAP[params.slug] || null
   return <CollegeDetailClient college={college} />
 }
