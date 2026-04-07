@@ -187,14 +187,14 @@ const COLLEGE_DATA = {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const SECTIONS = [
-  { id: 'overview',    label: 'Overview' },
-  { id: 'placements', label: 'Placements' },
-  { id: 'fees',       label: 'Fees & Aid' },
-  { id: 'admissions', label: 'Admissions' },
-  { id: 'programs',   label: 'Programs' },
-  { id: 'campus',     label: 'Campus' },
-  { id: 'alumni',     label: 'Alumni' },
-  { id: 'verdict',    label: "Claude's Verdict" },
+  { id: 'overview',    label: 'Overview',          href: '' },
+  { id: 'placements', label: 'Placements',         href: '/placements' },
+  { id: 'fees',       label: 'Fees & Aid',         href: '/fees' },
+  { id: 'admissions', label: 'Admissions',         href: '/admissions' },
+  { id: 'programs',   label: 'Programs',           href: '/programs' },
+  { id: 'campus',     label: 'Campus',             href: '/campus' },
+  { id: 'alumni',     label: 'Alumni',             href: '/alumni' },
+  { id: 'verdict',    label: "Claude's Verdict",   href: '/reviews' },
 ]
 
 function StarRating({ value, max=5 }) {
@@ -214,16 +214,15 @@ function StarRating({ value, max=5 }) {
 
 function SectionHead({ children }) {
   return (
-    <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:20, display:'flex', alignItems:'center', gap:12 }}>
+    <h2 style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:20, display:'flex', alignItems:'center', gap:12, fontWeight:500, margin:'0 0 20px 0' }}>
       {children}<span style={{ flex:1, height:1, background:'var(--border)' }} />
-    </div>
+    </h2>
   )
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function CollegeDetailClient({ college }) {
   const [leadOpen, setLeadOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState('overview')
 
   const data = COLLEGE_DATA[college?.slug] || null
 
@@ -289,10 +288,10 @@ export default function CollegeDetailClient({ college }) {
           {/* Tab nav */}
           <div style={{ display:'flex', gap:0, overflowX:'auto', scrollbarWidth:'none', marginTop:24 }}>
             {SECTIONS.map(s => (
-              <button key={s.id} onClick={() => { setActiveTab(s.id); document.getElementById(s.id)?.scrollIntoView({ behavior:'smooth', block:'start' }) }}
-                style={{ padding:'12px 18px', fontSize:12.5, fontFamily:'var(--mono)', cursor:'pointer', border:'none', background:'transparent', color: activeTab===s.id ? '#fff' : 'rgba(255,255,255,.35)', borderBottom: activeTab===s.id ? `2px solid ${d.color}` : '2px solid transparent', whiteSpace:'nowrap', transition:'all .15s' }}>
+              <Link key={s.id} href={`/colleges/${college?.slug || 'iim-ahmedabad'}${s.href}`}
+                style={{ padding:'12px 18px', fontSize:12.5, fontFamily:'var(--mono)', cursor:'pointer', border:'none', background:'transparent', color:'rgba(255,255,255,.35)', borderBottom:'2px solid transparent', whiteSpace:'nowrap', transition:'all .15s', textDecoration:'none', display:'block' }}>
                 {s.label}
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -300,9 +299,58 @@ export default function CollegeDetailClient({ college }) {
 
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'40px 24px 80px' }}>
 
+
+        {/* Sub-page deep dive links */}
+        <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px', marginBottom:28 }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Deep dive into each section</div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
+            {[
+              { label:'💰 Fees & ROI', sub:'Breakdown, scholarships, loans', href:'fees' },
+              { label:'📊 Placements', sub:'Report, sectors, recruiters', href:'placements' },
+              { label:'🎯 Admissions', sub:'Cutoff, process, batch profile', href:'admissions' },
+              { label:'🏛️ Campus', sub:'Hostels, clubs, student life', href:'campus' },
+              { label:'🎓 Alumni', sub:'Notable graduates and network', href:'alumni' },
+              { label:'📚 Programs', sub:'PGP, PGPX, FABM, FPM', href:'programs' },
+              { label:'⭐ Reviews', sub:'Honest student feedback', href:'reviews' },
+            ].map(item => (
+              <Link key={item.href} href={`/colleges/${college?.slug || 'iim-ahmedabad'}/${item.href}`}
+                style={{ textDecoration:'none', background:'var(--cream)', borderRadius:10, padding:'14px 14px', border:'1px solid var(--border2)', display:'block', transition:'all .2s' }}
+                onMouseOver={e => { e.currentTarget.style.borderColor='var(--orange)'; e.currentTarget.style.transform='translateY(-2px)' }}
+                onMouseOut={e => { e.currentTarget.style.borderColor='var(--border2)'; e.currentTarget.style.transform='none' }}>
+                <div style={{ fontSize:13.5, fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{item.label}</div>
+                <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{item.sub}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* ── SUB-PAGE DEEP DIVE LINKS ── */}
+        <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'20px 24px', marginBottom:32 }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>Deep dive — full guides for each section</div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(155px,1fr))', gap:10 }}>
+            {[
+              { label:'💰 Fees & ROI', sub:'Breakdown, loans, ROI', href:'fees' },
+              { label:'📊 Placements', sub:'Report, sectors, recruiters', href:'placements' },
+              { label:'🎯 Admissions', sub:'Cutoff, process, profile', href:'admissions' },
+              { label:'🏛️ Campus', sub:'Hostels, clubs, life', href:'campus' },
+              { label:'🎓 Alumni', sub:'Notable graduates', href:'alumni' },
+              { label:'📚 Programs', sub:'PGP, PGPX, FABM, FPM', href:'programs' },
+              { label:'⭐ Reviews', sub:'Honest student feedback', href:'reviews' },
+            ].map(item => (
+              <Link key={item.href} href={`/colleges/${college?.slug || 'iim-ahmedabad'}/${item.href}`}
+                style={{ textDecoration:'none', background:'var(--cream)', borderRadius:10, padding:'14px', border:'1px solid var(--border2)', display:'block', transition:'all .2s' }}
+                onMouseOver={e => { e.currentTarget.style.borderColor='var(--orange)'; e.currentTarget.style.transform='translateY(-2px)' }}
+                onMouseOut={e => { e.currentTarget.style.borderColor='var(--border2)'; e.currentTarget.style.transform='none' }}>
+                <div style={{ fontSize:13.5, fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{item.label}</div>
+                <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{item.sub}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         {/* ── OVERVIEW ── */}
         <div id="overview" style={{ marginBottom:56 }}>
-          <SectionHead>Overview</SectionHead>
+          <SectionHead>IIM Ahmedabad Overview — Rankings, Accreditations &amp; Quick Facts</SectionHead>
           <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px 28px', marginBottom:16 }}>
             <p style={{ fontSize:15, lineHeight:1.85, color:'var(--ink2)', margin:0 }}>{d.tagline}</p>
           </div>
@@ -340,7 +388,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── PLACEMENTS ── */}
         <div id="placements" style={{ marginBottom:56 }}>
-          <SectionHead>Placements {d.placements.year}</SectionHead>
+          <SectionHead>IIM Ahmedabad Placements 2025 — Average Package, Sectors &amp; Top Recruiters</SectionHead>
 
           {/* Numbers grid */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
@@ -403,7 +451,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── FEES ── */}
         <div id="fees" style={{ marginBottom:56 }}>
-          <SectionHead>Fees and financial aid</SectionHead>
+          <SectionHead>IIM Ahmedabad Fees 2025 — Total Cost, Scholarships &amp; Education Loans</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="fees-grid">
             {/* Fee breakdown */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
@@ -444,7 +492,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── ADMISSIONS ── */}
         <div id="admissions" style={{ marginBottom:56 }}>
-          <SectionHead>Admissions</SectionHead>
+          <SectionHead>IIM Ahmedabad Admission 2026 — CAT Cutoff, Selection Process &amp; Batch Profile</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }} className="admissions-grid">
             {/* Cutoffs */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
@@ -529,7 +577,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── PROGRAMS ── */}
         <div id="programs" style={{ marginBottom:56 }}>
-          <SectionHead>Programs</SectionHead>
+          <SectionHead>IIM Ahmedabad Programs — PGP, PGPX, FABM, FPM Fees &amp; Eligibility</SectionHead>
           <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', overflow:'hidden' }}>
             <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
               <thead>
@@ -557,7 +605,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── CAMPUS ── */}
         <div id="campus" style={{ marginBottom:56 }}>
-          <SectionHead>Campus and life</SectionHead>
+          <SectionHead>IIM Ahmedabad Campus — Louis Kahn Architecture, Hostels &amp; Student Life</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="campus-grid">
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Campus facts</div>
@@ -588,7 +636,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── ALUMNI ── */}
         <div id="alumni" style={{ marginBottom:56 }}>
-          <SectionHead>Notable alumni</SectionHead>
+          <SectionHead>IIM Ahmedabad Notable Alumni — Leaders, Founders &amp; Global Icons</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:10 }}>
             {d.alumni.map((a, i) => (
               <div key={i} style={{ background:'var(--white)', borderRadius:12, border:'1px solid var(--border)', padding:'16px 18px' }}>
@@ -602,7 +650,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── VERDICT ── */}
         <div id="verdict" style={{ marginBottom:56 }}>
-          <SectionHead>Claude's honest verdict</SectionHead>
+          <SectionHead>Is IIM Ahmedabad Worth It? — Honest Pros, Cons &amp; Who Should Apply</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }} className="verdict-grid">
             <div style={{ background:'var(--teal-lt)', borderRadius:14, border:'1px solid rgba(15,110,86,.2)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>IIM A is genuinely best for</div>
@@ -637,7 +685,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── REVIEWS ── */}
         <div style={{ marginBottom:56 }}>
-          <SectionHead>Student reviews</SectionHead>
+          <SectionHead>IIM Ahmedabad Student Reviews — Academics, Placements &amp; Campus Life</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:20, marginBottom:20 }} className="reviews-grid">
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px', textAlign:'center' }}>
               <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{d.reviews.overall.toFixed(1)}</div>
@@ -672,6 +720,28 @@ export default function CollegeDetailClient({ college }) {
                 Reviews compiled from Quora, PagalGuy, and MBA forums (2023-2025). Collvera has not verified individual claims.
               </div>
             </div>
+          </div>
+        </div>
+
+
+        {/* Internal links for SEO */}
+        <div style={{ marginBottom:32, padding:'20px 24px', background:'var(--white)', borderRadius:14, border:'1px solid var(--border)' }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:16 }}>Explore more</div>
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+            {[
+              { label:'IIM A vs IIM B — AI comparison', href:'/compare?a=iim-ahmedabad&b=iim-bangalore' },
+              { label:'Colleges for 99 percentile CAT', href:'/blog/colleges-for-99-percentile-cat-2025' },
+              { label:'Check your IIM A eligibility', href:'/eligibility' },
+              { label:'MBA ROI rankings', href:'/rankings' },
+              { label:'CAT 2026 preparation guide', href:'/blog/cat-2026-preparation-guide-april-november' },
+              { label:'IIM Ahmedabad vs FMS Delhi', href:'/compare?a=iim-ahmedabad&b=fms-delhi' },
+            ].map((l, i) => (
+              <Link key={i} href={l.href} style={{ fontSize:12.5, color:'var(--orange)', textDecoration:'none', background:'var(--orange-lt)', padding:'6px 14px', borderRadius:20, border:'1px solid rgba(217,95,2,.15)', fontWeight:500 }}
+                onMouseOver={e => e.currentTarget.style.background='rgba(217,95,2,.15)'}
+                onMouseOut={e => e.currentTarget.style.background='var(--orange-lt)'}>
+                {l.label} →
+              </Link>
+            ))}
           </div>
         </div>
 
