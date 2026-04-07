@@ -34,6 +34,37 @@ const META = {
       description: 'Honest IIM Ahmedabad student reviews 2025: transformative academics, extreme first-year pressure, 100% placements, isolated Ahmedabad location, Gujarat dry state, limited international offers.',
     },
   }
+
+  'iim-bangalore': {
+    fees: {
+      title: 'IIM Bangalore Fees 2025: Total Cost Rs 26L, Scholarships, Loans & ROI | Collvera',
+      description: 'IIM Bangalore PGP fees 2025-27: Rs 26 lakhs total. Financial aid for income below Rs 8 LPA, Aditya Birla Scholarship Rs 1.75L, education loans, monthly living costs in Bengaluru and ROI analysis.',
+    },
+    placements: {
+      title: 'IIM Bangalore Placements 2025: Rs 34.88 LPA Average, 22 Overseas Offers, 177 Companies | Collvera',
+      description: 'IIM Bangalore placement report 2025: Rs 34.88 LPA mean salary, Rs 32.61 LPA median. Consulting 41%, 22 international offers. Accenture Strategy 75 offers, BCG 25, McKinsey 14. 208 PPOs accepted.',
+    },
+    admissions: {
+      title: 'IIM Bangalore Admission 2026: CAT Cutoff, Selection Process & Batch Profile | Collvera',
+      description: 'IIM Bangalore PGP 2026 admission: CAT aggregate cutoff 85%ile General. Pre-PI weights: CAT 55%, Academics 30%, Work exp 10%. Post-PI: Interview 40%, WAT 10%. Batch of 544 with 37.5% female.',
+    },
+    campus: {
+      title: 'IIM Bangalore Campus: Bengaluru Location, Hostels, Clubs & International Exchange | Collvera',
+      description: 'IIM Bangalore campus guide: Bannerghatta Road Bengaluru, 95 partner universities in 30 countries, 200+ students on exchange annually, NSRCEL startup incubator, Yale Global Network for Advanced Management.',
+    },
+    alumni: {
+      title: 'IIM Bangalore Notable Alumni: Nandan Nilekani, Kiran Mazumdar-Shaw & More | Collvera',
+      description: 'IIM Bangalore famous alumni: Nandan Nilekani (Infosys co-founder, Aadhaar), Kiran Mazumdar-Shaw (Biocon founder), S.D. Shibulal (Infosys CEO), Aroon Purie (India Today founder) and more.',
+    },
+    programs: {
+      title: 'IIM Bangalore Programs 2025: PGP, PGPBA, EPGP, FPM Fees & Eligibility | Collvera',
+      description: 'IIM Bangalore programs: PGP MBA Rs 26L 2 years, PGPBA Business Analytics Rs 26L, EPGP Executive MBA 1 year FT ranked #34, FPM PhD fully funded. CAT cutoffs, eligibility and structure explained.',
+    },
+    reviews: {
+      title: 'IIM Bangalore Reviews 2025: Students on Academics, Placements & Bengaluru Life | Collvera',
+      description: 'Honest IIM Bangalore student reviews 2025: Bengaluru location advantage for tech and startups, 22 international placements, NSRCEL incubation, off-campus flexibility in Year 2, consulting vs tech placement balance.',
+    },
+  },
 }
 
 export async function generateMetadata({ params }) {
