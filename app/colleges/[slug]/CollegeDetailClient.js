@@ -119,30 +119,6 @@ export default function CollegeDetailClient({ college }) {
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'40px 24px 80px' }}>
 
 
-        {/* Sub-page deep dive links */}
-        <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px', marginBottom:28 }}>
-          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Deep dive into each section</div>
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:10 }}>
-            {[
-              { label:'💰 Fees & ROI', sub:'Breakdown, scholarships, loans', href:'fees' },
-              { label:'📊 Placements', sub:'Report, sectors, recruiters', href:'placements' },
-              { label:'🎯 Admissions', sub:'Cutoff, process, batch profile', href:'admissions' },
-              { label:'🏛️ Campus', sub:'Hostels, clubs, student life', href:'campus' },
-              { label:'🎓 Alumni', sub:'Notable graduates and network', href:'alumni' },
-              { label:'📚 Programs', sub:'PGP, PGPX, FABM, FPM', href:'programs' },
-              { label:'⭐ Reviews', sub:'Honest student feedback', href:'reviews' },
-            ].map(item => (
-              <Link key={item.href} href={`/colleges/${college?.slug || 'iim-ahmedabad'}/${item.href}`}
-                style={{ textDecoration:'none', background:'var(--cream)', borderRadius:10, padding:'14px 14px', border:'1px solid var(--border2)', display:'block', transition:'all .2s' }}
-                onMouseOver={e => { e.currentTarget.style.borderColor='var(--orange)'; e.currentTarget.style.transform='translateY(-2px)' }}
-                onMouseOut={e => { e.currentTarget.style.borderColor='var(--border2)'; e.currentTarget.style.transform='none' }}>
-                <div style={{ fontSize:13.5, fontWeight:600, color:'var(--ink)', marginBottom:3 }}>{item.label}</div>
-                <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{item.sub}</div>
-              </Link>
-            ))}
-          </div>
-        </div>
-
         {/* ── SUB-PAGE DEEP DIVE LINKS ── */}
         <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'20px 24px', marginBottom:32 }}>
           <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>Deep dive — full guides for each section</div>
@@ -156,7 +132,7 @@ export default function CollegeDetailClient({ college }) {
               { label:'📚 Programs', sub:'PGP, PGPX, FABM, FPM', href:'programs' },
               { label:'⭐ Reviews', sub:'Honest student feedback', href:'reviews' },
             ].map(item => (
-              <Link key={item.href} href={`/colleges/${college?.slug || 'iim-ahmedabad'}/${item.href}`}
+              <Link key={item.href} href={`/colleges/${d.slug}/${item.href}`}
                 style={{ textDecoration:'none', background:'var(--cream)', borderRadius:10, padding:'14px', border:'1px solid var(--border2)', display:'block', transition:'all .2s' }}
                 onMouseOver={e => { e.currentTarget.style.borderColor='var(--orange)'; e.currentTarget.style.transform='translateY(-2px)' }}
                 onMouseOut={e => { e.currentTarget.style.borderColor='var(--border2)'; e.currentTarget.style.transform='none' }}>
@@ -169,7 +145,7 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── OVERVIEW ── */}
         <div id="overview" style={{ marginBottom:56 }}>
-          <SectionHead>IIM Ahmedabad Overview — Rankings, Accreditations &amp; Quick Facts</SectionHead>
+          <SectionHead>{d.name} Overview — Rankings, Accreditations &amp; Quick Facts</SectionHead>
           <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px 28px', marginBottom:16 }}>
             <p style={{ fontSize:15, lineHeight:1.85, color:'var(--ink2)', margin:0 }}>{d.tagline}</p>
           </div>
@@ -567,10 +543,10 @@ export default function CollegeDetailClient({ college }) {
         {/* ── BOTTOM CTA ── */}
         <div style={{ background:'var(--ink)', borderRadius:16, padding:'32px', textAlign:'center' }}>
           <div style={{ fontFamily:'var(--serif)', fontSize:'1.3rem', fontWeight:700, color:'#fff', marginBottom:8 }}>
-            Check if IIM Ahmedabad is right for your profile
+            Check if {d.name} is right for your profile
           </div>
           <p style={{ fontSize:13.5, color:'rgba(255,255,255,.5)', marginBottom:22, maxWidth:480, margin:'0 auto 22px', lineHeight:1.7 }}>
-            Enter your percentile, category, and background. AI tells you your real conversion chance and what stands between you and a call.
+            Enter your percentile and background. Claude shows your real conversion chance at {d.name} and what stands between you and a call.
           </p>
           <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
             <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'12px 24px', borderRadius:10, fontSize:13.5, fontWeight:600, textDecoration:'none' }}>
@@ -586,7 +562,7 @@ export default function CollegeDetailClient({ college }) {
         </div>
       </div>
 
-      <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} context="IIM Ahmedabad college page" />
+      <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} context={`${d.name} college page`} />
 
       <style>{`
         @media(max-width:768px){
