@@ -467,7 +467,7 @@ export default function CollegeSectionClient({ slug, section }) {
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16, flexWrap:'wrap' }}>
             <Link href="/colleges" style={{ color:'rgba(255,255,255,.3)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>Colleges</Link>
             <span style={{ color:'rgba(255,255,255,.2)' }}>›</span>
-            <Link href={basePath} style={{ color:'rgba(255,255,255,.45)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>IIM Ahmedabad</Link>
+            <Link href={basePath} style={{ color:'rgba(255,255,255,.45)', fontSize:11.5, fontFamily:'var(--mono)', textDecoration:'none' }}>{slug.split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}</Link>
             <span style={{ color:'rgba(255,255,255,.2)' }}>›</span>
             <span style={{ color:'#fff', fontSize:11.5, fontFamily:'var(--mono)' }}>{meta?.title?.split('—')[0]?.trim()}</span>
           </div>
@@ -484,7 +484,7 @@ export default function CollegeSectionClient({ slug, section }) {
 
       <div style={{ maxWidth:960, margin:'0 auto', padding:'44px 24px 80px' }}>
         <div style={{ marginBottom:40 }}>
-          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.9rem,3.5vw,2.5rem)', fontWeight:700, color:'var(--ink)', lineHeight:1.12, marginBottom:12 }}>{meta?.title}</h1>
+          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.9rem,3.5vw,2.5rem)', fontWeight:700, color:'var(--ink)', lineHeight:1.12, marginBottom:12 }}>{meta?.title?.replace('IIM Ahmedabad', slug==='iim-bangalore'?'IIM Bangalore':'IIM Ahmedabad') || meta?.title}</h1>
           <p style={{ fontSize:15.5, color:'var(--muted)', lineHeight:1.75 }}>{meta?.sub}</p>
           <div style={{ height:3, width:56, background:'var(--orange)', borderRadius:2, marginTop:18 }} />
         </div>
@@ -506,7 +506,7 @@ export default function CollegeSectionClient({ slug, section }) {
           <p style={{ fontSize:14, color:'rgba(255,255,255,.48)', marginBottom:22, maxWidth:480, margin:'0 auto 22px', lineHeight:1.8 }}>Enter your percentile and background. Claude shows your real conversion chance at IIM A and 20+ other colleges.</p>
           <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
             <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'12px 24px', borderRadius:10, fontSize:14, fontWeight:600, textDecoration:'none' }}>Check my eligibility →</Link>
-            <Link href="/compare?a=iim-ahmedabad&b=iim-bangalore" style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>IIM A vs IIM B →</Link>
+            <Link href={`/compare?a=${slug}&b=${slug==='iim-ahmedabad'?'iim-bangalore':'iim-ahmedabad'}`} style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>Compare →</Link>
           </div>
         </div>
       </div>
