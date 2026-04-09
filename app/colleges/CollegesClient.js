@@ -4,222 +4,446 @@ import Link from 'next/link'
 import Nav from '../../components/Nav'
 import LeadModal from '../../components/LeadModal'
 
-function fmtFees(n) {
-  if (!n) return null
-  const l = n / 100000
-  return `₹${l >= 10 ? Math.round(l) : l.toFixed(1)}L`
-}
-function fmtPkg(n) {
-  if (!n) return null
-  return `₹${(n / 100000).toFixed(1)} LPA`
+// ── helpers ──────────────────────────────────────────────────────────────────
+const fmt = {
+  fees: n => n ? `₹${n >= 10e5 ? Math.round(n/1e5) : (n/1e5).toFixed(1)}L` : null,
+  pkg:  n => n ? `₹${(n/1e5).toFixed(1)} LPA` : null,
+  cut:  n => n ? `${n}%ile` : null,
 }
 
-export default function CollegesClient({ initialColleges }) {
-  const [leadOpen, setLeadOpen] = useState(false)
-  const [search,   setSearch]   = useState('')
-  const [city,     setCity]     = useState('')
-  const [tier,     setTier]     = useState('')
-  const [maxFees,  setMaxFees]  = useState('')
-  const [sort,     setSort]     = useState('nirf')
+const NCR = ['New Delhi','Gurugram','Ghaziabad']
 
-  const cities = useMemo(
-    () => [...new Set(initialColleges.map(c => c.city).filter(Boolean))].sort(),
-    [initialColleges]
-  )
+const CITIES = [
+  { label: 'Delhi NCR',  cities: NCR,            emoji: '🏛️' },
+  { label: 'Mumbai',     cities: ['Mumbai'],      emoji: '🌊' },
+  { label: 'Bengaluru',  cities: ['Bengaluru'],   emoji: '💻' },
+  { label: 'Chennai',    cities: ['Chennai'],     emoji: '🌴' },
+  { label: 'Kolkata',    cities: ['Kolkata'],     emoji: '🏙️' },
+  { label: 'Ahmedabad',  cities: ['Ahmedabad'],   emoji: '🔶' },
+  { label: 'Hyderabad',  cities: ['Hyderabad'],   emoji: '💎' },
+  { label: 'Pune',       cities: ['Pune'],        emoji: '🎓' },
+]
 
-  const filtered = useMemo(() => {
-    let list = initialColleges.filter(c => {
-      if (search  && !c.name?.toLowerCase().includes(search.toLowerCase())) return false
-      if (city    && c.city !== city)                return false
-      if (tier    && c.tier !== parseInt(tier))      return false
-      if (maxFees && c.min_fees > parseInt(maxFees)) return false
-      return true
-    })
-    list.sort((a, b) => {
-      if (sort === 'nirf')    return (a.nirf_rank || 999) - (b.nirf_rank || 999)
-      if (sort === 'package') return (b.latest_avg_package || 0) - (a.latest_avg_package || 0)
-      if (sort === 'fees')    return (a.min_fees || 0) - (b.min_fees || 0)
-      return 0
-    })
-    return list
-  }, [initialColleges, search, city, tier, maxFees, sort])
+const FEE_BRACKETS = [
+  { label: 'Under ₹5L',   max: 500000,   color: '#16a34a' },
+  { label: '₹5L – ₹15L',  min: 500000,   max: 1500000, color: '#0ea5e9' },
+  { label: '₹15L – ₹25L', min: 1500000,  max: 2500000, color: '#f59e0b' },
+  { label: 'Above ₹25L',  min: 2500000,  color: '#ef4444' },
+]
+
+const CATEGORY_PILLS = [
+  { label: 'Finance',    tag: 'Finance' },
+  { label: 'Consulting', tag: 'Consulting' },
+  { label: 'Marketing',  tag: 'Marketing' },
+  { label: 'HR',         tag: 'HR' },
+  { label: 'Analytics',  tag: 'Analytics' },
+  { label: 'Tech & PM',  tag: 'Tech' },
+  { label: 'FMCG',       tag: 'FMCG' },
+  { label: 'Startups',   tag: 'Startups' },
+]
+
+const TRIVIA = [
+  { stat: '₹2.43L', desc: 'FMS Delhi fees — gives ₹34 LPA avg. Best ROI in Indian MBA.' },
+  { stat: '22',     desc: 'Overseas offers at IIM B in 2025 — highest among all IIMs.' },
+  { stat: '2.52x',  desc: "SOIL's ROI in 2022 — post-MBA salary was 2.5x pre-MBA salary." },
+]
+
+// ── search classifier ─────────────────────────────────────────────────────────
+function classify(q, colleges) {
+  const lo = q.toLowerCase().trim()
+  if (!lo) return null
+
+  const cityKeywords = {
+    'delhi ncr': NCR, 'ncr': NCR, 'delhi': NCR,
+    'mumbai': ['Mumbai'],
+    'bangalore': ['Bengaluru'], 'bengaluru': ['Bengaluru'],
+    'chennai': ['Chennai'],
+    'kolkata': ['Kolkata'],
+    'ahmedabad': ['Ahmedabad'],
+    'hyderabad': ['Hyderabad'],
+    'pune': ['Pune'],
+    'gurgaon': ['Gurugram'], 'gurugram': ['Gurugram'],
+  }
+  const tagKeywords = {
+    'hr': 'HR', 'human resource': 'HR',
+    'finance': 'Finance', 'banking': 'Finance', 'investment banking': 'Finance',
+    'marketing': 'Marketing', 'fmcg': 'FMCG', 'brand': 'Marketing',
+    'consulting': 'Consulting', 'strategy': 'Consulting',
+    'analytics': 'Analytics', 'data': 'Analytics',
+    'tech': 'Tech', 'product': 'Tech', 'startup': 'Startups',
+  }
+
+  // 1-year / executive
+  if (/1.?year|one.?year|executive|pgpm|experienced/.test(lo)) {
+    return { label: '1-Year & Executive MBA', results: colleges.filter(c => c.work_exp_required || c.work_exp_preferred) }
+  }
+  // ROI / value
+  if (/roi|cheapest|affordable|best value|low fees|value for money/.test(lo)) {
+    return { label: 'Best Value MBAs — Lowest Fees', results: [...colleges].filter(c=>c.min_fees).sort((a,b)=>a.min_fees-b.min_fees) }
+  }
+  // Top / best / ranked
+  if (/^(top|best|rank|premier|iim)/.test(lo)) {
+    return { label: 'Top Ranked Colleges', results: [...colleges].sort((a,b)=>(a.nirf_rank||999)-(b.nirf_rank||999)).slice(0,12) }
+  }
+  // Fee range
+  const feeM = lo.match(/under\s*[₹rs]*\s*(\d+)/)
+  if (feeM) {
+    const cap = parseInt(feeM[1]) * 1e5
+    return { label: `MBA Colleges Under ₹${feeM[1]}L`, results: colleges.filter(c=>c.min_fees&&c.min_fees<=cap).sort((a,b)=>a.min_fees-b.min_fees) }
+  }
+  // City
+  for (const [kw, cityList] of Object.entries(cityKeywords)) {
+    if (lo.includes(kw)) {
+      return { label: `MBA in ${kw.charAt(0).toUpperCase()+kw.slice(1)}`, results: colleges.filter(c=>cityList.some(ci=>c.city?.includes(ci))) }
+    }
+  }
+  // Tag
+  for (const [kw, tag] of Object.entries(tagKeywords)) {
+    if (lo.includes(kw)) {
+      return { label: `Top Colleges for ${tag}`, results: colleges.filter(c=>c.tags?.includes(tag)) }
+    }
+  }
+  // Direct name
+  const nameHits = colleges.filter(c => c.name.toLowerCase().includes(lo) || c.slug.includes(lo.replace(/\s+/g,'-')))
+  if (nameHits.length) return { label: `Results for "${q}"`, results: nameHits }
+
+  return { label: `Results for "${q}"`, results: [] }
+}
+
+// ── college card ──────────────────────────────────────────────────────────────
+function CollegeCard({ c }) {
+  const color  = c.color || '#d95f02'
+  const fees   = fmt.fees(c.min_fees)
+  const pkg    = fmt.pkg(c.avg_package)
+  const cutoff = fmt.cut(c.cat_cutoff)
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f5f3ef' }}>
-      <Nav onLeadOpen={() => setLeadOpen(true)} />
+    <Link href={`/colleges/${c.slug}`} style={{ textDecoration:'none', display:'flex', flexDirection:'column', background:'var(--white)', border:'1px solid var(--border)', borderRadius:14, overflow:'hidden', transition:'transform .15s, box-shadow .15s' }}
+      onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-3px)'; e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,.09)' }}
+      onMouseLeave={e=>{ e.currentTarget.style.transform='none'; e.currentTarget.style.boxShadow='none' }}>
 
-      {/* ── HERO ── */}
-      <div style={{ background: 'var(--ink)' }}>
-        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '44px 24px 40px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap' }}>
-          <div>
-            <p style={{ fontSize: 10, fontFamily: 'var(--mono)', color: 'rgba(255,255,255,.25)', letterSpacing: '.18em', textTransform: 'uppercase', marginBottom: 12 }}>Collvera · MBA India · 2026</p>
-            <h1 style={{ fontFamily: 'var(--serif)', fontSize: 'clamp(2.2rem,4vw,3.2rem)', fontWeight: 700, color: '#fff', lineHeight: 1.05, margin: 0 }}>Find Your MBA</h1>
-          </div>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,.38)', lineHeight: 1.75, maxWidth: 380, margin: 0 }}>
-            Every top Indian B-school ranked and verified — fees, placements, and Claude's honest assessment.
-          </p>
+      {/* top color bar */}
+      <div style={{ height:4, background:color, flexShrink:0 }} />
+
+      <div style={{ padding:'18px 20px 20px', display:'flex', flexDirection:'column', flex:1, gap:0 }}>
+        {/* rank + tier */}
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+          <span style={{ fontFamily:'var(--mono)', fontSize:11, fontWeight:700, color, background:`${color}15`, padding:'3px 8px', borderRadius:20, border:`1px solid ${color}30` }}>
+            {c.nirf_rank ? `#${c.nirf_rank} NIRF` : 'Unranked'}
+          </span>
+          <span style={{ fontFamily:'var(--mono)', fontSize:10, color:'var(--muted)', background:'var(--cream)', padding:'3px 8px', borderRadius:20, border:'1px solid var(--border)' }}>
+            {c.tier === 1 ? 'Premier' : c.tier === 2 ? 'Top Private' : 'Regional'}
+          </span>
         </div>
 
-        {/* ── FILTER BAR inside hero ── */}
-        <div style={{ maxWidth: 1080, margin: '0 auto', padding: '0 24px 0' }}>
-          <div style={{ background: 'rgba(255,255,255,.06)', borderRadius: '12px 12px 0 0', border: '1px solid rgba(255,255,255,.1)', borderBottom: 'none', padding: '14px 18px', display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        {/* name */}
+        <div style={{ fontSize:15, fontWeight:700, color:'var(--ink)', lineHeight:1.3, marginBottom:4 }}>{c.name}</div>
+        <div style={{ fontSize:11.5, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:16 }}>📍 {c.city}, {c.state}</div>
 
-            {/* search */}
-            <div style={{ position: 'relative', flex: '1 1 160px', minWidth: 140 }}>
-              <span style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 12, pointerEvents: 'none', opacity: .5 }}>🔍</span>
-              <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search college..."
-                style={{ width: '100%', paddingLeft: 28, height: 34, borderRadius: 7, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(255,255,255,.08)', color: '#fff', fontSize: 13, boxSizing: 'border-box', outline: 'none' }} />
+        {/* stats */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:8, marginBottom:14 }}>
+          {[
+            { label:'Avg Pkg', value: pkg || '—' },
+            { label:'Fees',    value: fees || '—' },
+            { label:'CAT',     value: cutoff || '—' },
+          ].map(s => (
+            <div key={s.label} style={{ background:'var(--cream)', borderRadius:8, padding:'8px 10px', textAlign:'center' }}>
+              <div style={{ fontSize:13, fontWeight:700, color: s.value === '—' ? 'var(--muted)' : 'var(--ink)', marginBottom:2 }}>{s.value}</div>
+              <div style={{ fontSize:9.5, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.06em' }}>{s.label}</div>
             </div>
-
-            {/* selects */}
-            {[
-              { val: city,    set: setCity,    opts: [['','All Cities'], ...cities.map(c=>[c,c])] },
-              { val: tier,    set: setTier,    opts: [['','All Tiers'],['1','Tier 1'],['2','Tier 2'],['3','Tier 3']] },
-              { val: maxFees, set: setMaxFees, opts: [['','Any Fees'],['500000','Under ₹5L'],['1500000','Under ₹15L'],['2500000','Under ₹25L']] },
-            ].map((f, i) => (
-              <select key={i} value={f.val} onChange={e => f.set(e.target.value)}
-                style={{ height: 34, borderRadius: 7, border: '1px solid rgba(255,255,255,.15)', background: 'rgba(255,255,255,.08)', color: '#fff', fontSize: 13, padding: '0 10px', cursor: 'pointer', outline: 'none' }}>
-                {f.opts.map(([v,l]) => <option key={v} value={v} style={{ background: '#222', color: '#fff' }}>{l}</option>)}
-              </select>
-            ))}
-
-            {/* sort pills */}
-            <div style={{ display: 'flex', gap: 5, marginLeft: 'auto', flexShrink: 0 }}>
-              {[['nirf','NIRF'],['fees','Fees ↑'],['package','Pkg ↓']].map(([v,l]) => (
-                <button key={v} onClick={() => setSort(v)}
-                  style={{ height: 32, padding: '0 13px', borderRadius: 20, border: `1px solid ${sort===v ? 'var(--orange)' : 'rgba(255,255,255,.2)'}`, background: sort===v ? 'var(--orange)' : 'transparent', color: sort===v ? '#fff' : 'rgba(255,255,255,.55)', fontSize: 12, fontWeight: 500, cursor: 'pointer', transition: 'all .15s', whiteSpace: 'nowrap' }}>
-                  {l}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ── LIST ── */}
-      <div style={{ maxWidth: 1080, margin: '0 auto', padding: '0 24px 80px' }}>
-
-        {/* table header */}
-        <div style={{ display: 'grid', gridTemplateColumns: '60px 1fr 100px 120px 140px 140px', gap: '0 12px', padding: '11px 20px', background: '#fff', borderLeft: '1px solid #e5e0d8', borderRight: '1px solid #e5e0d8', borderBottom: '1px solid #e5e0d8', marginBottom: 0 }}>
-          {['Rank','College','Fees From','Avg Package','Tier',''].map((h,i) => (
-            <div key={i} style={{ fontSize: 10, fontFamily: 'var(--mono)', color: '#999', textTransform: 'uppercase', letterSpacing: '.1em' }}>{h}</div>
           ))}
         </div>
 
-        {/* count row */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 20px 10px', background: '#fff', borderLeft: '1px solid #e5e0d8', borderRight: '1px solid #e5e0d8', borderBottom: '1px solid #eee' }}>
-          <span style={{ fontSize: 11.5, fontFamily: 'var(--mono)', color: '#aaa' }}>{filtered.length} colleges</span>
-          {(city || tier || maxFees) && (
-            <button onClick={() => { setCity(''); setTier(''); setMaxFees('') }}
-              style={{ fontSize: 10.5, color: 'var(--orange)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--mono)', padding: 0 }}>
-              clear filters ×
-            </button>
-          )}
-        </div>
-
-        {/* college rows */}
-        <div style={{ background: '#fff', border: '1px solid #e5e0d8', borderTop: 'none' }}>
-          {filtered.map((c, idx) => {
-            const fees  = fmtFees(c.min_fees)
-            const pkg   = fmtPkg(c.latest_avg_package)
-            const color = c.color || 'var(--orange)'
-            const isLast = idx === filtered.length - 1
-
-            return (
-              <Link key={c.id} href={`/colleges/${c.slug}`}
-                style={{ textDecoration: 'none', display: 'grid', gridTemplateColumns: '60px 1fr 100px 120px 140px 140px', gap: '0 12px', alignItems: 'center', padding: '16px 20px', borderTop: idx === 0 ? 'none' : '1px solid #f0ece5', position: 'relative', transition: 'background .12s' }}
-                onMouseEnter={e => e.currentTarget.style.background = '#fdf9f5'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                {/* accent bar */}
-                <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 3, background: color }} />
-
-                {/* rank */}
-                <div style={{ paddingLeft: 4 }}>
-                  {c.nirf_rank
-                    ? <div style={{ fontFamily: 'var(--mono)', fontSize: 15, fontWeight: 800, color: 'var(--ink)', lineHeight: 1 }}>
-                        #{c.nirf_rank}
-                        <div style={{ fontSize: 8.5, fontWeight: 400, color: '#bbb', marginTop: 2, letterSpacing: '.06em' }}>NIRF</div>
-                      </div>
-                    : <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: '#ccc' }}>—</div>
-                  }
-                </div>
-
-                {/* name + location */}
-                <div>
-                  <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--ink)', lineHeight: 1.25, marginBottom: 3 }}>{c.name}</div>
-                  <div style={{ fontSize: 11.5, color: '#aaa', fontFamily: 'var(--mono)', display: 'flex', alignItems: 'center', gap: 3 }}>
-                    <span style={{ fontSize: 9 }}>📍</span> {c.city}, {c.state}
-                  </div>
-                </div>
-
-                {/* fees */}
-                <div>
-                  {fees
-                    ? <><div style={{ fontSize: 14.5, fontWeight: 700, color: 'var(--ink)' }}>{fees}</div>
-                        <div style={{ fontSize: 9.5, color: '#bbb', fontFamily: 'var(--mono)', marginTop: 1 }}>fees from</div></>
-                    : <div style={{ fontSize: 12, color: '#ccc', fontFamily: 'var(--mono)' }}>Contact</div>
-                  }
-                </div>
-
-                {/* package */}
-                <div>
-                  {pkg
-                    ? <><div style={{ fontSize: 14.5, fontWeight: 700, color }}>{pkg}</div>
-                        <div style={{ fontSize: 9.5, color: '#bbb', fontFamily: 'var(--mono)', marginTop: 1 }}>avg package</div></>
-                    : <div style={{ fontSize: 11.5, color: '#c8c0b8', fontFamily: 'var(--mono)' }}>See profile</div>
-                  }
-                </div>
-
-                {/* tier badge */}
-                <div>
-                  <span style={{
-                    display: 'inline-block', fontSize: 10.5, padding: '4px 10px', borderRadius: 20, fontFamily: 'var(--mono)', fontWeight: 600, whiteSpace: 'nowrap',
-                    background: c.tier === 1 ? '#fff5ee' : c.tier === 2 ? '#f5f3ff' : '#f0fdf4',
-                    color: c.tier === 1 ? 'var(--orange)' : c.tier === 2 ? '#6d28d9' : '#16a34a',
-                    border: `1px solid ${c.tier === 1 ? 'rgba(217,95,2,.2)' : c.tier === 2 ? 'rgba(109,40,217,.15)' : 'rgba(22,163,74,.15)'}`,
-                  }}>
-                    {c.tier === 1 ? 'Premier IIM' : c.tier === 2 ? 'Top Private' : 'Regional'}
-                  </span>
-                </div>
-
-                {/* cta */}
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <span style={{ fontSize: 12.5, fontWeight: 600, color, padding: '7px 16px', borderRadius: 8, border: `1.5px solid ${color}33`, background: `${color}0d`, whiteSpace: 'nowrap', transition: 'all .12s' }}>
-                    View Details →
-                  </span>
-                </div>
-              </Link>
-            )
-          })}
-        </div>
-
-        {/* bottom CTA */}
-        <div style={{ marginTop: 40, background: 'var(--ink)', borderRadius: 16, padding: '36px 32px', textAlign: 'center' }}>
-          <div style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 700, color: '#fff', marginBottom: 8 }}>Not sure which college fits your profile?</div>
-          <p style={{ fontSize: 14, color: 'rgba(255,255,255,.4)', marginBottom: 24, lineHeight: 1.8, maxWidth: 420, margin: '0 auto 24px' }}>
-            Enter your CAT percentile and background. Claude finds your realistic options from all colleges above.
+        {/* verdict */}
+        {c.verdict && (
+          <p style={{ fontSize:12.5, color:'var(--ink2)', lineHeight:1.6, margin:'0 0 16px', flex:1, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
+            {c.verdict}
           </p>
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/eligibility" style={{ background: 'var(--orange)', color: '#fff', padding: '12px 26px', borderRadius: 10, fontSize: 14, fontWeight: 600, textDecoration: 'none' }}>Check my eligibility →</Link>
-            <Link href="/compare"     style={{ background: 'rgba(255,255,255,.07)', color: 'rgba(255,255,255,.65)', padding: '12px 26px', borderRadius: 10, fontSize: 14, border: '1px solid rgba(255,255,255,.13)', textDecoration: 'none' }}>Compare colleges</Link>
+        )}
+
+        {/* cta */}
+        <div style={{ marginTop:'auto', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
+          <span style={{ fontSize:13, fontWeight:600, color }}>View College →</span>
+          {c.tags?.slice(0,2).map(t => (
+            <span key={t} style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', background:'var(--cream)', padding:'2px 7px', borderRadius:20, border:'1px solid var(--border)' }}>{t}</span>
+          ))}
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+// ── horizontal scroll section ─────────────────────────────────────────────────
+function ScrollSection({ title, sub, colleges, seeAllQuery, onSearch }) {
+  if (!colleges.length) return null
+  return (
+    <div style={{ marginBottom:48 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-end', marginBottom:16 }}>
+        <div>
+          <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'var(--ink)', margin:0 }}>{title}</h2>
+          {sub && <p style={{ fontSize:12.5, color:'var(--muted)', margin:'4px 0 0', fontFamily:'var(--mono)' }}>{sub}</p>}
+        </div>
+        {seeAllQuery && (
+          <button onClick={() => onSearch(seeAllQuery)}
+            style={{ fontSize:12.5, color:'var(--orange)', background:'none', border:'none', cursor:'pointer', fontFamily:'var(--mono)', whiteSpace:'nowrap' }}>
+            See all →
+          </button>
+        )}
+      </div>
+      <div style={{ display:'flex', gap:16, overflowX:'auto', paddingBottom:8, scrollbarWidth:'none', WebkitOverflowScrolling:'touch' }}>
+        {colleges.map(c => (
+          <div key={c.id} style={{ flexShrink:0, width:260 }}>
+            <CollegeCard c={c} />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ── grid section ──────────────────────────────────────────────────────────────
+function GridSection({ title, sub, colleges }) {
+  if (!colleges.length) return null
+  return (
+    <div style={{ marginBottom:48 }}>
+      <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{title}</h2>
+      {sub && <p style={{ fontSize:12.5, color:'var(--muted)', marginBottom:16, fontFamily:'var(--mono)' }}>{sub}</p>}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16 }}>
+        {colleges.map(c => <CollegeCard key={c.id} c={c} />)}
+      </div>
+    </div>
+  )
+}
+
+// ── main ──────────────────────────────────────────────────────────────────────
+export default function CollegesClient({ initialColleges }) {
+  const [leadOpen, setLeadOpen] = useState(false)
+  const [query,    setQuery]    = useState('')
+  const [active,   setActive]   = useState(null) // active category pill
+
+  // filter by active pill (tag or fee bracket)
+  const displayColleges = useMemo(() => {
+    if (!active) return initialColleges
+    if (active.type === 'tag')     return initialColleges.filter(c => c.tags?.includes(active.value))
+    if (active.type === 'fee')     return initialColleges.filter(c => {
+      const f = c.min_fees || 0
+      return (!active.min || f >= active.min) && (!active.max || f <= active.max)
+    })
+    if (active.type === 'city')    return initialColleges.filter(c => active.cities.some(ci => c.city?.includes(ci)))
+    if (active.type === 'program') return initialColleges.filter(c => c.work_exp_required || c.work_exp_preferred)
+    return initialColleges
+  }, [initialColleges, active])
+
+  const searchResult = useMemo(() => query ? classify(query, initialColleges) : null, [query, initialColleges])
+
+  const sorted = useMemo(() => [...initialColleges].sort((a,b)=>(a.nirf_rank||999)-(b.nirf_rank||999)), [initialColleges])
+
+  function doSearch(q) { setQuery(q); setActive(null); window.scrollTo({ top: 300, behavior: 'smooth' }) }
+
+  return (
+    <div style={{ minHeight:'100vh', background:'var(--cream)' }}>
+      <Nav onLeadOpen={() => setLeadOpen(true)} />
+
+      {/* ── HERO ── */}
+      <div style={{ background:'var(--ink)', padding:'56px 24px 48px' }}>
+        <div style={{ maxWidth:720, margin:'0 auto', textAlign:'center' }}>
+          <p style={{ fontSize:11, fontFamily:'var(--mono)', color:'rgba(255,255,255,.3)', letterSpacing:'.18em', textTransform:'uppercase', marginBottom:14 }}>Collvera · India MBA · 2026</p>
+          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(2.2rem,5vw,3.4rem)', fontWeight:700, color:'#fff', lineHeight:1.05, marginBottom:12 }}>
+            Find Your MBA
+          </h1>
+          <p style={{ fontSize:15, color:'rgba(255,255,255,.4)', lineHeight:1.75, marginBottom:32, maxWidth:460, margin:'0 auto 32px' }}>
+            Search by college name, city, specialisation, or just say what you're looking for.
+          </p>
+
+          {/* search bar */}
+          <div style={{ position:'relative', maxWidth:600, margin:'0 auto' }}>
+            <span style={{ position:'absolute', left:18, top:'50%', transform:'translateY(-50%)', fontSize:16, pointerEvents:'none' }}>🔍</span>
+            <input
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              placeholder='Try "top MBA in Delhi", "best for HR", "under 15 lakhs"...'
+              style={{ width:'100%', paddingLeft:48, paddingRight:query?48:18, height:52, borderRadius:14, border:'2px solid rgba(255,255,255,.15)', background:'rgba(255,255,255,.08)', color:'#fff', fontSize:14.5, boxSizing:'border-box', outline:'none', transition:'border-color .2s' }}
+              onFocus={e => e.target.style.borderColor='var(--orange)'}
+              onBlur={e => e.target.style.borderColor='rgba(255,255,255,.15)'}
+            />
+            {query && (
+              <button onClick={() => setQuery('')}
+                style={{ position:'absolute', right:14, top:'50%', transform:'translateY(-50%)', background:'none', border:'none', color:'rgba(255,255,255,.4)', fontSize:18, cursor:'pointer', lineHeight:1 }}>✕</button>
+            )}
+          </div>
+
+          {/* quick search pills */}
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap', justifyContent:'center', marginTop:16 }}>
+            {['Top IIMs','Delhi NCR','Under ₹15L','1-Year MBA','Best for Finance','Best ROI'].map(s => (
+              <button key={s} onClick={() => doSearch(s)}
+                style={{ fontSize:12, padding:'6px 14px', borderRadius:20, border:'1px solid rgba(255,255,255,.18)', background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.6)', cursor:'pointer', transition:'all .15s', fontFamily:'var(--mono)' }}
+                onMouseEnter={e => { e.currentTarget.style.background='rgba(255,255,255,.14)'; e.currentTarget.style.color='#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background='rgba(255,255,255,.07)'; e.currentTarget.style.color='rgba(255,255,255,.6)' }}>
+                {s}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} context="College Explorer" />
+      <div style={{ maxWidth:1100, margin:'0 auto', padding:'40px 24px 80px' }}>
 
+        {/* ── SEARCH RESULTS ── */}
+        {searchResult ? (
+          <div>
+            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:24 }}>
+              <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', margin:0 }}>{searchResult.label}</h2>
+              <span style={{ fontSize:12, fontFamily:'var(--mono)', color:'var(--muted)' }}>{searchResult.results.length} colleges</span>
+              <button onClick={() => setQuery('')} style={{ marginLeft:'auto', fontSize:12, color:'var(--orange)', background:'none', border:'none', cursor:'pointer' }}>← Back to browse</button>
+            </div>
+            {searchResult.results.length === 0 ? (
+              <div style={{ textAlign:'center', padding:'60px 20px', background:'var(--white)', borderRadius:16, border:'1px solid var(--border)' }}>
+                <div style={{ fontSize:40, marginBottom:12 }}>🔍</div>
+                <p style={{ color:'var(--muted)', fontSize:15 }}>No colleges found. Try "top IIMs", a city name, or a specialisation.</p>
+              </div>
+            ) : (
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16 }}>
+                {searchResult.results.map(c => <CollegeCard key={c.id} c={c} />)}
+              </div>
+            )}
+          </div>
+        ) : (
+
+          /* ── BROWSE MODE ── */
+          <>
+            {/* category filter pills */}
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:40 }}>
+              <button onClick={() => setActive(null)}
+                style={{ fontSize:12.5, padding:'7px 16px', borderRadius:20, border:`1.5px solid ${!active ? 'var(--orange)' : 'var(--border)'}`, background:!active ? 'var(--orange)' : 'transparent', color:!active ? '#fff' : 'var(--ink2)', cursor:'pointer', fontWeight:500, transition:'all .15s' }}>
+                All Colleges
+              </button>
+              {CATEGORY_PILLS.map(p => {
+                const isActive = active?.type==='tag' && active?.value===p.tag
+                return (
+                  <button key={p.tag} onClick={() => setActive(isActive ? null : { type:'tag', value:p.tag })}
+                    style={{ fontSize:12.5, padding:'7px 16px', borderRadius:20, border:`1.5px solid ${isActive ? 'var(--orange)' : 'var(--border)'}`, background:isActive ? 'var(--orange)' : 'transparent', color:isActive ? '#fff' : 'var(--ink2)', cursor:'pointer', fontWeight:500, transition:'all .15s' }}>
+                    {p.label}
+                  </button>
+                )
+              })}
+              <button onClick={() => setActive(active?.type==='program' ? null : { type:'program' })}
+                style={{ fontSize:12.5, padding:'7px 16px', borderRadius:20, border:`1.5px solid ${active?.type==='program' ? 'var(--orange)' : 'var(--border)'}`, background:active?.type==='program' ? 'var(--orange)' : 'transparent', color:active?.type==='program' ? '#fff' : 'var(--ink2)', cursor:'pointer', fontWeight:500, transition:'all .15s' }}>
+                1-Year MBA
+              </button>
+            </div>
+
+            {/* if pill active — grid */}
+            {active ? (
+              <GridSection
+                title={active.type==='tag' ? `Top Colleges for ${active.value}` : active.type==='program' ? '1-Year & Executive MBA Programs' : 'Filtered Colleges'}
+                colleges={displayColleges.sort((a,b)=>(a.nirf_rank||999)-(b.nirf_rank||999))}
+              />
+            ) : (
+              <>
+                {/* ── TOP RANKED ── */}
+                <ScrollSection
+                  title="Top Ranked Colleges"
+                  sub="Sorted by NIRF 2025 ranking"
+                  colleges={sorted.slice(0,8)}
+                  seeAllQuery="top ranked colleges"
+                  onSearch={doSearch}
+                />
+
+                {/* ── CITY SECTIONS ── */}
+                <div style={{ marginBottom:48 }}>
+                  <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>Browse by City</h2>
+                  <p style={{ fontSize:12.5, color:'var(--muted)', marginBottom:20, fontFamily:'var(--mono)' }}>Click a city to explore colleges in that region</p>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:28 }}>
+                    {CITIES.map(city => {
+                      const count = initialColleges.filter(c => city.cities.some(ci => c.city?.includes(ci))).length
+                      if (!count) return null
+                      const isAct = active?.type==='city' && active?.label===city.label
+                      return (
+                        <button key={city.label} onClick={() => setActive(isAct ? null : { type:'city', label:city.label, cities:city.cities })}
+                          style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6, padding:'16px 12px', borderRadius:12, border:`1.5px solid ${isAct ? 'var(--orange)' : 'var(--border)'}`, background:isAct ? 'var(--orange)' : 'var(--white)', cursor:'pointer', transition:'all .15s' }}>
+                          <span style={{ fontSize:24 }}>{city.emoji}</span>
+                          <span style={{ fontSize:13, fontWeight:600, color:isAct ? '#fff' : 'var(--ink)' }}>{city.label}</span>
+                          <span style={{ fontSize:11, fontFamily:'var(--mono)', color:isAct ? 'rgba(255,255,255,.7)' : 'var(--muted)' }}>{count} college{count>1?'s':''}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* ── TRIVIA STRIP ── */}
+                <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:12, marginBottom:48, padding:'24px', background:'var(--ink)', borderRadius:16 }}>
+                  {TRIVIA.map((t,i) => (
+                    <div key={i} style={{ display:'flex', gap:14, alignItems:'flex-start' }}>
+                      <div style={{ fontFamily:'var(--serif)', fontSize:'1.8rem', fontWeight:700, color:'var(--orange)', flexShrink:0, lineHeight:1 }}>{t.stat}</div>
+                      <p style={{ fontSize:12.5, color:'rgba(255,255,255,.5)', lineHeight:1.65, margin:0 }}>{t.desc}</p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* ── FEE BRACKETS ── */}
+                <div style={{ marginBottom:48 }}>
+                  <h2 style={{ fontFamily:'var(--serif)', fontSize:'1.25rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>Browse by Budget</h2>
+                  <p style={{ fontSize:12.5, color:'var(--muted)', marginBottom:20, fontFamily:'var(--mono)' }}>Find the right MBA at the right price point</p>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:10, marginBottom:24 }}>
+                    {FEE_BRACKETS.map(b => {
+                      const count = initialColleges.filter(c => {
+                        const f = c.min_fees || 0
+                        return (!b.min || f >= b.min) && (!b.max || f < b.max)
+                      }).length
+                      if (!count) return null
+                      const isAct = active?.type==='fee' && active?.label===b.label
+                      return (
+                        <button key={b.label} onClick={() => setActive(isAct ? null : { type:'fee', label:b.label, min:b.min, max:b.max })}
+                          style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'14px 18px', borderRadius:12, border:`1.5px solid ${isAct ? b.color : 'var(--border)'}`, background:isAct ? b.color+'15' : 'var(--white)', cursor:'pointer', transition:'all .15s' }}>
+                          <span style={{ fontSize:13.5, fontWeight:600, color:isAct ? b.color : 'var(--ink)' }}>{b.label}</span>
+                          <span style={{ fontSize:11, fontFamily:'var(--mono)', color: isAct ? b.color : 'var(--muted)' }}>{count} colleges</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* ── 1-YEAR MBA ── */}
+                <ScrollSection
+                  title="1-Year & Executive MBA"
+                  sub="For working professionals with 2+ years experience"
+                  colleges={initialColleges.filter(c => c.work_exp_required || c.work_exp_preferred).sort((a,b)=>(a.nirf_rank||999)-(b.nirf_rank||999))}
+                  seeAllQuery="1 year executive MBA"
+                  onSearch={doSearch}
+                />
+
+                {/* ── BEST ROI ── */}
+                <ScrollSection
+                  title="Best Value MBAs"
+                  sub="Sorted by lowest fees — highest ROI potential"
+                  colleges={[...initialColleges].filter(c=>c.min_fees).sort((a,b)=>a.min_fees-b.min_fees).slice(0,6)}
+                  seeAllQuery="best ROI MBA"
+                  onSearch={doSearch}
+                />
+              </>
+            )}
+
+            {/* bottom CTA */}
+            <div style={{ marginTop:20, background:'var(--ink)', borderRadius:16, padding:'36px 28px', textAlign:'center' }}>
+              <div style={{ fontFamily:'var(--serif)', fontSize:'1.35rem', fontWeight:700, color:'#fff', marginBottom:8 }}>Not sure which college fits your profile?</div>
+              <p style={{ fontSize:14, color:'rgba(255,255,255,.4)', marginBottom:24, lineHeight:1.8, maxWidth:420, margin:'0 auto 24px' }}>
+                Enter your CAT percentile and background. Claude finds your realistic options in seconds.
+              </p>
+              <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
+                <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'12px 26px', borderRadius:10, fontSize:14, fontWeight:600, textDecoration:'none' }}>Check my eligibility →</Link>
+                <Link href="/compare"     style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.65)', padding:'12px 26px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.13)', textDecoration:'none' }}>Compare colleges</Link>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} context="College Explorer" />
       <style>{`
-        input::placeholder { color: rgba(255,255,255,.3) !important; }
-        input:focus { border-color: var(--orange) !important; }
-        select option { background: #1a1a1a; color: #fff; }
-        @media (max-width: 860px) {
-          .college-row-inner { grid-template-columns: 52px 1fr 90px 110px !important; }
-          .college-col-tier, .college-col-cta { display: none !important; }
-        }
-        @media (max-width: 560px) {
-          .college-row-inner { grid-template-columns: 44px 1fr !important; }
-          .college-col-fees { display: none !important; }
+        input::placeholder { color: rgba(255,255,255,.28) !important; }
+        ::-webkit-scrollbar { display: none; }
+        @media (max-width: 600px) {
+          h1 { font-size: 2rem !important; }
         }
       `}</style>
     </div>
