@@ -40,24 +40,75 @@ function H2({ children }) { return <h2 style={{ fontFamily:'var(--serif)', fontS
 function FeesPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>Great Lakes — All Programs Fee Summary</H2>
+      <P>Great Lakes runs four programs across two campuses. The 1-year PGPM is for experienced professionals; the 2-year PGDM is open to freshers. PGDM fees are approximate — confirm with the admissions office before committing.</P>
+      <T headers={['Program','Campus','Duration','Total Fees','Avg CTC 2025']} rows={[
+        ['PGPM','Chennai','1 year','Rs 23.50 L','Rs 17.8 LPA'],
+        ['PGPM','Gurgaon','1 year','Rs 21.66–24.10 L','Rs 15.1 LPA'],
+        ['PGDM','Chennai','2 years','Rs 16–18 L (approx)','Rs 15 LPA'],
+        ['PGDM','Gurgaon','2 years','Rs 14–16 L (approx)','Rs 11.8 LPA'],
+      ]} />
+      <H2>PGPM Chennai — Full Fee Breakdown (2026-27)</H2>
+      <T headers={['Component','Amount (INR)','Notes']} rows={[
+        ['Tuition Fee','Rs 12,43,000','Includes case studies, textbooks, online resources'],
+        ['Program Fee','Rs 6,96,000','Academic and program-related charges'],
+        ['Academic Subtotal','Rs 19,39,000',''],
+        ['Accommodation (Single AC)','Rs 3,96,000','Mandatory residential; all vegetarian meals included'],
+        ['Caution Deposit','Rs 10,000','Fully refundable at program end'],
+        ['Alumni Subscription','Rs 5,000','Lifetime access to 15,000+ alumni network'],
+        ['Total Fees','Rs 23,50,000','All-inclusive'],
+      ]} />
+      <H2>PGPM Gurgaon — Fee Breakdown</H2>
+      <T headers={['Component','Amount (INR)','Notes']} rows={[
+        ['Academic / Tuition Fees','Rs 18,08,000',''],
+        ['Accommodation and Meals','Rs 3,43,000 – 5,92,000','Varies by room type chosen'],
+        ['Refundable Deposit','Rs 10,000',''],
+        ['Alumni Subscription','Rs 5,000',''],
+        ['Total Program Cost','Rs 21,66,000 – 24,10,000','Range based on accommodation'],
+      ]} />
+      <H2>ROI — All 4 Programs</H2>
+      <T headers={['Program','Fees','Avg CTC','Salary Multiplier','Payback (est.)']} rows={[
+        ['PGPM Chennai','Rs 23.5L','Rs 17.8 LPA','~2.7x','~1.5 years'],
+        ['PGPM Gurgaon','Rs 21.7–24.1L','Rs 15.1 LPA','~2.5x','~1.6 years'],
+        ['PGDM Chennai','Rs 16–18L','Rs 15 LPA','—','~1.5–2 years'],
+        ['PGDM Gurgaon','Rs 14–16L','Rs 11.8 LPA','—','~1.5–2 years'],
+      ]} />
+      <H2>Great Lakes vs Peer 1-Year Programs</H2>
+      <T headers={['Program','Fees','Avg CTC','Work Exp','Accreditation']} rows={[
+        ['Great Lakes PGPM Chennai','Rs 23.5L','Rs 17.8 LPA','2+ yrs','AACSB + AMBA'],
+        ['Great Lakes PGPM Gurgaon','Rs 21.7–24.1L','Rs 15.1 LPA','2+ yrs','AACSB + AMBA'],
+        ['ISB Hyderabad','Rs 42–45L','Rs 34+ LPA','3-5 yrs','AACSB + AMBA + EQUIS'],
+        ['IIM-A PGPX','Rs 35L+','Rs 35+ LPA','5+ yrs','AACSB + AMBA + EQUIS'],
+        ['SOIL PGPM','Rs 15L','Rs 12.3 LPA','2+ yrs','AICTE only'],
+      ]} />
+      <H2>Scholarships and Financial Aid</H2>
+      <T headers={['Aid Type','Eligibility','Amount']} rows={[
+        ['Merit Scholarship','Top academic performers and diverse backgrounds','Up to 20% off fees'],
+        ['SBI Education Loan','All admitted students','Up to full tuition; ~8.5–10% p.a.'],
+        ['HDFC Credila / Avanse','All admitted students','Full fees; 11–13% p.a.'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
       <H2>SOIL Program Fees — Overview</H2>
-      <P>SOIL runs three programs with different fee structures. The 1-year PGPM and PGPM-HR are priced at approximately Rs 15 lakhs each. The 2-year PGDM at the Manesar campus (SSOBD) is approximately Rs 17 lakhs. These are approximate figures — SOIL does not publish fees on its website. Contact admissions@soilindia.net or call 9654467153 for the current confirmed fee schedule.</P>
+      <P>SOIL runs three programs with different fee structures. The 1-year PGPM and PGPM-HR are approximately Rs 15 lakhs each. The 2-year PGDM at Manesar (SSOBD) is approximately Rs 17 lakhs. These are approximate — SOIL does not publish fees publicly. Contact admissions@soilindia.net or call 9654467153 for confirmed figures.</P>
       <T headers={['Program','Duration','Fees (Approx)','Campus','Intake']} rows={[
         ['PGPM','1 year','Rs 15 L','Gurugram (Sec 44)','~60 students'],
         ['PGPM-HR','1 year','Rs 15 L','Gurugram (Sec 44)','TBD'],
         ['PGDM (SSOBD)','2 years','Rs 17 L','Manesar','TBD'],
       ]} />
       <H2>SOIL ROI — 4-Year Track Record</H2>
-      <P>SOIL's clearest value argument is the ROI multiple — post-MBA salary divided by pre-MBA salary. At Rs 15L fees and a 2.22x ROI on the 2024-25 batch, the fee recovery happens within the first year of employment for most graduates. The ROI has been above 2x every year since 2021-22, which is a strong and consistent result for a mid-tier private B-school.</P>
       <T headers={['Batch','Avg CTC','Top 50% CTC','Highest CTC','Firms','ROI']} rows={[
         ['PGPM 2021–22','Rs 11 LPA','Rs 13.2 LPA','Rs 19 LPA','43','2.52x'],
         ['PGPM 2022–23','Rs 11.5 LPA','Rs 12.6 LPA','Rs 18.5 LPA','49','2.37x'],
         ['PGPM 2023–24','Rs 11.75 LPA','Rs 13.7 LPA','Rs 22 LPA','64','2.31x'],
         ['PGPM 2024–25','Rs 12.3 LPA','Rs 15.4 LPA','Rs 21.8 LPA','60','2.22x'],
       ]} />
-      <H2>Fee Comparison — SOIL vs Peer Programs</H2>
+      <H2>Fee Comparison — SOIL vs Peers</H2>
       <T headers={['Program','Type','Fees','Avg CTC','ROI']} rows={[
         ['SOIL PGPM','1-yr, experienced','Rs 15 L','Rs 12.3 LPA','2.22x'],
         ['SOIL PGDM','2-yr, fresher','Rs 17 L','Rs 11.17 LPA','—'],
@@ -65,26 +116,16 @@ function FeesPage({ slug }) {
         ['MDI Gurgaon','2-yr, fresher','Rs 23 L','Rs 22 LPA','—'],
         ['IMT Ghaziabad','2-yr, fresher','Rs 18 L','Rs 14 LPA','—'],
       ]} />
-      <H2>Cost of Living — Gurugram</H2>
-      <P>Both PGPM programs are fully residential at Gurugram Sector 44 — accommodation is included in the program. The PGDM is residential at Manesar. Living costs beyond hostel are moderate: food Rs 3,000-5,000/month, transport Rs 1,500-3,000, personal Rs 3,000-5,000. Total out-of-pocket living cost is approximately Rs 8,000-15,000/month over and above the program fee.</P>
-      <T headers={['Expense','Monthly Estimate','Notes']} rows={[
-        ['Hostel / Accommodation','Included','Fully residential; all programs'],
-        ['Food (campus + outside)','Rs 3,000 – 5,000','Campus mess plus occasional outside'],
-        ['Transport','Rs 1,500 – 3,000','Within Gurugram; Metro access'],
-        ['Personal / Misc','Rs 3,000 – 5,000','Clothing, phone, subscriptions'],
-        ['Books & Materials','Rs 500 – 1,000','Most materials provided'],
-        ['Total Monthly Estimate','Rs 8,000 – 14,000','Excluding hostel (included)'],
-      ]} />
       <H2>Education Loans for SOIL Programs</H2>
-      <P>Education loans are available from major Indian banks for SOIL programs. Lenders weigh SOIL's 100% placement record and 2x+ ROI history favourably. An offer letter significantly improves approval speed. At Rs 15L loan amount, monthly EMI post-placement is approximately Rs 15,000-18,000 — well within reach given placement averages of Rs 12+ LPA.</P>
       <T headers={['Lender','Max Loan','Interest Rate','Notes']} rows={[
         ['SBI','Up to Rs 20L','8.5–10%','Collateral-free up to Rs 20L; moratorium during program'],
-        ['HDFC Credila','Up to Rs 40L','10.5–12%','Faster processing; flexible structure'],
+        ['HDFC Credila','Up to Rs 40L','10.5–12%','Faster processing'],
         ['Avanse','Up to Rs 40L','11–13%','No upper cap with collateral'],
         ['Axis Bank','Up to Rs 20L','9–11%','Collateral-free available'],
       ]} />
     </>
   )
+
   if (!isB) return (
     <>
       <H2>What the Rs 27.5 Lakh Fee Covers at IIM Ahmedabad</H2>
@@ -173,10 +214,66 @@ function FeesPage({ slug }) {
 function PlacementsPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>Great Lakes Placements 2025 — All 4 Programs</H2>
+      <P>PGDM Chennai produced the highest single offer at Rs 39.3 LPA — above PGPM Chennai's Rs 30.8 LPA. PGPM Chennai leads on average at Rs 17.8 LPA. PGDM programs serve freshers so averages are lower, but the Rs 39.3 LPA outlier shows strong top-of-class potential.</P>
+      <T headers={['Program','Avg CTC','Top 10% Avg','Highest CTC']} rows={[
+        ['PGPM Chennai','Rs 17.8 LPA','Rs 28.6 LPA','Rs 30.8 LPA'],
+        ['PGPM Gurgaon','Rs 15.1 LPA','Rs 21.7 LPA','Rs 21.8 LPA'],
+        ['PGDM Chennai','Rs 15 LPA','Rs 23.3 LPA','Rs 39.3 LPA'],
+        ['PGDM Gurgaon','Rs 11.8 LPA','Rs 17.6 LPA','Rs 22.7 LPA'],
+      ]} />
+      <H2>PGPM Chennai — Function Breakdown</H2>
+      <T headers={['Function','Share','Sample Roles']} rows={[
+        ['Consulting','61%','Business Research Consultant, Business Value Architect, Decision Analytics Consultant'],
+        ['Product Management','12%','Product Manager, Product Sales Manager'],
+        ['Sales / Marketing / BD','10%','Marketing Manager, Pursuit Manager'],
+        ['Operations / SCM / Logistics','7%','Retail Logistician, Project Manager'],
+        ['Analytics and Data Science','7%','Pricing Analyst, Data Consultant'],
+        ['General Management','2%','Manager'],
+        ['Finance / Fintech','1%','Manager — Financial Planning and Analysis'],
+      ]} />
+      <H2>PGPM Gurgaon — Function Breakdown</H2>
+      <T headers={['Function','Share']} rows={[
+        ['Digital Consulting','29%'],['Analytics','21%'],['Digital Ops','14%'],
+        ['Functional Consulting','13%'],['Enterprise Sales','8%'],['Others','15%'],
+      ]} />
+      <H2>PGDM Chennai — Function Breakdown</H2>
+      <P>PGDM Chennai has a very different profile — Finance and Sales dominate at 65% combined vs PGPM's consulting-heavy 61%, reflecting the fresher pool targeting Finance and FMCG entry roles.</P>
+      <T headers={['Function','Share']} rows={[
+        ['Finance','33%'],['Sales and Marketing','32%'],['Tech Consulting','12%'],
+        ['Operations','11%'],['Analytics','7%'],['Others','5%'],
+      ]} />
+      <H2>PGDM Gurgaon — Function Breakdown</H2>
+      <T headers={['Function','Share']} rows={[
+        ['Finance','28%'],['Sales and Marketing','24%'],['Tech Consulting','18%'],
+        ['Analytics','14%'],['Operations','10%'],['Others','6%'],
+      ]} />
+      <H2>Key Recruiters — PGPM Chennai</H2>
+      <T headers={['Company','Sector']} rows={[
+        ['Accenture Strategy and Consulting (AIOC, ATCI, OPS, TFO)','Consulting'],
+        ['Deloitte India / Deloitte USI','Consulting'],['KPMG','Consulting'],
+        ['ZS Associates','Consulting / Analytics'],['Cognizant','IT / Consulting'],
+        ['LTIMindtree','IT / Consulting'],['Tiger Analytics','Analytics'],
+        ['IBM','Technology / Consulting'],['WNS','Operations / Analytics'],
+        ['FedEx','Logistics'],['Swiggy','E-commerce'],['Kantar','Research / Analytics'],
+      ]} />
+      <H2>Key Recruiters — PGDM Chennai</H2>
+      <T headers={['Company','Sector']} rows={[
+        ['JP Morgan Chase','BFSI'],['Amazon','E-commerce'],['Cisco','Technology'],
+        ['PayPal','Fintech'],['Wells Fargo','BFSI'],['MasterCard','Fintech'],
+        ['Standard Chartered','BFSI'],['BNY Mellon','BFSI'],['ITC','FMCG'],
+        ['Nestle','FMCG'],['Gartner','Research'],['EY India','Consulting'],
+        ['Mahindra and Mahindra','Automotive'],['HDFC Life','Insurance'],
+        ['Decathlon','Retail'],['Godrej','Conglomerate'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
-      <H2>SOIL PGPM Placements 2024–25 — Headline Numbers</H2>
-      <P>The PGPM 2024-25 batch achieved an average CTC of Rs 12.3 LPA, highest of Rs 21.8 LPA, with 60 firms participating. 93% of the batch opted for placements; of those, 100% were placed. Top 50% average was Rs 15.4 LPA — a significant jump from the overall average, showing that the top half of the batch is very well placed. ROI of 2.22x means the average student more than doubled their pre-MBA salary.</P>
+      <H2>SOIL PGPM Placements 2024–25</H2>
       <T headers={['Metric','2024–25','2023–24','2022–23','2021–22']} rows={[
         ['Average CTC','Rs 12.3 LPA','Rs 11.75 LPA','Rs 11.5 LPA','Rs 11 LPA'],
         ['Top 50% Avg CTC','Rs 15.4 LPA','Rs 13.7 LPA','Rs 12.6 LPA','Rs 13.2 LPA'],
@@ -192,7 +289,6 @@ function PlacementsPage({ slug }) {
         ['Finance','Rs 11.18 LPA','—'],
       ]} />
       <H2>SOIL PGDM Placements — 5-Year Trend</H2>
-      <P>The 2-year PGDM at Manesar (SSOBD) primarily takes freshers. The 2023-25 batch saw 130 firms recruit — a sharp jump from 84 firms in 2022-24 and 49 in 2021-23. The 2024-26 interim report (80% placed, 2 months before graduation) shows Rs 11.5 LPA average and Rs 24 LPA highest — matching or exceeding final placement numbers of prior batches. BFSI and IT/ITES together account for 69% of PGDM placements.</P>
       <T headers={['Batch','Avg CTC','Median CTC','Highest CTC','Firms']} rows={[
         ['2020–22','Rs 9.7 LPA','Rs 9.8 LPA','Rs 20 LPA','61'],
         ['2021–23','Rs 10.3 LPA','Rs 10 LPA','Rs 19.3 LPA','49'],
@@ -201,61 +297,34 @@ function PlacementsPage({ slug }) {
         ['2024–26 (interim)','Rs 11.5 LPA','—','Rs 24 LPA','—'],
       ]} />
       <H2>PGPM-HR Placements 2024–25</H2>
-      <P>The PGPM-HR 2024-25 batch achieved Rs 11.2 LPA average with a Rs 20 LPA highest. Top 50% average was Rs 13.7 LPA. 98% opted for placements; of those, 100% were placed — consistent with SOIL's placement record across all programs. Alumni hold VP HR roles at Goldman Sachs, Morgan Stanley, and JP Morgan Chase — the HR program has exceptional brand equity in financial services HR.</P>
       <T headers={['Metric','2024–25']} rows={[
-        ['Highest CTC','Rs 20 LPA'],
-        ['Average CTC','Rs 11.2 LPA'],
-        ['Top 50% Average','Rs 13.7 LPA'],
-        ['% Opted for Placements','98%'],
+        ['Highest CTC','Rs 20 LPA'],['Average CTC','Rs 11.2 LPA'],
+        ['Top 50% Average','Rs 13.7 LPA'],['% Opted for Placements','98%'],
         ['Placement Rate (of those who opted)','100%'],
       ]} />
       <H2>Industry Distribution — PGPM</H2>
       <T headers={['Industry','Share']} rows={[
-        ['IT & ITES','22%'],
-        ['BFSI','14%'],
-        ['Automotive','14%'],
-        ['Consulting','10%'],
-        ['Insurance','8%'],
-        ['Research & Consulting','6%'],
-        ['Ad Tech','4%'],
-        ['BPO','4%'],
-        ['Healthcare','4%'],
-        ['Others','14%'],
+        ['IT and ITES','22%'],['BFSI','14%'],['Automotive','14%'],
+        ['Consulting','10%'],['Insurance','8%'],['Others','32%'],
       ]} />
       <H2>Function Distribution — PGPM</H2>
       <T headers={['Function','Share']} rows={[
-        ['Consulting','31%'],
-        ['Analytics','21%'],
-        ['Business Development','17%'],
-        ['Marketing','16%'],
-        ['Finance','10%'],
-        ['HR','5%'],
+        ['Consulting','31%'],['Analytics','21%'],['Business Development','17%'],
+        ['Marketing','16%'],['Finance','10%'],['HR','5%'],
       ]} />
-      <H2>Top Recruiting Companies — All Programs (Last 3 Years)</H2>
-      <P>SOIL's recruiter base spans IT services, BFSI, automotive, consulting, and FMCG. Standout names include BCG, Deloitte, Gartner, S&P Global, Microsoft, and Berkshire Hathaway. The automotive sector is unusually strong — Mahindra, Hero MotoCorp, Royal Enfield, and Anand Group all recruit consistently, reflecting SOIL's consortium roots.</P>
+      <H2>Top Recruiters — All Programs (Last 3 Years)</H2>
       <T headers={['Company','Sector']} rows={[
-        ['BCG','Consulting'],
-        ['Deloitte','Consulting'],
-        ['Gartner','Research & Consulting'],
-        ['PWC','Consulting'],
-        ['KPMG Global','Consulting'],
-        ['S&P Global','BFSI'],
-        ['ANZ','BFSI'],
-        ['Berkshire Hathaway','BFSI'],
-        ['Tresvista','BFSI / Finance'],
-        ['Microsoft','Technology'],
-        ['TCS','Technology'],
-        ['HCL','Technology'],
-        ['Mahindra & Mahindra','Automotive'],
-        ['Hero MotoCorp','Automotive'],
-        ['Royal Enfield','Automotive'],
-        ['Tata Communications','Telecom'],
-        ['Zomato','E-commerce'],
-        ['Urban Company','Consumer Tech'],
-        ['Lal PathLabs','Healthcare'],
+        ['BCG','Consulting'],['Deloitte','Consulting'],['Gartner','Research and Consulting'],
+        ['PWC','Consulting'],['KPMG Global','Consulting'],['S&P Global','BFSI'],
+        ['ANZ','BFSI'],['Berkshire Hathaway','BFSI'],['Tresvista','BFSI / Finance'],
+        ['Microsoft','Technology'],['TCS','Technology'],['HCL','Technology'],
+        ['Mahindra and Mahindra','Automotive'],['Hero MotoCorp','Automotive'],
+        ['Royal Enfield','Automotive'],['Tata Communications','Telecom'],
+        ['Zomato','E-commerce'],['Urban Company','Consumer Tech'],
       ]} />
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad Placements 2025 — Key Numbers</H2>
@@ -328,10 +397,56 @@ function PlacementsPage({ slug }) {
 function AdmissionsPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>PGPM vs PGDM — Eligibility at a Glance</H2>
+      <T headers={['Requirement','PGPM (1-Year)','PGDM (2-Year)']} rows={[
+        ['Education',"Bachelor's degree from recognised institution","Bachelor's degree from recognised institution"],
+        ['Work Experience','Minimum 2 years by 30 April 2026 (mandatory)','Not required — freshers welcome'],
+        ['Accepted Tests','GMAT / CAT / XAT / NMAT','CAT / XAT / GMAT / NMAT / CMAT'],
+        ['Typical GMAT Range','550+ (profile-based; no hard cutoff)','500+ (profile-based)'],
+        ['Typical CAT Range','80%+ (profile-based)','70%+ (profile-based)'],
+        ['Application Fee','Rs 2,200 (non-refundable)','Rs 2,200 (non-refundable)'],
+      ]} />
+      <H2>Admissions Process — 11 Steps (All Programs)</H2>
+      <T headers={['Step','Stage','What Happens']} rows={[
+        ['1','Online Application','Apply at greatlakes.edu.in; pay Rs 2,200; select program and campus'],
+        ['2','Campus / Program Selection','Choose Chennai, Gurgaon, or both; PGPM or PGDM via common form'],
+        ['3','Initial Screening','Admissions team reviews profile for minimum fit'],
+        ['4','AI Interview Invite','Shortlisted candidates receive AI interview link by email'],
+        ['5','AI Interview','Asynchronous video interview completed online at your schedule'],
+        ['6','PI Invite','AI interview passers receive Personal Interview invite'],
+        ['7','Personal Interview','In-depth conversation on goals, experience, and leadership potential'],
+        ['8','Offer Letters','Final shortlist receives formal offer by email'],
+        ['9','Offer Acceptance','Accept and pay initial seat deposit'],
+        ['10','Document Verification','Submit academic certificates and experience proof'],
+        ['11','Orientation and Commencement','Report to campus; program begins'],
+      ]} />
+      <H2>PGPM Batch Profile 2025-26</H2>
+      <T headers={['Attribute','Chennai','Gurgaon']} rows={[
+        ['Avg Work Experience','3.2 years','3.1 years'],
+        ['Average Age','25 years','25 years'],
+        ['Female Students','24%','36%'],
+        ['Work Exp Distribution','24-30m: 25% | 30-36m: 32% | 36-48m: 27% | 48+m: 16%','24-35m: 49% | 36-48m: 38% | 49-60m: 10% | 60+m: 3%'],
+        ['Top Pre-MBA Background','IT/ITES 38%, BFSI 8%, Consulting 7%','IT/ITES 46%, BFSI 12%, Consulting 11%'],
+      ]} />
+      <H2>PGDM Batch Profile 2025-27</H2>
+      <T headers={['Attribute','Chennai','Gurgaon']} rows={[
+        ['Batch Size','368','~180–200'],
+        ['Female Students','35%','44%'],
+        ['Freshers %','66%','75%'],
+        ['Average Age','22 years','22 years'],
+        ['Work Exp Distribution','Freshers 66% | 1-12m: 13% | 13-23m: 15% | 24-35m: 6%','Freshers 75% | 1-12m: 10% | 13-23m: 10% | 24-35m: 5%'],
+      ]} />
+      <H2>Important Disclaimers</H2>
+      <P>Great Lakes uses CAT scores only for screening — IIMs have no role in any Great Lakes program. XAT scores are used only for screening — XLRI has no role in any Great Lakes program. The PGPM awards a PGCM (Post Graduate Certificate in Management), not technically an MBA — though widely accepted by employers as equivalent. The PGDM is NBA-accredited and fully equivalent to an MBA for employment and higher education purposes.</P>
+    </>
+  )
   if (isSOIL) return (
     <>
       <H2>SOIL Admissions — 9-Step Process</H2>
-      <P>SOIL's admissions process is holistic — unlike IIMs, there is no CAT cutoff that auto-qualifies or disqualifies. SOIL evaluates academic record, test score, work experience, and the personal interview together. The psychometric assessment is unique among top B-schools and reflects SOIL's leadership development philosophy — they are selecting for values and character alongside competence.</P>
+      <P>SOIL's admissions is holistic — no CAT cutoff auto-qualifies or disqualifies. Academic record, test score, work experience, and personal interview are evaluated together. The psychometric assessment is unique among Indian B-schools and reflects SOIL's leadership development philosophy.</P>
       <T headers={['Step','Stage','What Happens']} rows={[
         ['1','Application Submission','Online form at soilindia.net with academic background, work history, and essays'],
         ['2','Application Screening','SOIL team reviews profile for minimum eligibility and program fit'],
@@ -350,43 +465,32 @@ function AdmissionsPage({ slug }) {
         ['PGDM (SSOBD)',"Bachelor's degree in any discipline",'Not required','Yes (76% in 2023–25 batch)'],
       ]} />
       <H2>Accepted Entrance Tests</H2>
-      <P>SOIL accepts multiple entrance tests — unlike IIMs that accept only CAT. This makes SOIL accessible to professionals who took GMAT for ISB or international programs, or GRE for non-MBA purposes. SOIL also administers its own aptitude test for applicants who have not taken any standard exam.</P>
-      <T headers={['Test','Accepted For','Notes']} rows={[
-        ['CAT','All programs','Most common; no minimum cutoff published'],
-        ['GMAT','All programs','Common for PGPM applicants from corporate backgrounds'],
-        ['XAT','All programs','Accepted for all three programs'],
-        ['GRE','All programs','Accepted; less common'],
-        ['SOIL Aptitude Test','All programs','Available for applicants without standard test scores'],
+      <T headers={['Test','Notes']} rows={[
+        ['CAT','Most common; no minimum cutoff published'],
+        ['GMAT','Common for PGPM applicants from corporate backgrounds'],
+        ['XAT','Accepted for all three programs'],
+        ['GRE','Accepted; less common'],
+        ['SOIL Aptitude Test','Available for applicants without standard test scores'],
       ]} />
       <H2>PGPM Batch Profile 2024–25</H2>
-      <P>The PGPM batch is highly experienced — average 44 months (3.7 years) of work experience. 62% engineers, but the non-engineering 38% is higher than at most IIMs, reflecting SOIL's broader intake criteria. 29% female is in line with most IIM batches. Candidates from 17 states create genuine diversity within a compact batch of ~60 students.</P>
       <T headers={['Attribute','2024–25 Data']} rows={[
-        ['Batch Size','~60 students'],
-        ['Average Work Experience','44.1 months (3.7 years)'],
-        ['Female %','29%'],
-        ['Engineering Background','62%'],
-        ['Average Age','27 years'],
-        ['States Represented','17'],
-        ['% With Work Experience','76%'],
+        ['Batch Size','~60 students'],['Average Work Experience','44.1 months (3.7 years)'],
+        ['Female %','29%'],['Engineering Background','62%'],
+        ['Average Age','27 years'],['States Represented','17'],
       ]} />
       <H2>PGDM Batch Profile 2023–25</H2>
       <T headers={['Attribute','2023–25 Data']} rows={[
-        ['Average Age','22.5 years'],
-        ['Female %','46%'],
-        ['Freshers %','76%'],
-        ['Average Work Experience','4 months'],
-        ['States Represented','25'],
+        ['Average Age','22.5 years'],['Female %','46%'],
+        ['Freshers %','76%'],['States Represented','25'],
       ]} />
       <H2>PGPM-HR Batch Profile 2025</H2>
       <T headers={['Attribute','2025 Data']} rows={[
-        ['Average Age','24.7 years'],
-        ['Female %','64%'],
-        ['Freshers %','24%'],
-        ['Average Work Experience','23 months'],
-        ['States Represented','13'],
+        ['Average Age','24.7 years'],['Female %','64%'],
+        ['Freshers %','24%'],['Average Work Experience','23 months'],
       ]} />
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad CAT Cutoff 2025</H2>
@@ -469,36 +573,75 @@ function AdmissionsPage({ slug }) {
 function CampusPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>Two Campuses, Four Programs</H2>
+      <T headers={['Feature','Chennai','Gurgaon']} rows={[
+        ['Established','2004 (Flagship)','2010'],
+        ['Campus Size','32 acres — LEED Platinum','7.5 acres — modern'],
+        ['Location','ECR Road, 40km from Chennai city centre','NH-8, 45km from IGI Airport, Delhi'],
+        ['Programs','PGPM + PGDM','PGPM + PGDM'],
+        ['PGPM Avg CTC','Rs 17.8 LPA','Rs 15.1 LPA'],
+        ['PGDM Avg CTC','Rs 15 LPA','Rs 11.8 LPA'],
+        ['NIRF 2025','#37','#50'],
+        ['Top PGPM Role','Consulting (61%)','Digital Consulting (29%) + Analytics (21%)'],
+        ['Top PGDM Role','Finance (33%)','Finance (28%)'],
+        ['PGPM Specialisations','7 tracks','5 tracks'],
+        ['PGDM Specialisations','5 tracks','6 tracks (incl. HR)'],
+        ['Unique Feature','PGPM 2.0 curriculum; LEED Platinum','Spatial Reality Lab; Rutgers partnership; HR spec'],
+      ]} />
+      <H2>Chennai Campus — Details</H2>
+      <P>The flagship campus on ECR Road is the first LEED Platinum Rated Green Campus in South Asia — 32 acres of green infrastructure. It is 40km south of Chennai and 9km from Mahabalipuram UNESCO heritage site. Smart classrooms, library, gym, football field, basketball court. Hostel is mandatory and fully air-conditioned. Night canteen open until 2:45 AM.</P>
+      <H2>Gurgaon Campus — Details</H2>
+      <P>The North India campus on NH-8 is 45km from IGI Airport, inside the Delhi-NCR corporate corridor. Features 3 hostel buildings, 2 academic blocks, a Spatial Reality Lab for immersive business simulations (unique in India), and seminar halls with modern AV. 24/7 housekeeping and high-speed Wi-Fi throughout.</P>
+      <H2>Karma-Yoga — In All Programs</H2>
+      <T headers={['Impact','Chennai','Gurgaon']} rows={[
+        ['Villages / Schools','27+ panchayat villages','27 village schools, 32 Karmabhoomis'],
+        ['Events per year','60+ village-level events','Regular community engagement'],
+        ['Children reached','5,000+ in tuition / science clubs','2,500+ in educational activities'],
+        ['People reached','10,000+ with medical attention','Community-wide development programs'],
+      ]} />
+      <H2>International Partners — All Programs</H2>
+      <T headers={['Institution','Country','Type','Campus']} rows={[
+        ['IESEG School of Management','France','Immersion + Exchange','Both'],
+        ['University of Bordeaux','France','Dual Degree (4–6 weeks)','Both'],
+        ['SKEMA Business School','France','Immersion','Chennai'],
+        ['Frankfurt School of Finance','Germany','Immersion','Chennai'],
+        ['HHL Leipzig Graduate School','Germany','Immersion','Both'],
+        ['EDHEC Business School','France','Partner','Both'],
+        ['Bologna Business School','Italy','Exchange','Both'],
+        ['PACE University','USA','Exchange','Both'],
+        ['Rutgers-Camden School of Business','USA','Exchange','Gurgaon only'],
+        ['Ural Federal University','Russia','Exchange','Gurgaon only'],
+        ['NUCB Business School','Japan','Partner','Chennai only'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
-      <H2>SOIL — Two Campuses, Two Programs</H2>
-      <P>SOIL operates two fully residential campuses. The Gurugram Sector 44 campus runs the PGPM and PGPM-HR programs — located inside India's corporate capital with Deloitte, Gartner, Microsoft, Hero MotoCorp, and hundreds of other SOIL recruiters within a 15km radius. The Manesar campus runs the 2-year PGDM under the SOIL School of Business Design (SSOBD) — in the IMT Manesar industrial belt, surrounded by Maruti, Hero, and Anand Group facilities that contribute to the industry consortium.</P>
-      <T headers={['Campus','Location','Programs','Character']} rows={[
-        ['Gurugram (Sector 44)','Plot 76, Bhagwan Mahaveer Marg, Sector 44, Gurugram','PGPM, PGPM-HR','Corporate NCR hub; direct recruiter proximity; Metro connected'],
-        ['Manesar (SSOBD)','Manesar, Haryana','PGDM','Industrial belt; Design Thinking focus; residential'],
+      <H2>SOIL — Two Campuses</H2>
+      <T headers={['Feature','Gurugram (Sector 44)','Manesar (SSOBD)']} rows={[
+        ['Programs','PGPM, PGPM-HR','PGDM (2-Year)'],
+        ['Address','Plot 76, Bhagwan Mahaveer Marg, Sec 44, Gurugram','Manesar, Haryana (IMT Manesar belt)'],
+        ['Character','Heart of corporate capital; direct recruiter proximity','Industrial belt; Design Thinking pedagogy'],
+        ['Campus Format','Fully residential — live-in format','Fully residential — live-in format'],
       ]} />
       <H2>Gurugram Location — The Real Advantage</H2>
-      <P>Gurugram is India's outsourcing and corporate services capital. Gartner, S&P Global, Microsoft, American Express, ANZ, Deloitte, and dozens of other SOIL recruiters have their India headquarters within 10-15km of the campus. For a placement-critical program like PGPM, this proximity translates directly: company visits, pre-placement talks, and alumni meetups happen spontaneously in ways that are impossible from Ahmedabad, Kolkata, or even Bengaluru. Students describe being able to attend company events and return to campus the same evening.</P>
+      <P>Gurugram is India's outsourcing and corporate services capital. Gartner, S&P Global, Microsoft, American Express, ANZ, Deloitte, and dozens of other SOIL recruiters have their India headquarters within 10-15km of the campus. Company visits, pre-placement talks, and alumni meetups happen spontaneously in ways that are impossible from Ahmedabad, Kolkata, or even Bengaluru.</P>
       <H2>Industry Consortium — 30+ Co-Creating Companies</H2>
-      <P>SOIL's curriculum is co-designed with a consortium of 30+ companies who actively participate in guest sessions, live projects, and placement. This is not a standard advisory board — these companies built the program from the ground up in 2009. The consortium model means every major subject area has an industry counterpart who designed it, not just a visiting speaker who drops in once a semester.</P>
       <T headers={['Consortium Company','Sector']} rows={[
-        ['ABB','Electrical Equipment'],
-        ['Anand Group','Automotive Components'],
-        ['Aditya Birla Group','Diversified Conglomerate'],
-        ['Hero MotoCorp','Automotive'],
-        ['Mahindra & Mahindra','Automotive / Tech'],
-        ['Schneider Electric','Energy Management'],
-        ['S&P Global','BFSI / Data'],
-        ['Tata Communications','Telecom'],
-        ['Exide Industries','Manufacturing'],
-        ['Gartner','Research & Consulting'],
+        ['ABB','Electrical Equipment'],['Anand Group','Automotive Components'],
+        ['Aditya Birla Group','Diversified Conglomerate'],['Hero MotoCorp','Automotive'],
+        ['Mahindra and Mahindra','Automotive / Tech'],['Schneider Electric','Energy Management'],
+        ['S&P Global','BFSI / Data'],['Tata Communications','Telecom'],
+        ['Exide Industries','Manufacturing'],['Gartner','Research and Consulting'],
       ]} />
       <H2>International Exchange Programs</H2>
-      <P>SOIL has exchange partnerships with IESE Business School in Spain (consistently ranked top-10 globally), Shizenkan University in Japan (known for humanistic leadership education), and FGV EAESP in Brazil (Latin America's top B-school). These are genuine exchanges — not paid study tours. Students spend 2-4 weeks at the partner institution on an academic module with local students.</P>
-      <T headers={['Partner','Country','Known For']} rows={[
-        ['IESE Business School','Spain','Top-10 global MBA; strong values-based leadership curriculum'],
-        ['Shizenkan University','Japan','Humanistic management; leadership and wellbeing focus'],
-        ['FGV (EAESP)','Brazil','Latin America\'s most respected business school'],
+      <T headers={['Partner','Country','Note']} rows={[
+        ['IESE Business School','Spain','Top-10 global MBA; short-term exchange program'],
+        ['Shizenkan University','Japan','Leadership and humanistic management focus'],
+        ['FGV (EAESP)','Brazil',"Latin America's top business school"],
       ]} />
       <H2>Global Academic Associations</H2>
       <T headers={['Institution','Country','Partnership Type']} rows={[
@@ -507,13 +650,10 @@ function CampusPage({ slug }) {
         ['CEDEP','Spain / France','Executive education consortium'],
         ['Shizenkan University','Japan','Academic + exchange'],
         ['Johannesburg Business School','South Africa','Academic partnership; emerging markets focus'],
-        ['IESE Business School','Spain','Exchange program'],
-        ['FGV (EAESP)','Brazil','Exchange program'],
       ]} />
-      <H2>Leadership Philosophy — What Makes SOIL Different</H2>
-      <P>Every SOIL program is built around three pillars: Character, Competence, and Enthusiasm. This is not a tagline — it shapes curriculum, assessments, the psychometric admission test, and how placement conversations are framed. SOIL explicitly does not position itself as a placement agency. Mohammad Salman, Director of Career Management Services, has publicly stated that "recruiters appreciate the fact that we are genuinely committed to learning and not seen as a placement agency." For students who want more than a salary jump, this orientation makes a material difference in the learning environment.</P>
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad — Louis Kahn Campus</H2>
@@ -555,36 +695,74 @@ function CampusPage({ slug }) {
 function AlumniPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>Great Lakes Alumni Network</H2>
+      <T headers={['Metric','Value']} rows={[
+        ['Total Alumni','15,000+'],['Countries Represented','30+'],
+        ['CxO and Leadership Roles','300+'],['Years of Alumni History','20+ (since 2004)'],
+      ]} />
+      <H2>Notable Alumni</H2>
+      <T headers={['Name','Batch','Current Role']} rows={[
+        ['Ramya Balakrishnan','2007','Global Director — Strategy and Ops, Meta (Facebook), USA'],
+        ['Shobha Subramanian','2007','Lead Product Manager, Uber, USA'],
+        ['Neha Kumar Saraf','2007','Sr. Director, Visa, Singapore'],
+        ['Harsh Ratan Mehta','2010','Global Director, PepsiCo'],
+        ['Aparna S','2010','Director and Business Lead, Bain Capability Network'],
+        ['Ritesh Pal','2014','Director, Morgan Stanley, UK'],
+        ['Divyansh Nasa','—','Partner — Transaction Strategy and Execution, EY-Parthenon'],
+        ['Guneet Gyani','—','Senior Manager — Search and Commerce, Google'],
+        ['Amisha Arora','—','Head — Ecommerce, East Asia, H&M'],
+        ['Hemant Grover','PGPM 2013','Director of Technology, Xceedance'],
+      ]} />
+      <H2>Prominent Speakers Who Addressed Students</H2>
+      <T headers={['Speaker','Association']} rows={[
+        ['Late Dr. Ratan Tata','Chairman Emeritus, Tata Sons'],
+        ['Dr. Srikant Datar','Dean, Harvard Business School'],
+        ['Prof. Sunil Chopra','IBM Distinguished Professor, Kellogg School of Management'],
+        ['Dr. Philip Kotler','Professor Emeritus of Marketing, Kellogg'],
+        ['Indra Nooyi','Former Chairman and CEO, PepsiCo'],
+        ['Kiran Mazumdar Shaw','Executive Chairperson, Biocon and Biocon Biologics'],
+        ['Vijay Govindarajan','Coxe Distinguished Professor, Tuck School (Dartmouth)'],
+        ['Dr. Preetha Reddy','Vice Chairperson, Apollo Hospitals'],
+        ['Suresh Narayanan','Managing Director, Nestle India'],
+      ]} />
+      <H2>Faculty Profile</H2>
+      <T headers={['Metric','Number']} rows={[
+        ['Full-Time Faculty','50+'],['International Visiting Faculty','25+'],
+        ['Academic and Industry Visiting Faculty','70+'],
+        ['Thought Leader Talks (2024-25)','50+'],
+        ['Industry Leaders Interacting with Students (2024-25)','100+'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
-      <H2>SOIL Notable Alumni — PGPM-HR</H2>
-      <P>SOIL's most visible alumni are from the PGPM-HR program, which has been running the longest and produced 500+ alumni now in 200+ organizations. The standout pattern is senior HR leadership at global financial services firms — Goldman Sachs, Morgan Stanley, JP Morgan Chase all have SOIL PGPM-HR alumni in VP-level HR roles. This is a remarkable track record for a mid-tier Indian B-school and reflects both the program's HR specialization depth and the Gurugram location's access to BFSI firms.</P>
+      <H2>SOIL Alumni Network</H2>
+      <T headers={['Metric','Value']} rows={[
+        ['PGPM-HR Alumni','500+'],['Organizations Represented (PGPM-HR)','200+'],
+        ['Total Alumni Across All Programs (est.)','2,000+'],['Years in Operation','16 years (since 2009)'],
+      ]} />
+      <H2>Notable Alumni — PGPM-HR</H2>
       <T headers={['Name','Current Role','Program']} rows={[
         ["Karen D'Souza",'VP HR, Goldman Sachs','PGPM-HR'],
         ['Sreya Raghavan','VP HR, Morgan Stanley','PGPM-HR'],
         ['Sundaram Vasudevan','VP HR, JP Morgan Chase','PGPM-HR'],
         ['Arpit Bhatia','Associate Director, KPMG Global','PGPM-HR'],
       ]} />
-      <H2>Alumni Network — By the Numbers</H2>
-      <T headers={['Metric','Value']} rows={[
-        ['PGPM-HR Alumni','500+'],
-        ['Organizations Represented (PGPM-HR)','200+'],
-        ['Total Alumni Across All Programs (est.)','2,000+'],
-        ['Years in Operation','16 years (since 2009)'],
-      ]} />
-      <H2>Why SOIL HR Alumni Stand Out</H2>
-      <P>SOIL PGPM-HR is India's only dedicated 1-year residential HR program. This means alumni carry a genuinely differentiated credential in the HR profession — not a generalist MBA with an HR elective, but a program designed entirely around HR practice with industry consortium inputs from Mahindra, Aditya Birla, Hero, and others. The density of VP-level HR alumni at global financial firms suggests strong placement quality and career trajectory for this program specifically.</P>
       <H2>SOIL Leadership</H2>
       <T headers={['Name','Role']} rows={[
-        ['Anil Sachdev','Founder & Chairman — serial education entrepreneur; decades of HR and leadership consulting background'],
+        ['Anil Sachdev','Founder and Chairman — serial education entrepreneur; decades of HR and leadership consulting'],
         ['Sahil Sachdev','Board of Governors'],
         ['Dr. R. Srinivasan','Director, 2-Year PGDM (SSOBD, Manesar)'],
         ['Mohammad Salman','Director, Career Management Services'],
       ]} />
-      <H2>Founder Philosophy</H2>
-      <P>Anil Sachdev founded SOIL after recognising a gap in Indian management education — programs optimised for placement statistics at the expense of character and values development. His stated goal: build leaders who deliver value through both competence and ethics. This philosophy shaped every element of SOIL — the consortium co-creation model, the psychometric admission assessment, the experiential learning structure, and the refusal to position SOIL as a placement agency. After 16 years and 2,000+ alumni, the model has produced measurable outcomes at VP-level positions in global firms.</P>
+      <H2>Why SOIL HR Alumni Stand Out</H2>
+      <P>SOIL PGPM-HR is India's only dedicated 1-year residential HR program. This means alumni carry a genuinely differentiated credential in the HR profession — not a generalist MBA with an HR elective, but a program designed entirely around HR practice with industry consortium inputs from Mahindra, Aditya Birla, Hero, and others. VP-level HR alumni at Goldman Sachs, Morgan Stanley, and JP Morgan Chase demonstrate consistent program quality.</P>
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad Notable Alumni</H2>
@@ -630,17 +808,79 @@ function AlumniPage({ slug }) {
 function ProgramsPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>All Programs at a Glance</H2>
+      <T headers={['Feature','PGPM Chennai','PGPM Gurgaon','PGDM Chennai','PGDM Gurgaon']} rows={[
+        ['Duration','1 year (7 terms)','1 year (7 terms)','2 years (6 terms + internship)','2 years (6 terms + internship)'],
+        ['For','Experienced professionals 2+ yrs','Experienced professionals 2+ yrs','Freshers and early career','Freshers and early career'],
+        ['Degree','PGCM (AICTE)','PGCM (AICTE)','PGDM (AICTE + NBA)','PGDM (AICTE + NBA)'],
+        ['Industry Exposure','Live Industry Projects','Live Industry Projects','60-90 day Summer Internship','60-90 day Summer Internship'],
+        ['Total Fees','Rs 23.50 L','Rs 21.66–24.10 L','Rs 16–18 L (approx)','Rs 14–16 L (approx)'],
+        ['Avg CTC 2025','Rs 17.8 LPA','Rs 15.1 LPA','Rs 15 LPA','Rs 11.8 LPA'],
+        ['Highest CTC 2025','Rs 30.8 LPA','Rs 21.8 LPA','Rs 39.3 LPA','Rs 22.7 LPA'],
+        ['Specialisations','7 tracks','5 tracks','5 tracks','6 tracks (incl. HR)'],
+        ['NIRF 2025','#37','#50','#37','#50'],
+      ]} />
+      <H2>PGPM Chennai — 7 Specialisation Tracks</H2>
+      <T headers={['Track','Type','Key Courses']} rows={[
+        ['Finance','Functional','Corporate Valuation and M&A, Options and Derivatives, Fixed Income, FinTech, Financial Risk Analytics'],
+        ['Marketing','Functional','Consumer Behaviour, Brand Management, Digital Marketing, B2B and B2C Sales, CRM'],
+        ['Operations','Functional','Decision Science, Supply Chain, Project Management, Service Operations, Agile'],
+        ['Consulting','Industry','Unstructured Problem Solving, Digital Transformation, Technology Consulting, Execution Excellence'],
+        ['Product Management','Industry','Strategic Product Development, AI for PMs, Product Lab, Stakeholder Management, Tech Product Sales'],
+        ['Data Science','Industry','Advanced Data Mining, NLP and Neural Networks, Computer Vision, GenAI Models Lab, Big Data'],
+        ['Analytics','Industry','Advanced Data Mining, Predictive and Prescriptive Analytics, Time Series, Pricing Strategy'],
+      ]} />
+      <H2>PGPM Gurgaon — 5 Specialisation Tracks</H2>
+      <T headers={['Track','Key Courses']} rows={[
+        ['Analytics, AI and ML','Machine Learning I and II, Marketing Analytics, Web Analytics, Deep Learning, NLP, HR Analytics'],
+        ['Digital Strategy','Digital Enterprise Strategy, ERP, Digital Marketing, FinTech, Design Thinking, Tech Product Mgmt'],
+        ['Marketing','Retail Analytics, Brand Management, Consumer Behaviour, B2B Tech Sales, CRM, AR and Metaverse Marketing'],
+        ['Finance','Security Analysis, M&A, Financial Modelling, FinTech, Micro Finance, Alternative Investments'],
+        ['Operations','ERP, Project Management, Supply Chain Modelling, Service Operations, Strategic Sourcing'],
+      ]} />
+      <H2>PGDM Chennai — 5 Specialisation Tracks</H2>
+      <T headers={['Track','Key Courses']} rows={[
+        ['Marketing','Digital Marketing, Brand Management, Sales and Distribution, Retail Analytics, B2B, CRM, Services Marketing'],
+        ['Finance','Financial Statement Analysis, Wealth Management, Security Analysis, FinTech, M&A, Derivatives, Banking'],
+        ['Analytics','Business Intelligence, Machine Learning, Deep Learning and NLP, Financial Risk Analytics, HR Analytics'],
+        ['Operations','ERP, Services Operations, Project Management, Supply Chain, Demand Planning and Forecasting'],
+        ['OB and Strategy','Cross-listed electives in Organisational Behaviour, Strategy, and Leadership'],
+      ]} />
+      <H2>PGDM Gurgaon — 6 Specialisation Tracks</H2>
+      <T headers={['Track','Key Courses']} rows={[
+        ['Marketing','Digital Marketing, Brand Management, Sales and Distribution, Retail Analytics, B2B, CRM, IMC'],
+        ['Finance','Financial Statement Analysis, Wealth Management, Security Analysis, FinTech, M&A, Project Finance'],
+        ['Analytics','Machine Learning, Deep Learning, Web Analytics, Financial Risk Analytics, Big Data'],
+        ['Operations','ERP, Services Operations, Project Management, Supply Chain, Demand Planning'],
+        ['Human Resource','Talent Acquisition, Performance Management, Negotiation, Leadership, Compensation, HR Analytics'],
+        ['Open Electives','Contemporary Pricing, Game Theory and Public Policy, Managing Business in Multicultural Contexts'],
+      ]} />
+      <H2>What Makes Great Lakes Distinctive</H2>
+      <T headers={['Feature','Detail']} rows={[
+        ['First 1-year MBA in India','Pioneered the format; now widely replicated by other schools'],
+        ['First Analytics MBA in India','First to offer Analytics as a full-time MBA specialisation'],
+        ['First AI and ML MBA in India','First to offer AI and Machine Learning as a full-time specialisation'],
+        ['Karma-Yoga','Mandatory in all programs — unique rural leadership experience across 59+ villages'],
+        ['LEED Platinum Campus','First LEED Platinum Rated Green Campus in South Asia (Chennai)'],
+        ['AACSB + AMBA Dual Crown','Only ~7 Indian B-schools hold both — same as ISB, IIM A, IIM B'],
+        ['Summer Internship (PGDM)','60-90 day mandatory internship; frequently leads to PPOs'],
+        ['Dual Degree Option','Second triple-accredited MBA at Univ. of Bordeaux in 4-6 weeks post-program'],
+        ['Spatial Reality Lab','Immersive business simulation technology (Gurgaon — unique in India)'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
       <H2>SOIL Programs — Three Paths, One Philosophy</H2>
-      <P>SOIL runs three distinct programs targeting different candidate profiles. The PGPM is for experienced professionals (2+ years) wanting a fast 1-year MBA. The PGPM-HR is India's only 1-year residential HR specialization — for professionals targeting HR leadership. The PGDM at Manesar (SSOBD) is a 2-year AICTE-approved program welcoming freshers who want business education infused with Design Thinking and Liberal Arts. All three share SOIL's founding philosophy: character, competence, and enthusiasm.</P>
       <T headers={['Program','Duration','Fees','Campus','Intake','Eligibility']} rows={[
         ['PGPM','1 year','Rs 15 L (approx)','Gurugram Sec 44','~60','Min 2 yrs work experience'],
         ['PGPM-HR','1 year','Rs 15 L (approx)','Gurugram Sec 44','TBD','Work exp preferred; freshers considered'],
         ['PGDM (SSOBD)','2 years','Rs 17 L (approx)','Manesar','TBD','Freshers welcome; AICTE approved'],
       ]} />
-      <H2>PGPM — Post Graduate Program in Management</H2>
-      <P>The flagship 1-year program at Gurugram. Designed for professionals with 2+ years of experience who want a fast, industry-connected MBA without the 2-year opportunity cost. The 2024-25 batch had an average work experience of 44 months (3.7 years) — this is a meaningfully experienced cohort. Specializations in Finance, Marketing, and Analytics. Curriculum flows through four phases: Foundational → Core → Specialization → Experiential.</P>
+      <H2>PGPM — Flagship 1-Year Program</H2>
       <T headers={['PGPM Detail','Information']} rows={[
         ['Duration','1 year, full-time residential'],
         ['Campus','Gurugram Sector 44'],
@@ -654,7 +894,6 @@ function ProgramsPage({ slug }) {
         ['Entrance Exam','CAT / GMAT / XAT / GRE / SOIL Aptitude Test'],
       ]} />
       <H2>PGPM-HR — India's Only 1-Year PGPM-HR</H2>
-      <P>The PGPM-HR is SOIL's most differentiated program — there is no other 1-year residential PGPM-HR in India. For HR professionals who want to move into senior HR leadership without completing a 2-year general MBA, this is a unique credential. The 500+ alumni network in 200+ organizations is the program's clearest proof point — VP HR roles at Goldman Sachs, Morgan Stanley, and JP Morgan Chase all held by SOIL PGPM-HR alumni.</P>
       <T headers={['PGPM-HR Detail','Information']} rows={[
         ['Duration','1 year, full-time residential'],
         ['Campus','Gurugram Sector 44'],
@@ -663,10 +902,9 @@ function ProgramsPage({ slug }) {
         ['Avg CTC 2025','Rs 11.2 LPA'],
         ['Highest CTC 2025','Rs 20 LPA'],
         ['Unique Feature',"India's only dedicated 1-year PGPM-HR"],
-        ['Curriculum','Foundational → Core HR → Specialization → Leadership → Experiential'],
+        ['Curriculum','Foundational — Core HR — Specialization — Leadership — Experiential'],
       ]} />
       <H2>PGDM — SOIL School of Business Design (SSOBD)</H2>
-      <P>The 2-year PGDM at Manesar is SOIL's AICTE-approved fresher program. It stands out for integrating Business, Design Thinking, and Liberal Arts — a curriculum combination that prepares graduates for roles requiring creative problem-solving alongside management fundamentals. The 2023-25 batch saw 130 firms recruit — the largest recruiter base of any SOIL program batch in recent years. BFSI and IT/ITES dominate at 69% combined placement share.</P>
       <T headers={['PGDM Detail','Information']} rows={[
         ['Duration','2 years, full-time residential'],
         ['Campus','Manesar (SSOBD)'],
@@ -691,6 +929,7 @@ function ProgramsPage({ slug }) {
       ]} />
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad Programs 2025</H2>
@@ -736,41 +975,82 @@ function ProgramsPage({ slug }) {
 function ReviewsPage({ slug }) {
   const isB = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
+  const isGL   = slug === 'great-lakes-chennai'
+  if (isGL) return (
+    <>
+      <H2>Great Lakes — Ratings by Aspect</H2>
+      <T headers={['Aspect','Rating /5','Honest Comment']} rows={[
+        ['PGPM Placements (Chennai)','4.3','Rs 17.8 LPA avg, 61% consulting — strongest non-IIM consulting track'],
+        ['PGDM Placements (Chennai)','4.0','Rs 15 LPA avg with Rs 39.3 LPA highest — strong for a fresher program'],
+        ['PGPM Placements (Gurgaon)','3.8','Rs 15.1 LPA avg, digital-heavy — solid for NCR but gap vs Chennai is real'],
+        ['PGDM Placements (Gurgaon)','3.5','Rs 11.8 LPA avg — evaluate MDI and IMT before committing'],
+        ['Academic Quality','4.1','PGPM 2.0 genuinely industry-designed; PGDM strong on Finance and Analytics'],
+        ['Campus (Chennai)','4.4','LEED Platinum, 32 acres ECR Road — best campus among 1-year programs'],
+        ['Campus (Gurgaon)','3.9','Smaller, functional; Spatial Reality Lab unique; NCR location is real advantage'],
+        ['International Exposure','4.1','13 global partners; dual degree at Bordeaux is genuinely distinctive'],
+        ['ROI (PGPM Chennai)','4.3','2.7x salary multiplier, 1.5 yr payback — strong for this fee level'],
+        ['Karma-Yoga','4.6','Most unique feature in Indian B-school space — alumni repeatedly cite it'],
+        ['Overall','4.1','Best value 1-year MBA (PGPM) and solid fresher PGDM outside top-15 bracket'],
+      ]} />
+      <H2>Student Voices</H2>
+      <T headers={['Quote','Source']} rows={[
+        ['"The 1-year format was intense but exactly what I needed. I went from IT services to a consulting role at Deloitte — that career switch happened because of Great Lakes."','PGPM Alumni, Chennai, 2024'],
+        ['"Karma-Yoga sounds gimmicky from outside but it genuinely changes how you think about leadership. Most memorable part of the program."','PGDM Alumni, Gurgaon, 2023'],
+        ['"The PGDM summer internship led directly to my PPO at ICICI Bank. That bridge from academics to corporate is what makes the 2-year format valuable."','PGDM Alumni, Chennai, 2024'],
+      ]} />
+      <H2>PGPM vs PGDM — Which to Choose?</H2>
+      <T headers={['Factor','Choose PGPM','Choose PGDM']} rows={[
+        ['Work Experience','You have 2+ years','You are a fresher or under 2 years exp'],
+        ['Time Available','You can afford only 1 year away','You want structured 2-year learning'],
+        ['Career Goal','Consulting, Product Mgmt switch','Finance, FMCG, Banking entry role'],
+        ['Summer Internship','No internship — live projects instead','Mandatory 60-90 day internship; leads to PPOs'],
+        ['Fees','Rs 23.5L (Chennai)','Rs 16-18L (Chennai — lower per year)'],
+        ['Avg CTC','Rs 17.8 LPA (Chennai)','Rs 15 LPA (Chennai)'],
+        ['Highest CTC','Rs 30.8 LPA (Chennai)','Rs 39.3 LPA (Chennai) — higher outlier'],
+      ]} />
+      <H2>Great Lakes vs Alternatives</H2>
+      <T headers={['School','Program','Fees','Avg CTC','Best For']} rows={[
+        ['Great Lakes Chennai','PGPM 1-yr','Rs 23.5L','Rs 17.8 LPA','IT switchers into consulting/product; AACSB+AMBA'],
+        ['Great Lakes Gurgaon','PGPM 1-yr','Rs 21.7-24.1L','Rs 15.1 LPA','Digital/Analytics roles, NCR proximity'],
+        ['Great Lakes Chennai','PGDM 2-yr','Rs 16-18L','Rs 15 LPA','Freshers targeting Finance/FMCG with summer internship'],
+        ['ISB Hyderabad','PGP 1-yr','Rs 42-45L','Rs 34 LPA','Premium brand, 4-7 yr exp, global targets'],
+        ['MDI Gurgaon','PGDM 2-yr','Rs 23L','Rs 22 LPA','NIRF ranked; Gurgaon; stronger avg salary for freshers'],
+        ['IMT Ghaziabad','PGDM 2-yr','Rs 18L','Rs 14 LPA','Older brand, larger network, Delhi NCR'],
+        ['SOIL PGPM','PGPM 1-yr','Rs 15L','Rs 12.3 LPA','Lower fees, values-driven, smaller batch'],
+      ]} />
+    </>
+  )
   if (isSOIL) return (
     <>
-      <H2>SOIL — What Students Say</H2>
-      <P>SOIL's strongest and most consistent positive review theme is authenticity — students consistently describe the values and leadership focus as genuine rather than marketing language. The second strongest theme is the Gurugram location's practical placement advantage. The main criticism is the brand gap versus top-10 schools and the smaller batch size limiting peer diversity compared to IIMs.</P>
+      <H2>SOIL — Honest Assessment</H2>
       <T headers={['Aspect','Rating /5','Honest Comment']} rows={[
         ['Placements (BFSI, consulting, automotive)','4.0','Strong for the fee level; 2x+ ROI consistent; not IIM-level salaries'],
         ['Academics and curriculum quality','4.2','Genuinely industry-aligned; Design Thinking in PGDM is distinctive'],
         ['Campus and facilities','4.0','Modern, residential; Gurugram location is a practical advantage'],
-        ['ROI for fees paid','4.3','Best argument for SOIL; 2.22x-2.52x over 4 years'],
+        ['ROI for fees paid','4.3','Best argument for SOIL; 2.22x–2.52x over 4 years'],
         ['Leadership development','4.5','The genuine differentiator; values-based education is real, not a tagline'],
-        ['HR program (PGPM-HR)','4.6','India\'s only 1-year PGPM-HR; VP-level alumni at Goldman, MS, JPM'],
+        ['HR program (PGPM-HR)','4.6',"India's only 1-year PGPM-HR; VP-level alumni at Goldman, MS, JPM"],
         ['Brand recognition','3.0','Honest gap vs top-10 schools; matters less inside NCR corporates'],
-        ['Batch size and diversity','3.5','Small batch is tight-knit but limits peer network breadth'],
         ['Overall','4.1','Strong choice for experienced professionals targeting NCR roles'],
       ]} />
-      <H2>What Students Say — SOIL Voices</H2>
+      <H2>Student Voices</H2>
       <T headers={['Quote','Source']} rows={[
         ['"SOIL is genuinely different — the focus on values and leadership is not just talk, it is built into everything you do here."','PGPM Alumnus, 2024'],
         ['"The industry connections are real. Every project has an actual company behind it and people who care about the outcome."','PGPM-HR Alumnus, 2023'],
         ['"Gurugram location is a massive advantage — companies are literally next door and that shows in internship and placement quality."','PGDM Student, 2025'],
         ['"The small batch was initially a concern. But it meant every professor knew my name and every recruiter had a real conversation with us."','PGPM Alumnus, 2023'],
       ]} />
-      <H2>SOIL vs Alternatives — Honest Comparison</H2>
-      <P>SOIL sits in a distinct niche: a values-driven, industry-consortium-built program in Gurugram NCR with a 2x+ ROI track record, priced at Rs 15-17L. The closest alternatives are MDI Gurgaon (Rs 23L, NIRF ranked, higher brand), IMT Ghaziabad (Rs 18L, older brand, larger batch), and ISB Hyderabad (Rs 43L, 1-year, globally ranked but much higher cost). For candidates who prioritise per-rupee ROI and leadership philosophy over ranking and brand, SOIL is the strongest option in this bracket.</P>
+      <H2>SOIL vs Alternatives</H2>
       <T headers={['School','Fees','Avg CTC','NIRF Rank','Best For']} rows={[
         ['SOIL PGPM','Rs 15 L','Rs 12.3 LPA','Not ranked','ROI, HR, experienced professionals, NCR'],
         ['MDI Gurgaon','Rs 23 L','Rs 22 LPA','#14','Strong brand, NIRF ranked, Gurgaon'],
         ['IMT Ghaziabad','Rs 18 L','Rs 14 LPA','~#25','Larger alumni network, older brand'],
-        ['Great Lakes Chennai','Rs 18 L','Rs 13 LPA','Not listed','South India focus, 1-year option'],
+        ['Great Lakes Chennai PGPM','Rs 23.5 L','Rs 17.8 LPA','#37','AACSB+AMBA, consulting track, 1-yr'],
         ['ISB Hyderabad','Rs 43 L','Rs 34 LPA','#2','Top brand, global rankings, 5+ yrs exp'],
       ]} />
-      <H2>Is SOIL Worth It? — Verdict</H2>
-      <P>SOIL is worth it if: you have 2+ years of experience and want a 1-year MBA in NCR, you are targeting HR leadership and the PGPM-HR is a unique fit, or you want an industry-consortium-designed curriculum where real companies built what you study. SOIL is not the right choice if you need NIRF ranking for government job eligibility, want the brand prestige of an IIM or ISB, or are a fresher without a clear reason to choose PGDM over a ranked 2-year program.</P>
     </>
   )
+
   if (!isB) return (
     <>
       <H2>IIM Ahmedabad — Honest Student Reviews</H2>
@@ -819,21 +1099,22 @@ function ReviewsPage({ slug }) {
 export default function CollegeSectionClient({ slug, section }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const basePath = `/colleges/${slug}`
-  const isB = slug === 'iim-bangalore'
+  const isB    = slug === 'iim-bangalore'
   const isSOIL = slug === 'soil'
-  const collegeName = isSOIL ? 'SOIL Institute of Management' : isB ? 'IIM Bangalore' : 'IIM Ahmedabad'
-  const accentColor = isSOIL ? '#1b6b3a' : isB ? '#C0392B' : 'var(--orange)'
-  const accentBg = isSOIL ? 'rgba(27,107,58,.08)' : isB ? '#fdecea' : 'var(--orange-lt)'
-  const accentBorder = isSOIL ? 'rgba(27,107,58,.2)' : isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)'
+  const isGL   = slug === 'great-lakes-chennai'
+  const collegeName = isGL ? 'Great Lakes Institute of Management' : isSOIL ? 'SOIL Institute of Management' : isB ? 'IIM Bangalore' : 'IIM Ahmedabad'
+  const accentColor  = isGL ? '#1a3a6b' : isSOIL ? '#1b6b3a' : isB ? '#C0392B' : 'var(--orange)'
+  const accentBg     = isGL ? 'rgba(26,58,107,.08)' : isSOIL ? 'rgba(27,107,58,.08)' : isB ? '#fdecea' : 'var(--orange-lt)'
+  const accentBorder = isGL ? 'rgba(26,58,107,.2)' : isSOIL ? 'rgba(27,107,58,.2)' : isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)'
 
   const METAS = {
-    fees:       { title:`${collegeName} Fees 2025 — Complete Guide`, sub: isSOIL ? 'Program fees, ROI track record, living costs and education loans' : `Total cost, ROI, scholarships and education loans` },
-    placements: { title:`${collegeName} Placements 2025 — Full Report`, sub: isSOIL ? 'PGPM, PGPM-HR and PGDM placement data — 4-year trend, sectors and top recruiters' : `Average package, sector breakdown, top recruiters and process` },
-    admissions: { title:`${collegeName} Admission 2026 — Complete Guide`, sub: isSOIL ? '9-step process, eligibility, accepted tests and batch profiles for all 3 programs' : `CAT cutoff, shortlisting formula, PI process and batch profile` },
-    reviews:    { title:`${collegeName} Reviews 2025 — Honest Assessment`, sub: isSOIL ? 'Ratings, student quotes, honest pros and cons, comparison with peer programs' : `What students and alumni say about academics, placements and campus life` },
-    campus:     { title:`${collegeName} Campus — Complete Guide`, sub: isSOIL ? 'Gurugram + Manesar campuses, industry consortium, international exchange and global partners' : isB ? 'Bengaluru location, international exchange, NSRCEL and student life' : 'Louis Kahn architecture, hostels, clubs and Ahmedabad life' },
-    alumni:     { title:`${collegeName} Notable Alumni`, sub: isSOIL ? 'PGPM-HR alumni at Goldman Sachs, Morgan Stanley, JP Morgan and KPMG' : `Leaders, founders and public figures from ${collegeName}` },
-    programs:   { title:`${collegeName} Programs 2025`, sub: isSOIL ? 'PGPM (1-yr), PGPM-HR (1-yr), and PGDM (2-yr) — fees, eligibility and outcomes' : isB ? 'PGP MBA, PGPBA, EPGP, PGPEM and FPM' : 'PGP, PGPX, FABM, ePGP and FPM' },
+    fees:       { title:`${collegeName} Fees 2025 — Complete Guide`, sub: isGL ? 'PGPM and PGDM fees, ROI analysis and education loans for all 4 programs' : isSOIL ? 'Program fees, ROI track record, living costs and education loans' : `Total cost, ROI, scholarships and education loans` },
+    placements: { title:`${collegeName} Placements 2025 — Full Report`, sub: isGL ? 'PGPM and PGDM placement data — all 4 programs, sector breakdown and top recruiters' : isSOIL ? 'PGPM, PGPM-HR and PGDM placement data — 4-year trend, sectors and recruiters' : `Average package, sector breakdown, top recruiters and process` },
+    admissions: { title:`${collegeName} Admission 2026 — Complete Guide`, sub: isGL ? 'PGPM and PGDM eligibility, 11-step process and batch profiles' : isSOIL ? '9-step process, eligibility, accepted tests and batch profiles for all 3 programs' : `CAT cutoff, shortlisting formula, PI process and batch profile` },
+    reviews:    { title:`${collegeName} Reviews 2025 — Honest Assessment`, sub: isGL ? 'Ratings across all 4 programs, student quotes, PGPM vs PGDM comparison' : isSOIL ? 'Ratings, student quotes, honest pros and cons, comparison with peer programs' : `What students and alumni say about academics, placements and campus life` },
+    campus:     { title:`${collegeName} Campus — Complete Guide`, sub: isGL ? 'Chennai and Gurgaon campuses, Karma-Yoga, 13 global partners and international immersion' : isSOIL ? 'Gurugram + Manesar campuses, industry consortium, international exchange and global partners' : isB ? 'Bengaluru location, international exchange, NSRCEL and student life' : 'Louis Kahn architecture, hostels, clubs and Ahmedabad life' },
+    alumni:     { title:`${collegeName} Notable Alumni`, sub: isGL ? '15,000+ alumni in 30+ countries — Meta, Uber, Visa, PepsiCo, Morgan Stanley, Google' : isSOIL ? 'PGPM-HR alumni at Goldman Sachs, Morgan Stanley, JP Morgan and KPMG' : `Leaders, founders and public figures from ${collegeName}` },
+    programs:   { title:`${collegeName} Programs 2025`, sub: isGL ? 'PGPM (1-yr) and PGDM (2-yr) at Chennai and Gurgaon — fees, specs and outcomes' : isSOIL ? 'PGPM (1-yr), PGPM-HR (1-yr), and PGDM (2-yr) — fees, eligibility and outcomes' : isB ? 'PGP MBA, PGPBA, EPGP, PGPEM and FPM' : 'PGP, PGPX, FABM, ePGP and FPM' },
   }
 
   const PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
@@ -895,8 +1176,8 @@ export default function CollegeSectionClient({ slug, section }) {
           <p style={{ fontSize:14, color:'rgba(255,255,255,.48)', marginBottom:22, maxWidth:480, margin:'0 auto 22px', lineHeight:1.8 }}>Enter your percentile and background. Claude shows your real conversion chance at {collegeName} and 20+ other colleges.</p>
           <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
             <Link href="/eligibility" style={{ background:accentColor, color:'#fff', padding:'12px 24px', borderRadius:10, fontSize:14, fontWeight:600, textDecoration:'none' }}>Check my eligibility →</Link>
-            <Link href={`/compare?a=${slug}&b=${isSOIL?'iim-ahmedabad':isB?'iim-ahmedabad':'iim-bangalore'}`} style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>
-              {isSOIL ? 'SOIL vs MDI Gurgaon →' : isB ? 'IIM B vs IIM A →' : 'IIM A vs IIM B →'}
+            <Link href={isGL ? '/compare?a=great-lakes-chennai&b=isb-hyderabad' : isSOIL ? '/compare?a=soil&b=mdi-gurgaon' : `/compare?a=${slug}&b=${isB?'iim-ahmedabad':'iim-bangalore'}`} style={{ background:'rgba(255,255,255,.07)', color:'rgba(255,255,255,.7)', padding:'12px 24px', borderRadius:10, fontSize:14, border:'1px solid rgba(255,255,255,.14)', textDecoration:'none' }}>
+              {isGL ? 'Great Lakes vs ISB →' : isSOIL ? 'SOIL vs MDI Gurgaon →' : isB ? 'IIM B vs IIM A →' : 'IIM A vs IIM B →'}
             </Link>
           </div>
         </div>
