@@ -455,7 +455,53 @@ export default function NMATCollegesClient() {
           </div>
         </div>
 
-        {/* CTA */}
+
+        {/* FAQ Section */}
+        <div style={{ marginBottom: 32 }}>
+          <h2 style={{ fontFamily: 'var(--serif)', fontSize: '1.4rem', fontWeight: 700, color: 'var(--ink)', marginBottom: 24, paddingBottom: 14, borderBottom: '2px solid var(--border2)' }}>
+            Frequently Asked Questions — NMAT Colleges 2026
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              {
+                q: 'Which top MBA colleges accept NMAT scores in 2026?',
+                a: 'Top NMAT participating institutes include NMIMS Mumbai (cutoff 210+), NMIMS Bangalore (200+), SPJIMR Mumbai (200+), ISB Hyderabad (210+ or GMAT 700+), SDA Bocconi Asia Pacific (200+), TISS Mumbai (190+), and XIM Bhubaneswar (185+). NMIMS exclusively accepts NMAT — they do not accept CAT scores.',
+              },
+              {
+                q: 'Is NMAT accepted in IIMs?',
+                a: 'No. IIMs only accept CAT scores for their flagship PGP MBA programmes. NMAT is not accepted by any IIM. If you are targeting IIMs, you must take CAT. NMAT is primarily relevant for NMIMS campuses and select premium private colleges.',
+              },
+              {
+                q: 'What is a good NMAT score for NMIMS Mumbai?',
+                a: '210 or above is typically required for a shortlist from NMIMS Mumbai. Scores of 215-230 give a strong chance. NMIMS Bangalore has a slightly lower cutoff of around 200-215. These cutoffs shift year to year based on test-taker pool performance.',
+              },
+              {
+                q: 'Should I take both NMAT and CAT?',
+                a: 'Yes, if NMIMS is a target. CAT opens IIMs, FMS, XLRI and 1000+ colleges. NMAT opens NMIMS exclusively — they do not accept CAT. SPJIMR and ISB accept multiple exams. Taking both maximises your college options significantly.',
+              },
+              {
+                q: 'What colleges can I get with NMAT 190?',
+                a: 'With 190, you are competitive for NMIMS Hyderabad, NMIMS Navi Mumbai, TISS Mumbai (HR programme), XIM Bhubaneswar, and Shiv Nadar University. Apply to NMIMS Bangalore and Mumbai as stretch options.',
+              },
+              {
+                q: 'Does SPJIMR accept NMAT?',
+                a: 'Yes. SPJIMR Mumbai accepts NMAT along with CAT and XAT. A score of 200+ is typically needed for shortlisting. SPJIMR is one of the highest-ranked colleges accepting NMAT with average placements of Rs 28 LPA — making it a strong target if you score well.',
+              },
+            ].map((faq, i) => (
+              <details key={i} style={{ background: 'var(--white)', borderRadius: 12, border: '1px solid var(--border)', padding: '18px 22px', cursor: 'pointer' }}>
+                <summary style={{ fontSize: 15, fontWeight: 600, color: 'var(--ink)', lineHeight: 1.5, listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                  {faq.q}
+                  <span style={{ color: 'var(--orange)', fontSize: 18, flexShrink: 0 }}>+</span>
+                </summary>
+                <p style={{ fontSize: 14.5, color: 'var(--ink2)', lineHeight: 1.85, marginTop: 14, marginBottom: 0, paddingTop: 14, borderTop: '1px solid var(--border2)' }}>
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+
+                {/* CTA */}
         <div style={{ background: 'var(--ink)', borderRadius: 16, padding: '32px', textAlign: 'center' }}>
           <div style={{ fontFamily: 'var(--serif)', fontSize: '1.25rem', fontWeight: 700, color: '#fff', marginBottom: 10 }}>
             Which NMAT college is right for your profile?
