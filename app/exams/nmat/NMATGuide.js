@@ -13,6 +13,7 @@ const TOC = [
   { id:'5-nmat-registration-process-2026', label:'Registration' },
   { id:'6-nmat-syllabus-2026-section-wise', label:'Syllabus' },
   { id:'7-nmat-score-vs-colleges-the-complete-guide', label:'Score vs Colleges' },
+  { id:'nmat-colleges-page', label:'All Colleges →', href:'/exams/nmat/colleges' },
   { id:'8-nmat-preparation-strategy-2026', label:'Preparation Strategy' },
   { id:'9-section-wise-preparation-tips', label:'Section-Wise Tips' },
   { id:'10-best-resources-for-nmat-2026', label:'Best Resources' },
@@ -444,6 +445,16 @@ export default function NMATGuide() {
             <span>✓</span><span>Last verified: March 2026 · verify@collvera.com</span>
           </div>
           <RenderContent text={ARTICLE_CONTENT} faqs={FAQS}/>
+          {/* NMAT Colleges deep-dive banner */}
+          <div style={{ margin:'40px 0', padding:'24px 28px', background:'var(--ink)', borderRadius:14, display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16 }}>
+            <div>
+              <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:8 }}>New — detailed college guide</div>
+              <div style={{ fontFamily:'var(--serif)', fontSize:'1.1rem', fontWeight:700, color:'#fff', marginBottom:6 }}>18 NMAT Colleges — Cutoffs, Fees & Placements</div>
+              <div style={{ fontSize:13, color:'rgba(255,255,255,.5)', lineHeight:1.6 }}>NMIMS Mumbai, SPJIMR, ISB, SDA Bocconi, TISS, XIM and more — with score filters and honest assessment.</div>
+            </div>
+            <Link href="/exams/nmat/colleges" style={{ background:'var(--orange)', color:'#fff', padding:'12px 22px', borderRadius:10, fontSize:13.5, fontWeight:600, textDecoration:'none', flexShrink:0, whiteSpace:'nowrap' }}>View all colleges →</Link>
+          </div>
+
           <div style={{ margin:'40px 0', padding:'20px 24px', background:'var(--orange-lt)', borderRadius:12, border:'1px solid rgba(217,95,2,.15)', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
             <div>
               <div style={{ fontSize:14, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>Know your NMAT mock score? See all colleges you can get into.</div>
@@ -457,7 +468,8 @@ export default function NMATGuide() {
             <p style={{ fontSize:13, color:'rgba(255,255,255,.5)', marginBottom:20, lineHeight:1.6 }}>Enter your NMAT score, academics and profile for personalised college matches.</p>
             <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
               <Link href="/eligibility" style={{ background:'var(--orange)', color:'#fff', padding:'11px 24px', borderRadius:8, fontSize:13, fontWeight:500, textDecoration:'none' }}>Check My Eligibility →</Link>
-              <Link href="/mba-game" style={{ background:'rgba(255,255,255,.08)', color:'rgba(255,255,255,.7)', padding:'11px 24px', borderRadius:8, fontSize:13, textDecoration:'none', border:'1px solid rgba(255,255,255,.12)' }}>Play The MBA Game</Link>
+              <Link href="/exams/nmat/colleges" style={{ background:'rgba(255,255,255,.08)', color:'rgba(255,255,255,.7)', padding:'11px 24px', borderRadius:8, fontSize:13, textDecoration:'none', border:'1px solid rgba(255,255,255,.12)' }}>All NMAT Colleges →</Link>
+              <Link href="/mba-game" style={{ background:'rgba(255,255,255,.08)', color:'rgba(255,255,255,.7)', padding:'11px 24px', borderRadius:8, fontSize:13, textDecoration:'none', border:'1px solid rgba(255,255,255,.12)' }}>MBA Game</Link>
             </div>
           </div>
         </div>
