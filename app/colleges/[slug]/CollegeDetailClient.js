@@ -78,20 +78,14 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ width:56, height:56, borderRadius:14, background:'rgba(255,255,255,.08)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:28, flexShrink:0 }}>{d.emoji}</div>
             <div style={{ flex:1, minWidth:200 }}>
               <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap', marginBottom:8 }}>
-                {d.nirf ? (
-                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:d.color, textTransform:'uppercase', letterSpacing:'.1em', background:'rgba(29,158,117,.1)', border:`1px solid ${d.color}40`, padding:'3px 10px', borderRadius:20 }}>
-                    NIRF #{d.nirf}
-                  </div>
-                ) : (
-                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:d.color, textTransform:'uppercase', letterSpacing:'.1em', background:`${d.color}18`, border:`1px solid ${d.color}40`, padding:'3px 10px', borderRadius:20 }}>
-                    {d.short}
-                  </div>
-                )}
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:d.color, textTransform:'uppercase', letterSpacing:'.1em', background:'rgba(29,158,117,.1)', border:`1px solid ${d.color}40`, padding:'3px 10px', borderRadius:20 }}>
+                  NIRF #{d.nirf}
+                </div>
                 {d.accreditations.map(a => (
                   <div key={a} style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', background:'rgba(255,255,255,.06)', padding:'3px 10px', borderRadius:20, border:'1px solid rgba(255,255,255,.1)' }}>{a}</div>
                 ))}
               </div>
-              <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.8rem,3.5vw,2.6rem)', fontWeight:700, color:'#fff', marginBottom:6, lineHeight:1.1 }}>{d.name}</h1>
+              <h1 style={{ fontFamily:'var(--serif-display)', fontSize:'clamp(1.8rem,3.5vw,2.6rem)', fontWeight:700, color:'#fff', marginBottom:6, lineHeight:1.1 }}>{d.name}</h1>
               <div style={{ fontSize:13, color:'rgba(255,255,255,.4)', fontFamily:'var(--mono)' }}>📍 {d.location} · Est. {d.founded} · Director: {d.director}</div>
             </div>
             <button onClick={() => setLeadOpen(true)} style={{ background:'var(--orange)', color:'#fff', border:'none', padding:'12px 22px', borderRadius:10, fontSize:13, fontWeight:600, cursor:'pointer', flexShrink:0 }}>
@@ -176,7 +170,7 @@ export default function CollegeDetailClient({ college }) {
                 ['Accreditations', d.accreditations.join(', ')],
                 ['Campus', d.campusLabel],
                 ['Programs', d.programs.map(p=>p.name).join(' · ')],
-                ['Website', d.slug === 'iim-bangalore' ? 'iimb.ac.in' : d.slug === 'soil' ? 'soilindia.net' : 'iima.ac.in'],
+                ['Website', d.slug === 'iim-bangalore' ? 'iimb.ac.in' : 'iima.ac.in'],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:'grid', gridTemplateColumns:'120px 1fr', gap:12, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
                   <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase' }}>{k}</div>
@@ -195,10 +189,10 @@ export default function CollegeDetailClient({ college }) {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
             {[
               { label:'Avg Package', value:`₹${d.placements.avg} LPA`, color:d.color },
-              { label:'Median Package', value: d.placements.median ? `₹${d.placements.median} LPA` : '—', color:d.color },
+              { label:'Median Package', value:`₹${d.placements.median} LPA`, color:d.color },
               { label:'Highest (Domestic)', value:`₹${d.placements.highest} LPA`, color:'#d95f02' },
               { label:'Companies', value:d.placements.companies, color:'var(--ink)' },
-              { label:'PPOs Accepted', value: d.placements.ppo ?? '—', color:'var(--ink)' },
+              { label:'PPOs Accepted', value:d.placements.ppo, color:'var(--ink)' },
               { label:'Placed', value:`${d.placements.rate}%`, color:d.color },
             ].map((s, i) => (
               <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px' }}>
@@ -258,9 +252,9 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>PGP 2025-27 fee breakdown</div>
               {[
-                { label:'Tuition fee', amount: d.fees.tuition ? `₹${d.fees.tuition} L` : 'Contact admissions' },
-                { label:'Library, computing, materials', amount: d.fees.other ? `₹${d.fees.other} L` : 'Contact admissions' },
-                { label:'Total programme fee', amount: d.fees.total ? `₹${d.fees.total} L` : 'Contact admissions', bold:true },
+                { label:'Tuition fee', amount:`₹${d.fees.tuition} L` },
+                { label:'Library, computing, materials', amount:`₹${d.fees.other} L` },
+                { label:'Total programme fee', amount:`₹${d.fees.total} L`, bold:true },
                 { label:'Monthly living (on-campus)', amount:d.fees.living_monthly },
                 { label:'Education loan available', amount:d.fees.loan_max },
                 { label:'Loan interest rate', amount:d.fees.loan_rate },
@@ -271,10 +265,7 @@ export default function CollegeDetailClient({ college }) {
                 </div>
               ))}
               <div style={{ marginTop:16, padding:'12px 16px', background:'var(--teal-lt)', borderRadius:10, fontSize:12.5, color:'var(--teal)', lineHeight:1.6 }}>
-                {d.fees.total
-                  ? `ROI check: At ₹${d.placements.avg} LPA average, you recover the full fee in under ${Math.round((d.fees.total / (d.placements.avg / 12))).toFixed(0)} months of salary.`
-                  : `ROI: SOIL's PGPM batch achieves a ${d.stats.find(s=>s.label==='ROI')?.value || '2.22x'} average salary multiple post-MBA.`
-                }
+                ROI check: At ₹35 LPA average, you recover the full fee in under 10 months of salary.
               </div>
             </div>
             {/* Scholarships */}
@@ -337,10 +328,10 @@ export default function CollegeDetailClient({ college }) {
                 <div key={i} style={{ marginBottom:12 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
                     <span>{w.label}</span>
-                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color }}>{w.pct != null ? `${w.pct}%` : '—'}</span>
+                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color }}>{w.pct}%</span>
                   </div>
                   <div style={{ height:6, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
-                    <div style={{ height:'100%', width:`${w.pct ?? 0}%`, background:d.color, borderRadius:3 }} />
+                    <div style={{ height:'100%', width:`${w.pct}%`, background:d.color, borderRadius:3 }} />
                   </div>
                 </div>
               ))}
@@ -349,10 +340,10 @@ export default function CollegeDetailClient({ college }) {
                 <div key={i} style={{ marginBottom:10 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:5 }}>
                     <span>{w.label}</span>
-                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02' }}>{w.pct != null ? `${w.pct}%` : '—'}</span>
+                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02' }}>{w.pct}%</span>
                   </div>
                   <div style={{ height:5, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
-                    <div style={{ height:'100%', width:`${w.pct ?? 0}%`, background:'#d95f02', borderRadius:3 }} />
+                    <div style={{ height:'100%', width:`${w.pct}%`, background:'#d95f02', borderRadius:3 }} />
                   </div>
                 </div>
               ))}
@@ -415,10 +406,10 @@ export default function CollegeDetailClient({ college }) {
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Campus facts</div>
               {[
                 ['Area', d.campus.area],
-                ['Dormitories', d.campus.dorms ? `${d.campus.dorms} dorms · ${d.campus.dorm_capacity} students` : 'Fully residential'],
+                ['Dormitories', `${d.campus.dorms} dorms · ${d.campus.dorm_capacity} students`],
                 ['Architecture', d.campus.architect],
                 ['Heritage', d.campus.heritage],
-                ['Student clubs', d.campus.clubs ? `${d.campus.clubs}+ active clubs` : 'Multiple clubs & committees'],
+                ['Student clubs', `${d.campus.clubs}+ active clubs`],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:'grid', gridTemplateColumns:'120px 1fr', gap:10, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
                   <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase' }}>{k}</div>
@@ -457,7 +448,7 @@ export default function CollegeDetailClient({ college }) {
           <SectionHead>Is {d.name} Worth It? — Honest Pros, Cons &amp; Who Should Apply</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }} className="verdict-grid">
             <div style={{ background:'var(--teal-lt)', borderRadius:14, border:'1px solid rgba(15,110,86,.2)', padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>{d.name} is best for</div>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>IIM A is genuinely best for</div>
               {d.verdict.best_for.map((b, i) => (
                 <div key={i} style={{ display:'flex', gap:10, marginBottom:10, alignItems:'flex-start' }}>
                   <span style={{ color:'var(--teal)', flexShrink:0, fontWeight:700 }}>✓</span>
