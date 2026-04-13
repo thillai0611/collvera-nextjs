@@ -26,13 +26,21 @@ function parseTLDR(text) {
 
 // ── Inline bold: **text** → <strong>
 function renderInline(text) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/)
+  // Split on **bold**, [text](url), and bare URLs
+  const parts = text.split(/(\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\)|https?:\/\/[^\s,;)]+)/)
   if (parts.length === 1) return text
-  return parts.map((p, i) =>
-    p.startsWith('**') && p.endsWith('**')
-      ? <strong key={i} style={{ fontWeight:600, color:'var(--ink)' }}>{p.slice(2,-2)}</strong>
-      : p
-  )
+  return parts.map((p, i) => {
+    if (p.startsWith('**') && p.endsWith('**'))
+      return <strong key={i} style={{ fontWeight:600, color:'var(--ink)' }}>{p.slice(2,-2)}</strong>
+    // Markdown link [text](url)
+    const mdLink = p.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
+    if (mdLink)
+      return <a key={i} href={mdLink[2]} style={{ color:'var(--orange)', textDecoration:'underline', textDecorationColor:'rgba(217,95,2,.3)', textUnderlineOffset:3 }} target={mdLink[2].startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">{mdLink[1]}</a>
+    // Bare URL
+    if (p.startsWith('http'))
+      return <a key={i} href={p} style={{ color:'var(--orange)', textDecoration:'underline', textDecorationColor:'rgba(217,95,2,.3)', textUnderlineOffset:3 }} target="_blank" rel="noopener noreferrer">{p}</a>
+    return p
+  })
 }
 
 // ── Category colour map ──────────────────────────────────────────────────────
@@ -273,6 +281,19 @@ function RenderText({ text, inlineFAQs }) {
             allowFullScreen
           />
         </div>
+      )
+    }
+
+    // Blockquote
+    else if (line.startsWith('> ')) {
+      flushPara(); flushBullets(); flushNumbered()
+      const bqText = line.slice(2)
+      elements.push(
+        <blockquote key={`bq-${idx}`} style={{ margin:'28px 0', padding:'16px 20px', borderLeft:'3px solid var(--orange)', background:'var(--orange-lt)', borderRadius:'0 10px 10px 0' }}>
+          <p style={{ fontSize:14.5, color:'var(--ink2)', lineHeight:1.8, margin:0, fontStyle:'italic' }}>
+            {renderInline(bqText)}
+          </p>
+        </blockquote>
       )
     }
 
