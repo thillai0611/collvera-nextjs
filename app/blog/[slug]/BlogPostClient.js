@@ -9,12 +9,10 @@ function parseContent(raw) {
   if (!raw) return { type: 'empty' }
   if (typeof raw === 'object' && raw.sections) return { type: 'structured', data: raw }
   if (typeof raw === 'string') {
-    // Try JSON parse first
     try {
       const parsed = JSON.parse(raw)
       if (parsed && parsed.sections) return { type: 'structured', data: parsed }
     } catch {}
-    // Plain text
     return { type: 'text', data: raw }
   }
   return { type: 'empty' }
@@ -26,7 +24,18 @@ function parseTLDR(text) {
   return { tldr: m[1].trim(), body: text.replace(/---TLDR---[\s\S]*?---END TLDR---\n*/, '').trim() }
 }
 
-// ── Category colour map ───────────────────────────────────────────────────────
+// ── Inline bold: **text** → <strong>
+function renderInline(text) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/)
+  if (parts.length === 1) return text
+  return parts.map((p, i) =>
+    p.startsWith('**') && p.endsWith('**')
+      ? <strong key={i} style={{ fontWeight:600, color:'var(--ink)' }}>{p.slice(2,-2)}</strong>
+      : p
+  )
+}
+
+// ── Category colour map ──────────────────────────────────────────────────────
 const CAT_COLORS = {
   'Placement Data':    { bg:'#fff0e6', color:'#b84e00', dot:'#d95f02' },
   'College Comparison':{ bg:'#e6f1fb', color:'#1565c0', dot:'#185fa5' },
@@ -39,13 +48,12 @@ const CAT_COLORS = {
   'Career Guide':      { bg:'#e8eaf6', color:'#1a237e', dot:'#3949ab' },
   'Education Guide':   { bg:'#e0f7fa', color:'#006064', dot:'#00838f' },
   'Ranking':           { bg:'#e8eaf6', color:'#1a237e', dot:'#3949ab' },
-  'College Comparison':{ bg:'#e6f1fb', color:'#1565c0', dot:'#185fa5' },
 }
 function catStyle(cat) {
   return CAT_COLORS[cat] || { bg:'var(--cream2)', color:'var(--muted)', dot:'var(--orange)' }
 }
 
-// ── TLDR box ──────────────────────────────────────────────────────────────────
+// ── TLDR box ─────────────────────────────────────────────────────────────────
 function TLDRBox({ tldr }) {
   const lines   = tldr.split('\n').filter(l => l.trim())
   const bullets = lines.filter(l => l.startsWith('-') || l.startsWith('•'))
@@ -54,7 +62,7 @@ function TLDRBox({ tldr }) {
     <div style={{ background:'var(--orange-lt)', border:'1.5px solid rgba(217,95,2,.2)', borderRadius:12, padding:'20px 22px', marginBottom:32 }}>
       <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
         <span style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--orange2)', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:600 }}>TL;DR — Quick Summary</span>
-        <span style={{ flex:1, height:1, background:'rgba(217,95,2,.2)' }}></span>
+        <span style={{ flex:1, height:1, background:'rgba(217,95,2,.2)' }} />
         <span style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)' }}>2 min read</span>
       </div>
       {prose.map((p, i) => <p key={i} style={{ fontSize:14, lineHeight:1.7, color:'var(--ink2)', marginBottom:8 }}>{p}</p>)}
@@ -72,7 +80,7 @@ function TLDRBox({ tldr }) {
   )
 }
 
-// ── Inline FAQ accordion (mid-article) ───────────────────────────────────────
+// ── Inline FAQ accordion ─────────────────────────────────────────────────────
 function InlineFAQ({ faqs }) {
   const [open, setOpen] = useState(null)
   if (!faqs || faqs.length === 0) return null
@@ -93,46 +101,194 @@ function InlineFAQ({ faqs }) {
   )
 }
 
-// ── Render plain text with ## heading and paragraph support ──────────────────
+// ── RenderText — handles #, ##, ###, bullets, numbered lists, tables, bold ───
 function RenderText({ text, inlineFAQs }) {
-  const lines    = text.split('\n')
-  const elements = []
-  let h2Count    = 0
-  let slotIndex  = 0
-  let para       = []
+  const lines     = text.split('\n')
+  const elements  = []
+  let h2Count     = 0
+  let slotIndex   = 0
+  let para        = []
+  let bullets     = []
+  let numbered    = []
+  let tableLines  = []
+  let inTable     = false
 
   function flushPara() {
-    if (para.length === 0) return
-    elements.push(<p key={`p-${elements.length}`} style={{ marginBottom:20, color:'var(--ink2)', lineHeight:1.85 }}>{para.join(' ')}</p>)
+    if (!para.length) return
+    elements.push(
+      <p key={`p-${elements.length}`} style={{ marginBottom:20, color:'var(--ink2)', lineHeight:1.85 }}>
+        {renderInline(para.join(' '))}
+      </p>
+    )
     para = []
   }
 
+  function flushBullets() {
+    if (!bullets.length) return
+    elements.push(
+      <ul key={`ul-${elements.length}`} style={{ margin:'0 0 20px 0', paddingLeft:0, listStyle:'none' }}>
+        {bullets.map((b, i) => (
+          <li key={i} style={{ display:'flex', gap:10, marginBottom:8, fontSize:14.5, color:'var(--ink2)', lineHeight:1.7 }}>
+            <span style={{ color:'var(--orange)', flexShrink:0, marginTop:2, fontSize:12 }}>▸</span>
+            <span>{renderInline(b.replace(/^[-•*]\s*/, ''))}</span>
+          </li>
+        ))}
+      </ul>
+    )
+    bullets = []
+  }
+
+  function flushNumbered() {
+    if (!numbered.length) return
+    elements.push(
+      <ol key={`ol-${elements.length}`} style={{ margin:'0 0 20px 0', paddingLeft:0, listStyle:'none', counterReset:'ol-counter' }}>
+        {numbered.map((item, i) => (
+          <li key={i} style={{ display:'flex', gap:12, marginBottom:10, fontSize:14.5, color:'var(--ink2)', lineHeight:1.7 }}>
+            <span style={{ minWidth:24, height:24, borderRadius:'50%', background:'var(--orange)', color:'#fff', fontSize:11, fontWeight:700, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:2, fontFamily:'var(--mono)' }}>{i+1}</span>
+            <span>{renderInline(item.replace(/^\d+[.)]\s*/, ''))}</span>
+          </li>
+        ))}
+      </ol>
+    )
+    numbered = []
+  }
+
+  function flushTable() {
+    if (!tableLines.length) return
+    // Parse markdown table: | col | col | col |
+    const rows = tableLines.map(l =>
+      l.split('|').map(c => c.trim()).filter((_, i, a) => i > 0 && i < a.length - 1)
+    )
+    const validRows = rows.filter(r => r.length > 0 && !r.every(c => /^[-:]+$/.test(c)))
+    if (!validRows.length) { tableLines = []; return }
+    const [head, ...body] = validRows
+    elements.push(
+      <div key={`tbl-${elements.length}`} style={{ overflowX:'auto', margin:'24px 0' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13.5, lineHeight:1.6 }}>
+          <thead>
+            <tr>
+              {head.map((h, i) => (
+                <th key={i} style={{ background:'var(--ink)', color:'#fff', padding:'10px 14px', textAlign:'left', fontFamily:'var(--mono)', fontSize:11, textTransform:'uppercase', letterSpacing:'.07em', fontWeight:500, whiteSpace:'nowrap' }}>
+                  {h}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {body.map((row, ri) => (
+              <tr key={ri} style={{ background: ri % 2 === 0 ? 'var(--white)' : 'var(--cream)' }}>
+                {row.map((cell, ci) => (
+                  <td key={ci} style={{ padding:'10px 14px', borderBottom:'1px solid var(--border2)', color:'var(--ink2)', verticalAlign:'top' }}>
+                    {renderInline(cell)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+    tableLines = []
+    inTable = false
+  }
+
+  function flushAll() {
+    flushPara()
+    flushBullets()
+    flushNumbered()
+    flushTable()
+  }
+
+  function pushH2(text, idx) {
+    h2Count++
+    elements.push(
+      <h2 key={`h2-${idx}`} style={{ fontFamily:'var(--serif)', fontSize:'1.3rem', fontWeight:600, marginTop:44, marginBottom:16, color:'var(--ink)', lineHeight:1.25, borderBottom:'2px solid var(--border2)', paddingBottom:10 }}>
+        {text}
+      </h2>
+    )
+    if (h2Count % 3 === 0 && inlineFAQs?.[slotIndex]?.length > 0) {
+      elements.push(<InlineFAQ key={`faq-${h2Count}`} faqs={inlineFAQs[slotIndex]} />)
+      slotIndex++
+    }
+  }
+
+  function pushH3(text, idx) {
+    elements.push(
+      <h3 key={`h3-${idx}`} style={{ fontFamily:'var(--serif)', fontSize:'1.05rem', fontWeight:600, marginTop:28, marginBottom:10, color:'var(--ink)', lineHeight:1.3 }}>
+        {text}
+      </h3>
+    )
+  }
+
   lines.forEach((line, idx) => {
-    if (line.startsWith('## ')) {
-      flushPara()
-      h2Count++
-      elements.push(
-        <h2 key={`h2-${idx}`} style={{ fontFamily:'var(--serif)', fontSize:'1.3rem', fontWeight:700, marginTop:36, marginBottom:14, color:'var(--ink)', lineHeight:1.25 }}>
-          {line.replace('## ', '')}
-        </h2>
-      )
-      if (h2Count % 3 === 0 && inlineFAQs?.[slotIndex]?.length > 0) {
-        elements.push(<InlineFAQ key={`faq-${h2Count}`} faqs={inlineFAQs[slotIndex]} />)
-        slotIndex++
-      }
+    // Table rows
+    if (line.trim().startsWith('|')) {
+      flushPara(); flushBullets(); flushNumbered()
+      inTable = true
+      tableLines.push(line)
+      return
+    }
+    if (inTable) { flushTable() }
+
+    // Headings
+    if (line.startsWith('### ')) {
+      flushAll()
+      pushH3(line.slice(4), idx)
+    } else if (line.startsWith('## ')) {
+      flushAll()
+      pushH2(line.slice(3), idx)
     } else if (line.startsWith('# ')) {
-      flushPara()
-    } else if (line.trim() === '') {
-      flushPara()
-    } else {
+      flushAll()
+      // H1 — don't render (page already has h1 as the post title)
+    }
+    // Bullet lists
+    else if (/^[-•*] /.test(line)) {
+      flushPara(); flushNumbered()
+      bullets.push(line)
+    }
+    // Numbered lists
+    else if (/^\d+[.)]\s/.test(line)) {
+      flushPara(); flushBullets()
+      numbered.push(line)
+    }
+    // Horizontal rule
+    else if (/^---+$/.test(line.trim())) {
+      flushAll()
+      elements.push(<hr key={`hr-${idx}`} style={{ border:'none', borderTop:'1px solid var(--border)', margin:'32px 0' }} />)
+    }
+    // Empty line
+    else if (line.trim() === '') {
+      flushPara(); flushBullets(); flushNumbered()
+    }
+    // YouTube embed
+    else if (/https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/.test(line.trim())) {
+      flushPara(); flushBullets(); flushNumbered()
+      const ytId = line.trim().match(/https:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/)[1]
+      elements.push(
+        <div key={`yt-${elements.length}`} style={{ margin:'32px 0', borderRadius:12, overflow:'hidden', position:'relative', paddingTop:'56.25%', background:'#000' }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${ytId}`}
+            style={{ position:'absolute', top:0, left:0, width:'100%', height:'100%', border:'none' }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )
+    }
+
+    // Regular paragraph
+    else {
+      if (bullets.length) flushBullets()
+      if (numbered.length) flushNumbered()
       para.push(line)
     }
   })
-  flushPara()
+
+  flushAll()
   return <>{elements}</>
 }
 
-// ── Full FAQ accordion (bottom of article) ───────────────────────────────────
+// ── Full FAQ accordion ───────────────────────────────────────────────────────
 function FAQSection({ faqs }) {
   const [open, setOpen]       = useState(null)
   const [visible, setVisible] = useState(5)
@@ -156,7 +312,7 @@ function FAQSection({ faqs }) {
       <p style={{ fontSize:13, color:'var(--muted)', marginBottom:20 }}>{faqs.length} questions answered</p>
       <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
         {faqs.slice(0, visible).map((faq, i) => (
-          <div key={i} style={{ border:'1px solid var(--border)', borderRadius:10, overflow:'hidden', background:'var(--white)', transition:'all .2s' }}>
+          <div key={i} style={{ border:'1px solid var(--border)', borderRadius:10, overflow:'hidden', background:'var(--white)' }}>
             <button onClick={() => setOpen(open === i ? null : i)}
               style={{ width:'100%', padding:'14px 18px', display:'flex', justifyContent:'space-between', alignItems:'center', background:'none', border:'none', cursor:'pointer', textAlign:'left', gap:12 }}>
               <span style={{ fontSize:14, fontWeight:500, color:'var(--ink)', lineHeight:1.45 }}>{faq.q}</span>
@@ -182,7 +338,7 @@ function FAQSection({ faqs }) {
   )
 }
 
-// ── Sidebar ───────────────────────────────────────────────────────────────────
+// ── Sidebar ──────────────────────────────────────────────────────────────────
 function Sidebar({ recentPosts, currentCategory }) {
   const TOOLS = [
     { icon:'🎯', label:'Eligibility Checker', sub:'Profile → shortlist in 2 min', href:'/eligibility', c:'#1D9E75' },
@@ -190,14 +346,12 @@ function Sidebar({ recentPosts, currentCategory }) {
     { icon:'🎲', label:'MBA Game',            sub:'Score → college tiers',          href:'/mba-game',    c:'#a78bfa' },
     { icon:'📊', label:'Rankings',            sub:'5 views · Claude ranked',        href:'/rankings',    c:'#378ADD' },
   ]
-
   const related = recentPosts.filter(p => p.category === currentCategory).slice(0, 3)
   const recent  = recentPosts.filter(p => p.category !== currentCategory).slice(0, 5)
 
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:20 }}>
-
-      {/* CTA — Eligibility */}
+      {/* CTA */}
       <div style={{ background:'var(--ink)', borderRadius:14, padding:'20px 18px' }}>
         <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'#1D9E75', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10, display:'flex', alignItems:'center', gap:6 }}>
           <span style={{ width:5, height:5, borderRadius:'50%', background:'#1D9E75', display:'inline-block', animation:'blink 2s ease-in-out infinite' }} />
@@ -210,30 +364,26 @@ function Sidebar({ recentPosts, currentCategory }) {
         </Link>
       </div>
 
-      {/* Related articles */}
+      {/* Related */}
       {related.length > 0 && (
         <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'18px' }}>
           <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>Related articles</div>
-          <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
-            {related.map((p, i) => {
-              const s = catStyle(p.category)
-              return (
-                <Link key={p.id} href={`/blog/${p.slug}`} style={{ textDecoration:'none', display:'block', padding:'12px 0', borderBottom: i < related.length-1 ? '1px solid var(--border2)' : 'none' }}>
-                  <div style={{ fontSize:9, fontFamily:'var(--mono)', color:s.dot, textTransform:'uppercase', letterSpacing:'.06em', marginBottom:4 }}>{p.category}</div>
-                  <div style={{ fontSize:13, fontWeight:500, color:'var(--ink)', lineHeight:1.4, transition:'color .15s' }}
-                    onMouseOver={e => e.currentTarget.style.color='var(--orange)'}
-                    onMouseOut={e => e.currentTarget.style.color='var(--ink)'}>
-                    {p.title}
-                  </div>
-                  <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginTop:4 }}>{p.read_time}</div>
-                </Link>
-              )
-            })}
-          </div>
+          {related.map((p, i) => {
+            const s = catStyle(p.category)
+            return (
+              <Link key={p.id} href={`/blog/${p.slug}`} style={{ textDecoration:'none', display:'block', padding:'12px 0', borderBottom: i < related.length-1 ? '1px solid var(--border2)' : 'none' }}>
+                <div style={{ fontSize:9, fontFamily:'var(--mono)', color:s.dot, textTransform:'uppercase', letterSpacing:'.06em', marginBottom:4 }}>{p.category}</div>
+                <div style={{ fontSize:13, fontWeight:500, color:'var(--ink)', lineHeight:1.4 }}
+                  onMouseOver={e => e.currentTarget.style.color='var(--orange)'}
+                  onMouseOut={e => e.currentTarget.style.color='var(--ink)'}>{p.title}</div>
+                <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginTop:4 }}>{p.read_time}</div>
+              </Link>
+            )
+          })}
         </div>
       )}
 
-      {/* Tools grid */}
+      {/* Tools */}
       <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'18px' }}>
         <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>Collvera tools</div>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
@@ -249,28 +399,24 @@ function Sidebar({ recentPosts, currentCategory }) {
         </div>
       </div>
 
-      {/* Recent articles */}
+      {/* Recent */}
       {recent.length > 0 && (
         <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'18px' }}>
           <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>Recent articles</div>
-          <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
-            {recent.map((p, i) => {
-              const s = catStyle(p.category)
-              return (
-                <Link key={p.id} href={`/blog/${p.slug}`} style={{ textDecoration:'none', display:'flex', gap:10, alignItems:'flex-start', padding:'10px 0', borderBottom: i < recent.length-1 ? '1px solid var(--border2)' : 'none' }}>
-                  <div style={{ width:7, height:7, borderRadius:'50%', background:s.dot, flexShrink:0, marginTop:5 }} />
-                  <div>
-                    <div style={{ fontSize:12.5, fontWeight:500, color:'var(--ink)', lineHeight:1.4, marginBottom:2, transition:'color .15s' }}
-                      onMouseOver={e => e.currentTarget.style.color='var(--orange)'}
-                      onMouseOut={e => e.currentTarget.style.color='var(--ink)'}>
-                      {p.title}
-                    </div>
-                    <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)' }}>{p.read_time}</div>
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
+          {recent.map((p, i) => {
+            const s = catStyle(p.category)
+            return (
+              <Link key={p.id} href={`/blog/${p.slug}`} style={{ textDecoration:'none', display:'flex', gap:10, alignItems:'flex-start', padding:'10px 0', borderBottom: i < recent.length-1 ? '1px solid var(--border2)' : 'none' }}>
+                <div style={{ width:7, height:7, borderRadius:'50%', background:s.dot, flexShrink:0, marginTop:5 }} />
+                <div>
+                  <div style={{ fontSize:12.5, fontWeight:500, color:'var(--ink)', lineHeight:1.4, marginBottom:2 }}
+                    onMouseOver={e => e.currentTarget.style.color='var(--orange)'}
+                    onMouseOut={e => e.currentTarget.style.color='var(--ink)'}>{p.title}</div>
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)' }}>{p.read_time}</div>
+                </div>
+              </Link>
+            )
+          })}
           <Link href="/blog" style={{ display:'block', textAlign:'center', marginTop:14, fontSize:12, color:'var(--orange)', fontWeight:500, textDecoration:'none' }}>
             Browse all articles →
           </Link>
@@ -282,11 +428,11 @@ function Sidebar({ recentPosts, currentCategory }) {
         <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>Quick check</div>
         <div style={{ fontSize:13, fontWeight:600, color:'var(--ink)', marginBottom:14, lineHeight:1.4 }}>Where does your percentile stand?</div>
         {[
-          ['99%ile+', 'IIM A, B, C, FMS',         '#1D9E75'],
-          ['97-98%', 'XLRI, SPJIMR, IIM L',        '#2a9d8f'],
-          ['95-96%', 'MDI, IIFT, IIM K',            '#EF9F27'],
-          ['90-94%', 'IMT, TAPMI, FORE',            '#e06c00'],
-          ['<90%',   'Tier 3 & state colleges',     '#b5341b'],
+          ['99%ile+', 'IIM A, B, C, FMS',      '#1D9E75'],
+          ['97-98%',  'XLRI, SPJIMR, IIM L',   '#2a9d8f'],
+          ['95-96%',  'MDI, IIFT, IIM K',       '#EF9F27'],
+          ['90-94%',  'IMT, TAPMI, FORE',       '#e06c00'],
+          ['<90%',    'Tier 3 & state colleges','#b5341b'],
         ].map(([pct, colleges, color]) => (
           <div key={pct} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
             <div style={{ fontSize:10.5, fontFamily:'var(--mono)', fontWeight:600, color, minWidth:54 }}>{pct}</div>
@@ -300,15 +446,14 @@ function Sidebar({ recentPosts, currentCategory }) {
           Get full verdict →
         </Link>
       </div>
-
     </div>
   )
 }
 
-// ── Main component ────────────────────────────────────────────────────────────
+// ── Main ─────────────────────────────────────────────────────────────────────
 export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
   const [leadOpen, setLeadOpen] = useState(false)
-  const parsed = parseContent(post.content)
+  const parsed     = parseContent(post.content)
   const inlineFAQs = [faqs.slice(0, 3), faqs.slice(3, 6), faqs.slice(6, 9)]
 
   return (
@@ -316,17 +461,14 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
       <Nav onLeadOpen={() => setLeadOpen(true)} />
 
       <div style={{ maxWidth:1160, margin:'0 auto', padding:'28px 20px 60px' }}>
-        {/* Back */}
         <Link href="/blog" style={{ color:'var(--orange)', fontSize:13, fontWeight:500, textDecoration:'none', display:'inline-flex', alignItems:'center', gap:6, marginBottom:24 }}>
           ← Back to Blog
         </Link>
 
-        {/* Two-column layout */}
         <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:36, alignItems:'start' }} className="blog-layout">
 
-          {/* ── LEFT — article ── */}
+          {/* Article */}
           <article>
-            {/* Meta */}
             <div style={{ display:'flex', gap:10, alignItems:'center', flexWrap:'wrap', marginBottom:10 }}>
               {post.category && (() => { const s = catStyle(post.category); return (
                 <span style={{ fontSize:11, padding:'3px 10px', borderRadius:20, background:s.bg, color:s.color, fontFamily:'var(--mono)', fontWeight:500 }}>{post.category}</span>
@@ -339,23 +481,19 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
               )}
             </div>
 
-            {/* Title */}
-            <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.6rem,3vw,2.2rem)', fontWeight:700, lineHeight:1.2, marginBottom:16, marginTop:8, color:'var(--ink)' }}>
+            <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(1.5rem,2.5vw,2rem)', fontWeight:600, lineHeight:1.25, marginBottom:16, marginTop:8, color:'var(--ink)', letterSpacing:'-0.01em' }}>
               {post.title}
             </h1>
 
-            {/* Description */}
             <div style={{ borderTop:'3px solid var(--orange)', borderBottom:'1px solid var(--border2)', padding:'14px 0', marginBottom:28 }}>
               <p style={{ fontSize:15, color:'var(--muted)', lineHeight:1.7, margin:0, fontStyle:'italic' }}>{post.description}</p>
             </div>
 
-            {/* Verification badge */}
             <div style={{ padding:'8px 14px', background:'var(--cream2)', borderRadius:8, fontSize:11.5, color:'var(--muted)', marginBottom:28, fontFamily:'var(--mono)', display:'flex', alignItems:'center', gap:6 }}>
               <span>✓</span>
-              <span>Last verified: March 2026 · Spot outdated data? Email verify@collvera.com</span>
+              <span>Last verified: April 2026 · Spot outdated data? Email verify@collvera.com</span>
             </div>
 
-            {/* Content */}
             <div style={{ fontSize:15, lineHeight:1.85, color:'var(--ink)' }}>
               {parsed.type === 'text' && (() => {
                 const { tldr, body } = parseTLDR(parsed.data)
@@ -391,7 +529,7 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
               )}
             </div>
 
-            {/* Mid-article CTA */}
+            {/* Mid CTA */}
             <div style={{ margin:'40px 0', padding:'20px 24px', background:'var(--orange-lt)', borderRadius:12, border:'1px solid rgba(217,95,2,.15)', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
               <div>
                 <div style={{ fontSize:14, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>Not sure which college to apply to?</div>
@@ -402,7 +540,6 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
               </Link>
             </div>
 
-            {/* FAQ Section */}
             <FAQSection faqs={faqs} />
 
             {/* Bottom CTA */}
@@ -422,7 +559,7 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
             </div>
           </article>
 
-          {/* ── RIGHT — sidebar ── */}
+          {/* Sidebar */}
           <aside style={{ position:'sticky', top:80 }} className="blog-sidebar">
             <Sidebar recentPosts={recentPosts} currentCategory={post.category} />
           </aside>
@@ -437,6 +574,7 @@ export default function BlogPostClient({ post, faqs = [], recentPosts = [] }) {
           .blog-sidebar{ position: static !important; }
         }
         @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:.25} }
+        table td, table th { font-family: var(--sans); }
       `}</style>
     </div>
   )
