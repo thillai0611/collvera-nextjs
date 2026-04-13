@@ -121,7 +121,7 @@ export default function HomeClient() {
           </div>
 
           {/* H1 */}
-          <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(2.3rem,5.2vw,3.8rem)', fontWeight:700, color:'#fff', lineHeight:1.08, letterSpacing:'-.02em', marginBottom:14 }}>
+          <h1 style={{ fontFamily:'var(--serif-display)', fontSize:'clamp(2.3rem,5.2vw,3.8rem)', fontWeight:700, color:'#fff', lineHeight:1.08, letterSpacing:'-.02em', marginBottom:14 }}>
             Know exactly which college<br />
             <em style={{ color:'var(--orange)', fontStyle:'italic' }}>you'll actually convert.</em>
           </h1>
