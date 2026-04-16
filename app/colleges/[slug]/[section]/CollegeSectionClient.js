@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Nav from '../../../../components/Nav'
 import LeadModal from '../../../../components/LeadModal'
+import { COLLEGE_MAP } from '../../../../lib/colleges/index'
 
 const SUB_PAGES = [
   { id:'overview',   label:'Overview',   href:'' },
@@ -451,14 +452,65 @@ function ReviewsPage({ slug }) {
   )
 }
 
+// ── Generic content page for any college with content fields ─────────────────
+function GenericPage({ slug, section }) {
+  const college = COLLEGE_MAP[slug]
+  if (!college) return <P>Content coming soon.</P>
+
+  const sectionData = college[section]
+  const content = sectionData?.content
+
+  // FAQs
+  const faqs = college.faqs || []
+  const [openFaq, setOpenFaq] = useState(null)
+
+  return (
+    <>
+      {content ? (
+        <div dangerouslySetInnerHTML={{ __html: content }}
+          style={{ fontSize:15.5, lineHeight:1.95, color:'var(--ink2)' }} />
+      ) : (
+        <P>Detailed content for this section is coming soon.</P>
+      )}
+
+      {/* FAQs — only on placements/fees/admissions pages */}
+      {faqs.length > 0 && ['placements','fees','admissions'].includes(section) && (
+        <div style={{ marginTop:48 }}>
+          <H2>Frequently Asked Questions</H2>
+          <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
+            {faqs.map((faq, i) => (
+              <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:10, overflow:'hidden' }}>
+                <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  style={{ width:'100%', textAlign:'left', padding:'16px 20px', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', gap:16 }}>
+                  <span style={{ fontSize:14, fontWeight:600, color:'var(--ink)', lineHeight:1.5 }}>{faq.q}</span>
+                  <span style={{ fontSize:18, color:'var(--orange)', flexShrink:0, transition:'transform .2s', transform: openFaq === i ? 'rotate(45deg)' : 'none' }}>+</span>
+                </button>
+                {openFaq === i && (
+                  <div style={{ padding:'0 20px 18px', fontSize:14, color:'var(--ink2)', lineHeight:1.75, borderTop:'1px solid var(--border2)' }}>
+                    <div style={{ paddingTop:14 }}>{faq.a}</div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 export default function CollegeSectionClient({ slug, section }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const basePath = `/colleges/${slug}`
   const isB = slug === 'iim-bangalore'
-  const collegeName = isB ? 'IIM Bangalore' : 'IIM Ahmedabad'
-  const accentColor = isB ? '#C0392B' : 'var(--orange)'
-  const accentBg = isB ? '#fdecea' : 'var(--orange-lt)'
-  const accentBorder = isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)'
+  const isIIM = slug === 'iim-ahmedabad' || slug === 'iim-bangalore'
+
+  // Generic college data
+  const collegeData = COLLEGE_MAP[slug]
+  const collegeName = isIIM ? (isB ? 'IIM Bangalore' : 'IIM Ahmedabad') : (collegeData?.short || collegeData?.name || slug)
+  const accentColor = isIIM ? (isB ? '#C0392B' : 'var(--orange)') : (collegeData?.color || 'var(--orange)')
+  const accentBg = isIIM ? (isB ? '#fdecea' : 'var(--orange-lt)') : 'var(--orange-lt)'
+  const accentBorder = isIIM ? (isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)') : 'rgba(217,95,2,.15)'
 
   const METAS = {
     fees:       { title:`${collegeName} Fees 2025 — Complete Guide`, sub:`Total cost, ROI, scholarships and education loans` },
@@ -471,7 +523,7 @@ export default function CollegeSectionClient({ slug, section }) {
   }
 
   const PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
-  const Page = PAGES[section]
+  const Page = isIIM ? PAGES[section] : (PAGES[section] ? GenericPage : null)
   const meta = METAS[section]
 
   if (!Page) return (
@@ -513,7 +565,7 @@ export default function CollegeSectionClient({ slug, section }) {
           <p style={{ fontSize:15.5, color:'var(--muted)', lineHeight:1.75 }}>{meta?.sub}</p>
           <div style={{ height:3, width:56, background:accentColor, borderRadius:2, marginTop:18 }} />
         </div>
-        <Page slug={slug} />
+        <Page slug={slug} section={section} />
         <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px', marginTop:48, marginBottom:24 }}>
           <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:16 }}>More on {collegeName}</div>
           <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
