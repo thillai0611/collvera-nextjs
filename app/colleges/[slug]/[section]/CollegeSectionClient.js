@@ -479,9 +479,9 @@ function GenericPlacements({ college }) {
   return (
     <>
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
-        <StatCard label="Avg Package (PGPM)" value={`\u20b9${p.avg_pgpm} LPA`} color={color} />
-        <StatCard label="Avg Package (PGDM)" value={`\u20b9${p.avg_pgdm} LPA`} color={color} />
-        <StatCard label="Highest (PGPM)" value={`\u20b9${p.highest_pgpm} LPA`} color="#d95f02" />
+        <StatCard label="Avg Package (PGPM)" value={`₹${p.avg_pgpm} LPA`} color={color} />
+        <StatCard label="Avg Package (PGDM)" value={`₹${p.avg_pgdm} LPA`} color={color} />
+        <StatCard label="Highest (PGPM)" value={`₹${p.highest_pgpm} LPA`} color="#d95f02" />
         <StatCard label="PPOs Accepted" value={p.ppo} color="var(--ink)" />
         <StatCard label="Placement Rate" value={`${p.rate}%`} color={color} />
         <StatCard label="Companies" value={p.companies} color="var(--ink)" />
@@ -489,7 +489,7 @@ function GenericPlacements({ college }) {
       {p.trend?.length > 0 && (
         <SectionCard title="3-Year Placement Trend">
           <T headers={['Year','Avg PGPM','Avg PGDM','Highest PGPM','PPOs']}
-            rows={p.trend.map(t => [t.year, `\u20b9${t.avg_pgpm} L`, `\u20b9${t.avg_pgdm} L`, `\u20b9${t.highest_pgpm} L`, t.ppo])} />
+            rows={p.trend.map(t => [t.year, `₹${t.avg_pgpm} L`, `₹${t.avg_pgdm} L`, `₹${t.highest_pgpm} L`, t.ppo])} />
         </SectionCard>
       )}
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
@@ -498,7 +498,7 @@ function GenericPlacements({ college }) {
             {p.percentile_pgpm.map((r,i) => (
               <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < p.percentile_pgpm.length-1 ? '1px solid var(--border2)':'none' }}>
                 <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
-                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>\u20b9{r.value} LPA</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>₹{r.value} LPA</span>
               </div>
             ))}
           </SectionCard>
@@ -508,7 +508,7 @@ function GenericPlacements({ college }) {
             {p.percentile_pgdm.map((r,i) => (
               <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < p.percentile_pgdm.length-1 ? '1px solid var(--border2)':'none' }}>
                 <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
-                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>\u20b9{r.value} LPA</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>₹{r.value} LPA</span>
               </div>
             ))}
           </SectionCard>
@@ -532,15 +532,48 @@ function GenericPlacements({ college }) {
         )}
         {p.recruiters?.length > 0 && (
           <SectionCard title="Top Recruiters">
-            <T headers={['Company','Sector']} rows={p.recruiters.map(r => [r.name, r.type])} />
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:8 }}>
+              {p.recruiters.map((r,i) => (
+                <div key={i} style={{ display:'flex', alignItems:'center', gap:8, padding:'8px 12px', background:'var(--cream)', borderRadius:8, border:'1px solid var(--border2)' }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', flexShrink:0, background:
+                    r.type==='BFSI' ? '#0057A8' :
+                    r.type==='Consulting' ? '#d95f02' :
+                    r.type==='Analytics' ? '#7b1fa2' : '#2e7d32' }} />
+                  <div>
+                    <div style={{ fontSize:12.5, fontWeight:600, color:'var(--ink)' }}>{r.name}</div>
+                    <div style={{ fontSize:10.5, color:'var(--muted)', fontFamily:'var(--mono)' }}>{r.type}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display:'flex', gap:12, marginTop:14, flexWrap:'wrap' }}>
+              {[...new Set(p.recruiters.map(r=>r.type))].map(type => (
+                <div key={type} style={{ display:'flex', alignItems:'center', gap:6, fontSize:11, color:'var(--muted)' }}>
+                  <div style={{ width:8, height:8, borderRadius:'50%', background:
+                    type==='BFSI' ? '#0057A8' :
+                    type==='Consulting' ? '#d95f02' :
+                    type==='Analytics' ? '#7b1fa2' : '#2e7d32' }} />
+                  {type} ({p.recruiters.filter(r=>r.type===type).length})
+                </div>
+              ))}
+            </div>
           </SectionCard>
         )}
       </div>
+
+      {/* Eligibility CTA */}
+      <div style={{ background:'linear-gradient(135deg,#0057A8,#185fa5)', borderRadius:14, padding:'24px 28px', marginBottom:20, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16 }}>
+        <div>
+          <div style={{ fontSize:15, fontWeight:700, color:'#fff', marginBottom:4 }}>Will you get placed in BFSI or analytics?</div>
+          <div style={{ fontSize:13, color:'rgba(255,255,255,.65)', lineHeight:1.5 }}>Check your real conversion chance at {college.short || college.name} based on your profile.</div>
+        </div>
+        <a href="/eligibility" style={{ background:'#fff', color:'#0057A8', padding:'11px 22px', borderRadius:10, fontSize:13.5, fontWeight:600, textDecoration:'none', flexShrink:0 }}>
+          Check eligibility →
+        </a>
+      </div>
     </>
   )
-}
-
-function GenericFees({ college }) {
+}({ college }) {
   const f = college.fees
   const color = college.color || 'var(--orange)'
   return (
@@ -548,12 +581,12 @@ function GenericFees({ college }) {
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
         <SectionCard title="Fee Breakdown">
           {[
-            { label:'PGDM Tuition', amount:`\u20b9${f.tuition} L` },
-            { label:'PGPM Tuition', amount:`\u20b9${f.tuition_pgpm} L` },
-            { label:'PGDM Total All-In', amount:`\u20b9${f.total} L`, bold:true },
-            { label:'PGPM Total All-In', amount:`\u20b9${f.total_pgpm} L`, bold:true },
-            { label:'Monthly Living', amount: f.living_monthly || '\u20b98,000\u201312,000' },
-            { label:'Loan Available', amount: f.loan_max || 'Up to \u20b950 L' },
+            { label:'PGDM Tuition', amount:`₹${f.tuition} L` },
+            { label:'PGPM Tuition', amount:`₹${f.tuition_pgpm} L` },
+            { label:'PGDM Total All-In', amount:`₹${f.total} L`, bold:true },
+            { label:'PGPM Total All-In', amount:`₹${f.total_pgpm} L`, bold:true },
+            { label:'Monthly Living', amount: f.living_monthly || '₹8,000\u201312,000' },
+            { label:'Loan Available', amount: f.loan_max || 'Up to ₹50 L' },
             { label:'Loan Rate', amount: f.loan_rate || '9.5\u201312%' },
           ].map((r,i) => (
             <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderTop: i > 0 ? '1px solid var(--border2)':'none' }}>
