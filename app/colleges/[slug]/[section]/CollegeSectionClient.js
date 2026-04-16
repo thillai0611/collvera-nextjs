@@ -789,6 +789,31 @@ function GenericPrograms({ college }) {
   )
 }
 
+function ProseContent({ content }) {
+  const [expanded, setExpanded] = useState(false)
+  return (
+    <div style={{ marginTop:28, background:'var(--white)', border:'1px solid var(--border)', borderRadius:14, overflow:'hidden' }}>
+      <button onClick={() => setExpanded(o => !o)}
+        style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 24px', background:'none', border:'none', cursor:'pointer', borderBottom: expanded ? '1px solid var(--border2)' : 'none' }}>
+        <span style={{ fontSize:13, fontWeight:600, color:'var(--ink)', fontFamily:'var(--mono)', textTransform:'uppercase', letterSpacing:'.08em' }}>
+          📄 Read Full Analysis
+        </span>
+        <span style={{ fontSize:18, color:'var(--muted)', transition:'transform .2s', transform: expanded ? 'rotate(45deg)' : 'none' }}>+</span>
+      </button>
+      {expanded && (
+        <div dangerouslySetInnerHTML={{ __html: content }} className="prose-wrap" style={{ padding:'28px 32px' }} />
+      )}
+      <style>{`
+        .prose-wrap h2 { display:none }
+        .prose-wrap h3 { font-family:var(--serif); font-size:1.05rem; font-weight:700; color:var(--ink); margin:28px 0 10px; padding-top:20px; border-top:1px solid var(--border2) }
+        .prose-wrap h3:first-of-type { margin-top:0; padding-top:0; border-top:none }
+        .prose-wrap p { font-size:14.5px; line-height:1.85; color:var(--ink2); margin:0 0 14px }
+        .prose-wrap strong { color:var(--ink); font-weight:600 }
+      `}</style>
+    </div>
+  )
+}
+
 function GenericPage({ slug, section }) {
   const college = COLLEGE_MAP[slug]
   if (!college) return <P>Content coming soon.</P>
@@ -812,8 +837,7 @@ function GenericPage({ slug, section }) {
     <>
       {Structured && <Structured />}
       {content && (
-        <div dangerouslySetInnerHTML={{ __html: content }}
-          style={{ marginTop:28, padding:'28px 32px', background:'var(--white)', border:'1px solid var(--border)', borderRadius:14, fontSize:15, lineHeight:1.9, color:'var(--ink2)' }} />
+        <ProseContent content={content} />
       )}
       {college.faqs?.length > 0 && ['placements','fees','admissions'].includes(section) && (
         <div style={{ marginTop:40 }}>
