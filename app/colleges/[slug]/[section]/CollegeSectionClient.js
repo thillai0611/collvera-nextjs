@@ -452,38 +452,344 @@ function ReviewsPage({ slug }) {
   )
 }
 
-// ── Generic content page for any college with content fields ─────────────────
+
+// ── Generic structured pages for any college ─────────────────────────────────
+
+function StatCard({ label, value, color }) {
+  return (
+    <div style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px' }}>
+      <div style={{ fontFamily:'var(--serif)', fontSize:'1.5rem', fontWeight:700, color: color || 'var(--ink)', marginBottom:4 }}>{value}</div>
+      <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{label}</div>
+    </div>
+  )
+}
+
+function SectionCard({ title, children }) {
+  return (
+    <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px', marginBottom:20 }}>
+      {title && <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>{title}</div>}
+      {children}
+    </div>
+  )
+}
+
+function GenericPlacements({ college }) {
+  const p = college.placements
+  const color = college.color || 'var(--orange)'
+  return (
+    <>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
+        <StatCard label="Avg Package (PGPM)" value={`\u20b9${p.avg_pgpm} LPA`} color={color} />
+        <StatCard label="Avg Package (PGDM)" value={`\u20b9${p.avg_pgdm} LPA`} color={color} />
+        <StatCard label="Highest (PGPM)" value={`\u20b9${p.highest_pgpm} LPA`} color="#d95f02" />
+        <StatCard label="PPOs Accepted" value={p.ppo} color="var(--ink)" />
+        <StatCard label="Placement Rate" value={`${p.rate}%`} color={color} />
+        <StatCard label="Companies" value={p.companies} color="var(--ink)" />
+      </div>
+      {p.trend?.length > 0 && (
+        <SectionCard title="3-Year Placement Trend">
+          <T headers={['Year','Avg PGPM','Avg PGDM','Highest PGPM','PPOs']}
+            rows={p.trend.map(t => [t.year, `\u20b9${t.avg_pgpm} L`, `\u20b9${t.avg_pgdm} L`, `\u20b9${t.highest_pgpm} L`, t.ppo])} />
+        </SectionCard>
+      )}
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+        {p.percentile_pgpm?.length > 0 && (
+          <SectionCard title="PGPM Salary Distribution 2025">
+            {p.percentile_pgpm.map((r,i) => (
+              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < p.percentile_pgpm.length-1 ? '1px solid var(--border2)':'none' }}>
+                <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>\u20b9{r.value} LPA</span>
+              </div>
+            ))}
+          </SectionCard>
+        )}
+        {p.percentile_pgdm?.length > 0 && (
+          <SectionCard title="PGDM Salary Distribution 2025">
+            {p.percentile_pgdm.map((r,i) => (
+              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < p.percentile_pgdm.length-1 ? '1px solid var(--border2)':'none' }}>
+                <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>\u20b9{r.value} LPA</span>
+              </div>
+            ))}
+          </SectionCard>
+        )}
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+        {p.sectors?.length > 0 && (
+          <SectionCard title="Sector Breakdown">
+            {p.sectors.map((s,i) => (
+              <div key={i} style={{ marginBottom:14 }}>
+                <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
+                  <span style={{ fontWeight:500 }}>{s.name}</span>
+                  <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:s.color }}>{s.pct}%</span>
+                </div>
+                <div style={{ height:7, background:'var(--cream2)', borderRadius:4, overflow:'hidden' }}>
+                  <div style={{ height:'100%', width:`${s.pct}%`, background:s.color, borderRadius:4 }} />
+                </div>
+              </div>
+            ))}
+          </SectionCard>
+        )}
+        {p.recruiters?.length > 0 && (
+          <SectionCard title="Top Recruiters">
+            <T headers={['Company','Sector']} rows={p.recruiters.map(r => [r.name, r.type])} />
+          </SectionCard>
+        )}
+      </div>
+    </>
+  )
+}
+
+function GenericFees({ college }) {
+  const f = college.fees
+  const color = college.color || 'var(--orange)'
+  return (
+    <>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+        <SectionCard title="Fee Breakdown">
+          {[
+            { label:'PGDM Tuition', amount:`\u20b9${f.tuition} L` },
+            { label:'PGPM Tuition', amount:`\u20b9${f.tuition_pgpm} L` },
+            { label:'PGDM Total All-In', amount:`\u20b9${f.total} L`, bold:true },
+            { label:'PGPM Total All-In', amount:`\u20b9${f.total_pgpm} L`, bold:true },
+            { label:'Monthly Living', amount: f.living_monthly || '\u20b98,000\u201312,000' },
+            { label:'Loan Available', amount: f.loan_max || 'Up to \u20b950 L' },
+            { label:'Loan Rate', amount: f.loan_rate || '9.5\u201312%' },
+          ].map((r,i) => (
+            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderTop: i > 0 ? '1px solid var(--border2)':'none' }}>
+              <div style={{ fontSize:13, color: r.bold ? 'var(--ink)':'var(--ink2)', fontWeight: r.bold ? 600:400 }}>{r.label}</div>
+              <div style={{ fontFamily:'var(--mono)', fontSize:13, fontWeight: r.bold ? 700:500, color: r.bold ? color:'var(--ink)' }}>{r.amount}</div>
+            </div>
+          ))}
+        </SectionCard>
+        {f.scholarships?.length > 0 && (
+          <SectionCard title="Scholarships Available">
+            {f.scholarships.map((s,i) => (
+              <div key={i} style={{ padding:'14px 0', borderTop: i > 0 ? '1px solid var(--border2)':'none' }}>
+                <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>{s.name}</div>
+                <div style={{ fontSize:12, color:'var(--muted)', marginBottom:4 }}>{s.criteria}</div>
+                <div style={{ fontSize:12, fontFamily:'var(--mono)', color }}>{s.amount}</div>
+              </div>
+            ))}
+          </SectionCard>
+        )}
+      </div>
+    </>
+  )
+}
+
+function GenericAdmissions({ college }) {
+  const a = college.admissions
+  const color = college.color || 'var(--orange)'
+  return (
+    <>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+        <SectionCard title="CAT Cutoffs (Realistic for Shortlisting)">
+          <T headers={['Category','Min Qualifying','Realistic Shortlist']}
+            rows={(a.cat_cutoffs || [
+              { category:'General / EWS', min:`${a.cutoff_general}%ile`, realistic:`${a.cutoff_competitive}%ile` },
+            ]).map(r => [r.category, r.min, <strong key={r.category} style={{color}}>{r.realistic}</strong>])} />
+          <div style={{ marginTop:14, fontSize:11.5, color:'var(--muted)', lineHeight:1.65 }}>
+            Sectional minimum: 50%ile in each CAT section. XAT 90%ile / GMAT {a.cutoff_gmat || 650}+ also accepted.
+          </div>
+        </SectionCard>
+        <SectionCard title="How Selection Works">
+          {a.shortlist_weights?.map((w,i) => (
+            <div key={i} style={{ marginBottom:14 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
+                <span>{w.label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color }}>{w.pct}%</span>
+              </div>
+              <div style={{ height:6, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
+                <div style={{ height:'100%', width:`${w.pct}%`, background:color, borderRadius:3 }} />
+              </div>
+            </div>
+          ))}
+        </SectionCard>
+      </div>
+      {a.batch && (
+        <SectionCard title="Batch Profile — 2025">
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:16 }}>
+            {[
+              { label:'Batch Size',      value:`${a.batch.size} students` },
+              { label:'Female Students', value:`${a.batch.female}%` },
+              { label:'Engineers',       value:`${a.batch.engineering}%` },
+              { label:'With Work Exp',   value:`${a.batch.work_exp_pct}%` },
+              { label:'Avg Work Exp',    value:`${a.batch.avg_work_months} months` },
+            ].map((s,i) => (
+              <div key={i} style={{ textAlign:'center', padding:'16px', background:'var(--cream)', borderRadius:10 }}>
+                <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{s.value}</div>
+                <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </SectionCard>
+      )}
+    </>
+  )
+}
+
+function GenericCampus({ college }) {
+  const c = college.campus
+  const color = college.color || 'var(--orange)'
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+      <SectionCard title="Campus Facts">
+        {[
+          ['Area', c.area],
+          ['Certification', c.green],
+          ['Location', c.location],
+          ['Distance from City', c.distance_from_city],
+          ['Hostel Capacity', `${c.hostel_capacity} beds · ${c.hostel_blocks} blocks`],
+          ['Room Type', c.hostel_type],
+          ['Food', c.food],
+          ['Student Clubs', c.clubs ? `${c.clubs}+ active clubs` : null],
+        ].filter(([,v]) => v).map(([k,v]) => (
+          <div key={k} style={{ display:'grid', gridTemplateColumns:'140px 1fr', gap:10, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
+            <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase' }}>{k}</div>
+            <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.5 }}>{v}</div>
+          </div>
+        ))}
+      </SectionCard>
+      {c.highlights?.length > 0 && (
+        <SectionCard title="Life Highlights">
+          {c.highlights.map((h,i) => (
+            <div key={i} style={{ display:'flex', gap:10, marginBottom:12, alignItems:'flex-start' }}>
+              <div style={{ width:6, height:6, borderRadius:'50%', background:color, flexShrink:0, marginTop:6 }} />
+              <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{h}</div>
+            </div>
+          ))}
+        </SectionCard>
+      )}
+    </div>
+  )
+}
+
+function GenericVerdict({ college }) {
+  const v = college.verdict
+  return (
+    <>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }} className="grid-2col">
+        <div style={{ background:'var(--teal-lt)', borderRadius:14, border:'1px solid rgba(15,110,86,.2)', padding:'22px 24px' }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Best For</div>
+          {v.best_for?.map((b,i) => (
+            <div key={i} style={{ display:'flex', gap:10, marginBottom:10, alignItems:'flex-start' }}>
+              <span style={{ color:'var(--teal)', fontWeight:700, flexShrink:0 }}>✓</span>
+              <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{b}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ background:'#fdecea', borderRadius:14, border:'1px solid rgba(163,45,45,.15)', padding:'22px 24px' }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'#a32d2d', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Watch Out For</div>
+          {v.watch_out?.map((w,i) => (
+            <div key={i} style={{ display:'flex', gap:10, marginBottom:10, alignItems:'flex-start' }}>
+              <span style={{ color:'#a32d2d', fontWeight:700, flexShrink:0 }}>!</span>
+              <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{w}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="grid-2col">
+        <div style={{ background:'var(--white)', borderRadius:14, border:'2px solid var(--teal)', padding:'20px 24px' }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>Apply If</div>
+          <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{v.apply_if}</p>
+        </div>
+        <div style={{ background:'var(--white)', borderRadius:14, border:'2px solid rgba(163,45,45,.3)', padding:'20px 24px' }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'#a32d2d', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>Skip If</div>
+          <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{v.skip_if}</p>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function GenericReviews({ college }) {
+  const r = college.reviews
+  const color = college.color || 'var(--orange)'
+  return (
+    <div style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:20, marginBottom:20 }} className="grid-reviews">
+      <SectionCard>
+        <div style={{ textAlign:'center' }}>
+          <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{(r.overall ?? 0).toFixed(1)}</div>
+          <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:20 }}>Overall · {r.total || 0} reviews</div>
+          {[
+            ['Placements', r.placements ?? r.breakdown?.placements],
+            ['Faculty',    r.academics  ?? r.breakdown?.faculty],
+            ['Campus',     r.campus     ?? r.breakdown?.campus_life],
+            ['ROI',        r.roi        ?? r.breakdown?.roi],
+          ].map(([label, val]) => val != null && (
+            <div key={label} style={{ marginBottom:10 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'var(--muted)', marginBottom:4 }}>
+                <span>{label}</span><span style={{ fontFamily:'var(--mono)' }}>{val?.toFixed(1)}</span>
+              </div>
+              <div style={{ height:4, background:'var(--cream2)', borderRadius:2, overflow:'hidden' }}>
+                <div style={{ height:'100%', width:`${((val||0)/5)*100}%`, background:'var(--orange)', borderRadius:2 }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </SectionCard>
+      <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+        {r.quotes?.map((q,i) => (
+          <div key={i} style={{ background:'var(--white)', borderRadius:12, border:'1px solid var(--border)', padding:'18px 20px', borderLeft:`3px solid ${i%2===0?color:'var(--teal)'}` }}>
+            <p style={{ fontSize:14, fontStyle:'italic', color:'var(--ink2)', lineHeight:1.7, margin:'0 0 10px 0' }}>"{q.text}"</p>
+            <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)' }}>— {q.source}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function GenericPrograms({ college }) {
+  const color = college.color || 'var(--orange)'
+  return (
+    <SectionCard title="All Programmes — Fees, Duration & Eligibility">
+      <T headers={['Program','Duration','Seats','Fees','Intake','Exam','Notes']}
+        rows={(college.programs || []).map(p => [
+          p.name, p.duration, p.seats || '—',
+          p.fees, p.intake || '—', p.exam || '—', p.note || '—',
+        ])} />
+    </SectionCard>
+  )
+}
+
 function GenericPage({ slug, section }) {
   const college = COLLEGE_MAP[slug]
   if (!college) return <P>Content coming soon.</P>
 
-  const sectionData = college[section]
-  const content = sectionData?.content
-
-  // FAQs
-  const faqs = college.faqs || []
   const [openFaq, setOpenFaq] = useState(null)
+  const color = college.color || 'var(--orange)'
+
+  const Structured = {
+    placements: () => <GenericPlacements college={college} />,
+    fees:       () => <GenericFees college={college} />,
+    admissions: () => <GenericAdmissions college={college} />,
+    campus:     () => <GenericCampus college={college} />,
+    verdict:    () => <GenericVerdict college={college} />,
+    reviews:    () => <GenericReviews college={college} />,
+    programs:   () => <GenericPrograms college={college} />,
+  }[section]
+
+  const content = college[section]?.content
 
   return (
     <>
-      {content ? (
+      {Structured && <Structured />}
+      {content && (
         <div dangerouslySetInnerHTML={{ __html: content }}
-          style={{ fontSize:15.5, lineHeight:1.95, color:'var(--ink2)' }} />
-      ) : (
-        <P>Detailed content for this section is coming soon.</P>
+          style={{ marginTop:28, padding:'28px 32px', background:'var(--white)', border:'1px solid var(--border)', borderRadius:14, fontSize:15, lineHeight:1.9, color:'var(--ink2)' }} />
       )}
-
-      {/* FAQs — only on placements/fees/admissions pages */}
-      {faqs.length > 0 && ['placements','fees','admissions'].includes(section) && (
-        <div style={{ marginTop:48 }}>
-          <H2>Frequently Asked Questions</H2>
+      {college.faqs?.length > 0 && ['placements','fees','admissions'].includes(section) && (
+        <div style={{ marginTop:40 }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:16 }}>Frequently Asked Questions</div>
           <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
-            {faqs.map((faq, i) => (
+            {college.faqs.map((faq, i) => (
               <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:10, overflow:'hidden' }}>
                 <button onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   style={{ width:'100%', textAlign:'left', padding:'16px 20px', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', gap:16 }}>
                   <span style={{ fontSize:14, fontWeight:600, color:'var(--ink)', lineHeight:1.5 }}>{faq.q}</span>
-                  <span style={{ fontSize:18, color:'var(--orange)', flexShrink:0, transition:'transform .2s', transform: openFaq === i ? 'rotate(45deg)' : 'none' }}>+</span>
+                  <span style={{ fontSize:18, color, flexShrink:0, transition:'transform .2s', transform: openFaq === i ? 'rotate(45deg)':'none' }}>+</span>
                 </button>
                 {openFaq === i && (
                   <div style={{ padding:'0 20px 18px', fontSize:14, color:'var(--ink2)', lineHeight:1.75, borderTop:'1px solid var(--border2)' }}>
@@ -499,31 +805,30 @@ function GenericPage({ slug, section }) {
   )
 }
 
-export default function CollegeSectionClient({ slug, section }) {
+
   const [leadOpen, setLeadOpen] = useState(false)
   const basePath = `/colleges/${slug}`
   const isB = slug === 'iim-bangalore'
   const isIIM = slug === 'iim-ahmedabad' || slug === 'iim-bangalore'
 
-  // Generic college data
   const collegeData = COLLEGE_MAP[slug]
   const collegeName = isIIM ? (isB ? 'IIM Bangalore' : 'IIM Ahmedabad') : (collegeData?.short || collegeData?.name || slug)
   const accentColor = isIIM ? (isB ? '#C0392B' : 'var(--orange)') : (collegeData?.color || 'var(--orange)')
-  const accentBg = isIIM ? (isB ? '#fdecea' : 'var(--orange-lt)') : 'var(--orange-lt)'
-  const accentBorder = isIIM ? (isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)') : 'rgba(217,95,2,.15)'
+  const accentBg    = isIIM ? (isB ? '#fdecea' : 'var(--orange-lt)') : 'var(--orange-lt)'
+  const accentBorder= isIIM ? (isB ? 'rgba(192,57,43,.15)' : 'rgba(217,95,2,.15)') : 'rgba(217,95,2,.15)'
 
   const METAS = {
     fees:       { title:`${collegeName} Fees 2025 — Complete Guide`, sub:`Total cost, ROI, scholarships and education loans` },
     placements: { title:`${collegeName} Placements 2025 — Full Report`, sub:`Average package, sector breakdown, top recruiters and process` },
     admissions: { title:`${collegeName} Admission 2026 — Complete Guide`, sub:`CAT cutoff, shortlisting formula, PI process and batch profile` },
     reviews:    { title:`${collegeName} Reviews 2025 — Honest Student Feedback`, sub:`What students and alumni say about academics, placements and campus life` },
-    campus:     { title:`${collegeName} Campus — Complete Guide`, sub:isB ? 'Bengaluru location, international exchange, NSRCEL and student life' : 'Louis Kahn architecture, hostels, clubs and Ahmedabad life' },
+    campus:     { title:`${collegeName} Campus — Complete Guide`, sub: isIIM ? (isB ? 'Bengaluru location, international exchange, NSRCEL and student life' : 'Louis Kahn architecture, hostels, clubs and Ahmedabad life') : 'Infrastructure, hostels, faculty and student experience' },
     alumni:     { title:`${collegeName} Notable Alumni`, sub:`Leaders, founders and public figures from ${collegeName}` },
-    programs:   { title:`${collegeName} Programs 2025`, sub:isB ? 'PGP MBA, PGPBA, EPGP, PGPEM and FPM' : 'PGP, PGPX, FABM, ePGP and FPM' },
+    programs:   { title:`${collegeName} Programs 2025`, sub: isIIM ? (isB ? 'PGP MBA, PGPBA, EPGP, PGPEM and FPM' : 'PGP, PGPX, FABM, ePGP and FPM') : 'All programmes — fees, duration, intake and eligibility' },
   }
 
-  const PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
-  const Page = isIIM ? PAGES[section] : (PAGES[section] ? GenericPage : null)
+  const IIM_PAGES = { fees:FeesPage, placements:PlacementsPage, admissions:AdmissionsPage, reviews:ReviewsPage, campus:CampusPage, alumni:AlumniPage, programs:ProgramsPage }
+  const Page = isIIM ? IIM_PAGES[section] : GenericPage
   const meta = METAS[section]
 
   if (!Page) return (
@@ -588,7 +893,7 @@ export default function CollegeSectionClient({ slug, section }) {
         </div>
       </div>
       <LeadModal open={leadOpen} onClose={() => setLeadOpen(false)} />
-      <style>{`@media(max-width:768px){ table{font-size:12px!important} th,td{padding:8px 10px!important} }`}</style>
+      <style>{`@media(max-width:768px){ table{font-size:12px!important} th,td{padding:8px 10px!important} .grid-2col,.grid-reviews{grid-template-columns:1fr!important} }`}</style>
     </div>
   )
 }
