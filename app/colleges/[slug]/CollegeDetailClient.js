@@ -171,8 +171,8 @@ export default function CollegeDetailClient({ college }) {
             {/* Rankings */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Rankings 2025</div>
-              {d.rankings.map((r, i) => (
-                <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'9px 0', borderBottom: i < d.rankings.length-1 ? '1px solid var(--border2)' : 'none' }}>
+              {d.rankings?.map((r, i) => (
+                <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'9px 0', borderBottom: i < (d.rankings?.length || 0)-1 ? '1px solid var(--border2)' : 'none' }}>
                   <div>
                     <div style={{ fontSize:13, fontWeight:500, color:'var(--ink)' }}>{r.source}</div>
                     {r.note && <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{r.note}</div>}
@@ -187,7 +187,7 @@ export default function CollegeDetailClient({ college }) {
               {[
                 ['Accreditations', d.accreditations.join(', ')],
                 ['Campus', d.campusLabel],
-                ['Programs', d.programs.map(p=>p.name).join(' · ')],
+                ['Programs', d.programs?.map(p=>p.name).join(' · ')],
                 ['Website', d.slug === 'iim-bangalore' ? 'iimb.ac.in' : 'iima.ac.in'],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:'grid', gridTemplateColumns:'120px 1fr', gap:12, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
@@ -206,9 +206,9 @@ export default function CollegeDetailClient({ college }) {
           {/* Numbers grid */}
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
             {[
-              { label:'Avg Package', value:`₹${d.placements.avg} LPA`, color:d.color },
-              { label:'Median Package', value:`₹${d.placements.median} LPA`, color:d.color },
-              { label:'Highest (Domestic)', value:`₹${d.placements.highest} LPA`, color:'#d95f02' },
+              { label:'Avg Package', value:`₹${d.placements.avg || d.placements.avg_pgpm || '—'} LPA`, color:d.color },
+              { label:'Median Package', value:`₹${d.placements.median || d.placements.median_nirf || '—'} LPA`, color:d.color },
+              { label:'Highest (Domestic)', value:`₹${d.placements.highest || d.placements.highest_pgpm || '—'} LPA`, color:'#d95f02' },
               { label:'Companies', value:d.placements.companies, color:'var(--ink)' },
               { label:'PPOs Accepted', value:d.placements.ppo, color:'var(--ink)' },
               { label:'Placed', value:`${d.placements.rate}%`, color:d.color },
@@ -224,7 +224,7 @@ export default function CollegeDetailClient({ college }) {
             {/* Sector breakdown */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Sector breakdown</div>
-              {d.placements.sectors.map((s, i) => (
+              {d.placements.sectors?.map((s, i) => (
                 <div key={i} style={{ marginBottom:14 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
                     <span style={{ fontWeight:500 }}>{s.name}</span>
@@ -249,7 +249,7 @@ export default function CollegeDetailClient({ college }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {d.placements.recruiters.map((r, i) => (
+                  {d.placements.recruiters?.map((r, i) => (
                     <tr key={i} style={{ borderTop:'1px solid var(--border2)' }}>
                       <td style={{ padding:'9px 16px', fontWeight:500 }}>{r.name}</td>
                       <td style={{ padding:'9px 16px', color:'var(--muted)', fontSize:12 }}>{r.type}</td>
@@ -275,12 +275,12 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>PGP 2025-27 fee breakdown</div>
               {[
-                { label:'Tuition fee', amount:`₹${d.fees.tuition} L` },
-                { label:'Library, computing, materials', amount:`₹${d.fees.other} L` },
-                { label:'Total programme fee', amount:`₹${d.fees.total} L`, bold:true },
-                { label:'Monthly living (on-campus)', amount:d.fees.living_monthly },
-                { label:'Education loan available', amount:d.fees.loan_max },
-                { label:'Loan interest rate', amount:d.fees.loan_rate },
+                { label:'Tuition fee', amount:`₹${d.fees?.tuition || d.fees?.tuition_pgdm || '—'} L` },
+                { label:'Library, computing, materials', amount:`₹${d.fees?.other || '—'} L` },
+                { label:'Total programme fee', amount:`₹${d.fees?.total || d.fees?.total_pgdm || '—'} L`, bold:true },
+                { label:'Monthly living (on-campus)', amount:d.fees?.living_monthly || '—' },
+                { label:'Education loan available', amount:d.fees?.loan_max || 'Available' },
+                { label:'Loan interest rate', amount:d.fees?.loan_rate || '9.5–12%' },
               ].map((r, i) => (
                 <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderTop: i > 0 ? '1px solid var(--border2)' : 'none', borderTopWidth: r.bold ? 2 : 1, borderTopColor: r.bold ? 'var(--border)' : 'var(--border2)' }}>
                   <div style={{ fontSize:13, color: r.bold ? 'var(--ink)' : 'var(--ink2)', fontWeight: r.bold ? 600 : 400 }}>{r.label}</div>
@@ -294,7 +294,7 @@ export default function CollegeDetailClient({ college }) {
             {/* Scholarships */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Scholarships available</div>
-              {d.fees.scholarships.map((s, i) => (
+              {d.fees.scholarships?.map((s, i) => (
                 <div key={i} style={{ padding:'14px 0', borderTop: i > 0 ? '1px solid var(--border2)' : 'none' }}>
                   <div style={{ fontSize:13, fontWeight:600, marginBottom:4 }}>{s.name}</div>
                   <div style={{ fontSize:12, color:'var(--muted)', marginBottom:4 }}>{s.criteria}</div>
@@ -352,7 +352,7 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>How selection works</div>
               <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginBottom:10, textTransform:'uppercase' }}>Stage 1 — Shortlisting for PI</div>
-              {d.admissions.shortlist_weights.map((w, i) => (
+              {d.admissions.shortlist_weights?.map((w, i) => (
                 <div key={i} style={{ marginBottom:12 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
                     <span>{w.label}</span>
@@ -364,7 +364,7 @@ export default function CollegeDetailClient({ college }) {
                 </div>
               ))}
               <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginBottom:10, marginTop:20, textTransform:'uppercase' }}>Stage 2 — Final selection (post-PI)</div>
-              {d.admissions.final_weights.map((w, i) => (
+              {d.admissions.final_weights?.map((w, i) => (
                 <div key={i} style={{ marginBottom:10 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:5 }}>
                     <span>{w.label}</span>
@@ -383,11 +383,11 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Batch profile — PGP 2025-27</div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:16 }}>
               {[
-                { label:'Batch size', value:`${d.admissions.batch.size} students` },
-                { label:'Female students', value:`${d.admissions.batch.female}%` },
-                { label:'Engineers', value:`${d.admissions.batch.engineering}%` },
-                { label:'With work exp', value:`${d.admissions.batch.work_exp_pct}%` },
-                { label:'Avg work exp', value:`${d.admissions.batch.avg_work_months} months` },
+                { label:'Batch size', value:`${d.admissions?.batch?.size} students` },
+                { label:'Female students', value:`${d.admissions?.batch?.female}%` },
+                { label:'Engineers', value:`${d.admissions?.batch?.engineering}%` },
+                { label:'With work exp', value:`${d.admissions?.batch?.work_exp_pct}%` },
+                { label:'Avg work exp', value:`${d.admissions?.batch?.avg_work_months} months` },
               ].map((s, i) => (
                 <div key={i} style={{ textAlign:'center', padding:'16px', background:'var(--cream)', borderRadius:10 }}>
                   <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{s.value}</div>
@@ -416,7 +416,7 @@ export default function CollegeDetailClient({ college }) {
                 </tr>
               </thead>
               <tbody>
-                {d.programs.map((p, i) => (
+                {d.programs?.map((p, i) => (
                   <tr key={i} style={{ borderTop:'1px solid var(--border2)', background: i%2===0 ? 'var(--white)' : 'var(--cream)' }}>
                     <td style={{ padding:'12px 16px', fontWeight:600 }}>{p.name}</td>
                     <td style={{ padding:'12px 16px', color:'var(--ink2)' }}>{p.duration}</td>
@@ -438,11 +438,11 @@ export default function CollegeDetailClient({ college }) {
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Campus facts</div>
               {[
-                ['Area', d.campus.area],
-                ['Dormitories', `${d.campus.dorms} dorms · ${d.campus.dorm_capacity} students`],
-                ['Architecture', d.campus.architect],
-                ['Heritage', d.campus.heritage],
-                ['Student clubs', `${d.campus.clubs}+ active clubs`],
+                ['Area', d.campus?.area],
+                ['Dormitories', `${d.campus?.dorms} dorms · ${d.campus?.dorm_capacity} students`],
+                ['Architecture', d.campus?.architect],
+                ['Heritage', d.campus?.heritage],
+                ['Student clubs', `${d.campus?.clubs}+ active clubs`],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:'grid', gridTemplateColumns:'120px 1fr', gap:10, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
                   <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase' }}>{k}</div>
@@ -452,7 +452,7 @@ export default function CollegeDetailClient({ college }) {
             </div>
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Life highlights</div>
-              {d.campus.highlights.map((h, i) => (
+              {d.campus.highlights?.map((h, i) => (
                 <div key={i} style={{ display:'flex', gap:10, marginBottom:12, alignItems:'flex-start' }}>
                   <div style={{ width:6, height:6, borderRadius:'50%', background:d.color, flexShrink:0, marginTop:6 }} />
                   <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{h}</div>
@@ -471,7 +471,7 @@ export default function CollegeDetailClient({ college }) {
         <div id="alumni" style={{ marginBottom:56 }}>
           <SectionHead>{d.name} Notable Alumni — Leaders, Founders &amp; Global Icons</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:10 }}>
-            {d.alumni.map((a, i) => (
+            {d.alumni?.map((a, i) => (
               <div key={i} style={{ background:'var(--white)', borderRadius:12, border:'1px solid var(--border)', padding:'16px 18px' }}>
                 <div style={{ fontSize:14, fontWeight:600, color:'var(--ink)', marginBottom:4 }}>{a.name}</div>
                 {a.batch && <div style={{ fontSize:11, fontFamily:'var(--mono)', color:d.color, marginBottom:6 }}>PGP {a.batch}</div>}
@@ -487,7 +487,7 @@ export default function CollegeDetailClient({ college }) {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:14 }} className="verdict-grid">
             <div style={{ background:'var(--teal-lt)', borderRadius:14, border:'1px solid rgba(15,110,86,.2)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>IIM A is genuinely best for</div>
-              {d.verdict.best_for.map((b, i) => (
+              {d.verdict.best_for?.map((b, i) => (
                 <div key={i} style={{ display:'flex', gap:10, marginBottom:10, alignItems:'flex-start' }}>
                   <span style={{ color:'var(--teal)', flexShrink:0, fontWeight:700 }}>✓</span>
                   <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{b}</div>
@@ -496,7 +496,7 @@ export default function CollegeDetailClient({ college }) {
             </div>
             <div style={{ background:'#fdecea', borderRadius:14, border:'1px solid rgba(163,45,45,.15)', padding:'22px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'#a32d2d', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Watch out for</div>
-              {d.verdict.watch_out.map((w, i) => (
+              {d.verdict.watch_out?.map((w, i) => (
                 <div key={i} style={{ display:'flex', gap:10, marginBottom:10, alignItems:'flex-start' }}>
                   <span style={{ color:'#a32d2d', flexShrink:0, fontWeight:700 }}>!</span>
                   <div style={{ fontSize:13, color:'var(--ink2)', lineHeight:1.6 }}>{w}</div>
@@ -507,11 +507,11 @@ export default function CollegeDetailClient({ college }) {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="verdict-grid">
             <div style={{ background:'var(--white)', borderRadius:14, border:'2px solid var(--teal)', padding:'20px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--teal)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>Apply if</div>
-              <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{d.verdict.apply_if}</p>
+              <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{d.verdict?.apply_if}</p>
             </div>
             <div style={{ background:'var(--white)', borderRadius:14, border:'2px solid rgba(163,45,45,.3)', padding:'20px 24px' }}>
               <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'#a32d2d', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:10 }}>Consider alternatives if</div>
-              <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{d.verdict.skip_if}</p>
+              <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{d.verdict?.skip_if}</p>
             </div>
           </div>
 
@@ -526,15 +526,15 @@ export default function CollegeDetailClient({ college }) {
           <SectionHead>{d.name} Student Reviews — Academics, Placements &amp; Campus Life</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:20, marginBottom:20 }} className="reviews-grid">
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px', textAlign:'center' }}>
-              <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{d.reviews.overall.toFixed(1)}</div>
-              <div style={{ marginBottom:12, display:'flex', justifyContent:'center' }}><StarRating value={d.reviews.overall} /></div>
+              <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{d.reviews?.overall.toFixed(1)}</div>
+              <div style={{ marginBottom:12, display:'flex', justifyContent:'center' }}><StarRating value={d.reviews?.overall} /></div>
               <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>Overall rating</div>
               <div style={{ marginTop:20, display:'flex', flexDirection:'column', gap:10 }}>
                 {[
-                  ['Placements', d.reviews.placements],
-                  ['Academics', d.reviews.academics],
-                  ['Campus', d.reviews.campus],
-                  ['ROI', d.reviews.roi],
+                  ['Placements', d.reviews?.placements],
+                  ['Academics', d.reviews?.academics],
+                  ['Campus', d.reviews?.campus],
+                  ['ROI', d.reviews?.roi],
                 ].map(([label, val]) => (
                   <div key={label}>
                     <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'var(--muted)', marginBottom:4 }}>
@@ -548,7 +548,7 @@ export default function CollegeDetailClient({ college }) {
               </div>
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-              {d.reviews.quotes.map((q, i) => (
+              {d.reviews.quotes?.map((q, i) => (
                 <div key={i} style={{ background:'var(--white)', borderRadius:12, border:'1px solid var(--border)', padding:'18px 20px', borderLeft:`3px solid ${i%2===0?'var(--orange)':'var(--teal)'}` }}>
                   <p style={{ fontSize:14, fontStyle:'italic', color:'var(--ink2)', lineHeight:1.7, margin:'0 0 10px 0' }}>"{q.text}"</p>
                   <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)' }}>— {q.source}</div>
@@ -571,7 +571,7 @@ export default function CollegeDetailClient({ college }) {
           <div style={{ marginBottom:56 }}>
             <SectionHead>Frequently Asked Questions — {d.short || d.name}</SectionHead>
             <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
-              {d.faqs.map((faq, i) => (
+              {d.faqs?.map((faq, i) => (
                 <FaqItem key={i} q={faq.q} a={faq.a} color={d.color} />
               ))}
             </div>
