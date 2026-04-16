@@ -49,7 +49,7 @@ function FaqItem({ q, a, color }) {
   )
 }
 
-
+function SectionHead({ children }) {
   return (
     <h2 style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:20, display:'flex', alignItems:'center', gap:12, fontWeight:500, margin:'0 0 20px 0' }}>
       {children}<span style={{ flex:1, height:1, background:'var(--border)' }} />
