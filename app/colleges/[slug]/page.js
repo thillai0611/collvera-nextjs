@@ -5,8 +5,12 @@ export async function generateMetadata({ params }) {
   const college = COLLEGE_MAP[params.slug]
   if (!college) return { title: 'College Not Found | Collvera' }
 
-  const title = `${college.name} MBA 2026: Fees ₹${college.fees.total}L, Placements ₹${college.placements.avg} LPA, CAT Cutoff ${college.admissions.cutoff_general}%ile | Collvera`
-  const description = `${college.name} complete guide 2026: fees ₹${college.fees.total} lakhs, average placement ₹${college.placements.avg} LPA, NIRF rank #${college.nirf}. Admissions, scholarships, campus life, student reviews.`
+  const avgPkg = college.placements?.avg || college.placements?.avg_pgpm || ''
+  const totalFees = college.fees?.total || college.fees?.total_pgdm || ''
+  const cutoff = college.admissions?.cutoff_general || college.admissions?.cat_cutoff_min || ''
+
+  const title = `${college.name} MBA 2026: Fees ₹${totalFees}L, Placements ₹${avgPkg} LPA, CAT Cutoff ${cutoff}%ile | Collvera`
+  const description = `${college.name} complete guide 2026: fees ₹${totalFees} lakhs, average placement ₹${avgPkg} LPA, NIRF rank #${college.nirf}. Admissions, scholarships, campus life, student reviews.`
 
   return {
     title,
