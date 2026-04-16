@@ -526,19 +526,19 @@ export default function CollegeDetailClient({ college }) {
           <SectionHead>{d.name} Student Reviews — Academics, Placements &amp; Campus Life</SectionHead>
           <div style={{ display:'grid', gridTemplateColumns:'200px 1fr', gap:20, marginBottom:20 }} className="reviews-grid">
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'24px', textAlign:'center' }}>
-              <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{d.reviews?.overall.toFixed(1)}</div>
+              <div style={{ fontFamily:'var(--serif)', fontSize:'3rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{(d.reviews?.overall ?? 0).toFixed(1)}</div>
               <div style={{ marginBottom:12, display:'flex', justifyContent:'center' }}><StarRating value={d.reviews?.overall} /></div>
               <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>Overall rating</div>
               <div style={{ marginTop:20, display:'flex', flexDirection:'column', gap:10 }}>
                 {[
-                  ['Placements', d.reviews?.placements],
-                  ['Academics', d.reviews?.academics],
-                  ['Campus', d.reviews?.campus],
-                  ['ROI', d.reviews?.roi],
+                  ['Placements', d.reviews?.placements ?? d.reviews?.breakdown?.placements],
+                  ['Academics', d.reviews?.academics ?? d.reviews?.breakdown?.faculty],
+                  ['Campus', d.reviews?.campus ?? d.reviews?.breakdown?.campus_life],
+                  ['ROI', d.reviews?.roi ?? d.reviews?.breakdown?.roi],
                 ].map(([label, val]) => (
                   <div key={label}>
                     <div style={{ display:'flex', justifyContent:'space-between', fontSize:11, color:'var(--muted)', marginBottom:4 }}>
-                      <span>{label}</span><span style={{ fontFamily:'var(--mono)' }}>{val.toFixed(1)}</span>
+                      <span>{label}</span><span style={{ fontFamily:'var(--mono)' }}>{val?.toFixed(1) ?? "—"}</span>
                     </div>
                     <div style={{ height:4, background:'var(--cream2)', borderRadius:2, overflow:'hidden' }}>
                       <div style={{ height:'100%', width:`${(val/5)*100}%`, background:'var(--orange)', borderRadius:2 }} />
