@@ -806,6 +806,7 @@ function GenericPage({ slug, section }) {
 }
 
 
+export default function CollegeSectionClient({ slug, section }) {
   const [leadOpen, setLeadOpen] = useState(false)
   const basePath = `/colleges/${slug}`
   const isB = slug === 'iim-bangalore'
