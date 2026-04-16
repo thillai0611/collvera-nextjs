@@ -573,7 +573,9 @@ function GenericPlacements({ college }) {
       </div>
     </>
   )
-}({ college }) {
+}
+
+function GenericFees({ college }) {
   const f = college.fees
   const color = college.color || 'var(--orange)'
   return (
