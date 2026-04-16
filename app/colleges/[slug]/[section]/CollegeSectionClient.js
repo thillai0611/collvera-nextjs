@@ -790,27 +790,39 @@ function GenericPrograms({ college }) {
 }
 
 function ProseContent({ content }) {
-  const [expanded, setExpanded] = useState(false)
   return (
-    <div style={{ marginTop:28, background:'var(--white)', border:'1px solid var(--border)', borderRadius:14, overflow:'hidden' }}>
-      <button onClick={() => setExpanded(o => !o)}
-        style={{ width:'100%', display:'flex', justifyContent:'space-between', alignItems:'center', padding:'18px 24px', background:'none', border:'none', cursor:'pointer', borderBottom: expanded ? '1px solid var(--border2)' : 'none' }}>
-        <span style={{ fontSize:13, fontWeight:600, color:'var(--ink)', fontFamily:'var(--mono)', textTransform:'uppercase', letterSpacing:'.08em' }}>
-          📄 Read Full Analysis
-        </span>
-        <span style={{ fontSize:18, color:'var(--muted)', transition:'transform .2s', transform: expanded ? 'rotate(45deg)' : 'none' }}>+</span>
-      </button>
-      {expanded && (
-        <div dangerouslySetInnerHTML={{ __html: content }} className="prose-wrap" style={{ padding:'28px 32px' }} />
-      )}
+    <>
+      <div dangerouslySetInnerHTML={{ __html: content }} className="prose-wrap"
+        style={{ marginTop:28, padding:'32px 36px', background:'var(--white)', border:'1px solid var(--border)', borderRadius:14 }} />
       <style>{`
         .prose-wrap h2 { display:none }
-        .prose-wrap h3 { font-family:var(--serif); font-size:1.05rem; font-weight:700; color:var(--ink); margin:28px 0 10px; padding-top:20px; border-top:1px solid var(--border2) }
-        .prose-wrap h3:first-of-type { margin-top:0; padding-top:0; border-top:none }
-        .prose-wrap p { font-size:14.5px; line-height:1.85; color:var(--ink2); margin:0 0 14px }
-        .prose-wrap strong { color:var(--ink); font-weight:600 }
+        .prose-wrap h3 {
+          font-family: var(--serif);
+          font-size: 1.15rem;
+          font-weight: 700;
+          color: var(--ink);
+          margin: 36px 0 12px;
+          padding-bottom: 10px;
+          border-bottom: 2px solid var(--border2);
+        }
+        .prose-wrap h3:first-of-type { margin-top: 0 }
+        .prose-wrap p {
+          font-size: 15px;
+          line-height: 1.9;
+          color: var(--ink2);
+          margin: 0 0 18px;
+        }
+        .prose-wrap p:last-child { margin-bottom: 0 }
+        .prose-wrap strong { color: var(--ink); font-weight: 600 }
+        .prose-wrap ul { margin: 0 0 18px 20px; padding: 0 }
+        .prose-wrap li { font-size: 15px; line-height: 1.8; color: var(--ink2); margin-bottom: 8px }
+        @media(max-width:768px) {
+          .prose-wrap { padding: 20px 18px !important }
+          .prose-wrap h3 { font-size: 1rem }
+          .prose-wrap p { font-size: 14px }
+        }
       `}</style>
-    </div>
+    </>
   )
 }
 
