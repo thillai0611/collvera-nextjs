@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation'
+import { COLLEGE_MAP } from '../../../../lib/colleges/index'
 import CollegeSectionClient from './CollegeSectionClient'
 
 const VALID_SECTIONS = ['fees', 'placements', 'admissions', 'campus', 'alumni', 'programs', 'reviews']
 
-const META = {
+// Static metadata for IIM-A and IIM-B (kept for SEO quality)
+const STATIC_META = {
   'iim-ahmedabad': {
     fees: {
       title: 'IIM Ahmedabad Fees 2025: Total Cost Rs 27.5L, Scholarships, Loans & ROI | Collvera',
@@ -34,7 +36,6 @@ const META = {
       description: 'Honest IIM Ahmedabad student reviews 2025: transformative academics, extreme first-year pressure, 100% placements, isolated Ahmedabad location, Gujarat dry state, limited international offers.',
     },
   },
-
   'iim-bangalore': {
     fees: {
       title: 'IIM Bangalore Fees 2025: Total Cost Rs 26L, Scholarships, Loans & ROI | Collvera',
@@ -67,13 +68,41 @@ const META = {
   },
 }
 
+// Section labels for dynamic title generation
+const SECTION_LABELS = {
+  placements: { label: 'Placements 2025', sub: 'Average package, sector breakdown, top recruiters and PPOs' },
+  fees:       { label: 'Fees 2025 — Complete Guide', sub: 'Total cost, ROI analysis, scholarships and education loans' },
+  admissions: { label: 'Admission 2026 — Complete Guide', sub: 'CAT cutoff, selection process, batch profile and PI prep' },
+  campus:     { label: 'Campus Life — Complete Guide', sub: 'Infrastructure, hostels, faculty and student experience' },
+  alumni:     { label: 'Notable Alumni', sub: 'Leaders, founders and public figures' },
+  programs:   { label: 'Programs 2025 — All Courses', sub: 'Fees, duration, eligibility and intake details' },
+  reviews:    { label: 'Student Reviews 2025', sub: 'Honest feedback on academics, placements and campus life' },
+}
+
 export async function generateMetadata({ params }) {
-  const m = META[params.slug]?.[params.section]
-  if (!m) return { title: 'IIM Ahmedabad | Collvera' }
+  // Use static metadata for IIM-A/B
+  const staticMeta = STATIC_META[params.slug]?.[params.section]
+  if (staticMeta) return {
+    title: staticMeta.title,
+    description: staticMeta.description,
+    openGraph: { title: staticMeta.title, description: staticMeta.description },
+    alternates: { canonical: `https://collvera.com/colleges/${params.slug}/${params.section}` },
+  }
+
+  // Dynamic metadata for all other colleges
+  const college = COLLEGE_MAP[params.slug]
+  const sectionInfo = SECTION_LABELS[params.section]
+  if (!college || !sectionInfo) return { title: 'College | Collvera' }
+
+  const name = college.short || college.name
+  const title = `${name} ${sectionInfo.label} | Collvera`
+  const description = `${college.name} ${sectionInfo.label.toLowerCase()}: ${sectionInfo.sub}. NIRF rank #${college.nirf}. Verified data on Collvera.`
+
   return {
-    title: m.title,
-    description: m.description,
-    openGraph: { title: m.title, description: m.description },
+    title,
+    description,
+    openGraph: { title, description, type: 'website', url: `https://collvera.com/colleges/${params.slug}/${params.section}` },
+    twitter: { card: 'summary_large_image', title, description },
     alternates: { canonical: `https://collvera.com/colleges/${params.slug}/${params.section}` },
   }
 }
