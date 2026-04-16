@@ -31,7 +31,25 @@ function StarRating({ value, max=5 }) {
   )
 }
 
-function SectionHead({ children }) {
+function FaqItem({ q, a, color }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <div style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:10, overflow:'hidden' }}>
+      <button onClick={() => setOpen(o => !o)}
+        style={{ width:'100%', textAlign:'left', padding:'16px 20px', background:'none', border:'none', cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', gap:16 }}>
+        <span style={{ fontSize:14, fontWeight:600, color:'var(--ink)', lineHeight:1.5 }}>{q}</span>
+        <span style={{ fontSize:18, color:color || 'var(--orange)', flexShrink:0, transition:'transform .2s', transform: open ? 'rotate(45deg)' : 'none' }}>+</span>
+      </button>
+      {open && (
+        <div style={{ padding:'0 20px 18px', fontSize:13.5, color:'var(--ink2)', lineHeight:1.75, borderTop:'1px solid var(--border2)' }}>
+          <div style={{ paddingTop:14 }}>{a}</div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+
   return (
     <h2 style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.12em', marginBottom:20, display:'flex', alignItems:'center', gap:12, fontWeight:500, margin:'0 0 20px 0' }}>
       {children}<span style={{ flex:1, height:1, background:'var(--border)' }} />
@@ -242,6 +260,11 @@ export default function CollegeDetailClient({ college }) {
               </table>
             </div>
           </div>
+
+          {/* Long-form placements content */}
+          {d.placements?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.placements.content }} />
+          )}
         </div>
 
         {/* ── FEES ── */}
@@ -283,6 +306,11 @@ export default function CollegeDetailClient({ college }) {
               </div>
             </div>
           </div>
+
+          {/* Long-form fees content */}
+          {d.fees?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.fees.content }} />
+          )}
         </div>
 
         {/* ── ADMISSIONS ── */}
@@ -368,6 +396,11 @@ export default function CollegeDetailClient({ college }) {
               ))}
             </div>
           </div>
+
+          {/* Long-form admissions content */}
+          {d.admissions?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.admissions.content }} />
+          )}
         </div>
 
         {/* ── PROGRAMS ── */}
@@ -427,6 +460,11 @@ export default function CollegeDetailClient({ college }) {
               ))}
             </div>
           </div>
+
+          {/* Long-form campus content */}
+          {d.campus?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.campus.content }} />
+          )}
         </div>
 
         {/* ── ALUMNI ── */}
@@ -476,6 +514,11 @@ export default function CollegeDetailClient({ college }) {
               <p style={{ fontSize:14, color:'var(--ink2)', lineHeight:1.7, margin:0 }}>{d.verdict.skip_if}</p>
             </div>
           </div>
+
+          {/* Long-form verdict content */}
+          {d.verdict?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.verdict.content }} />
+          )}
         </div>
 
         {/* ── REVIEWS ── */}
@@ -516,8 +559,24 @@ export default function CollegeDetailClient({ college }) {
               </div>
             </div>
           </div>
+
+          {/* Long-form reviews content */}
+          {d.reviews?.content && (
+            <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.reviews.content }} />
+          )}
         </div>
 
+        {/* ── FAQs ── */}
+        {d.faqs?.length > 0 && (
+          <div style={{ marginBottom:56 }}>
+            <SectionHead>Frequently Asked Questions — {d.short || d.name}</SectionHead>
+            <div style={{ display:'flex', flexDirection:'column', gap:2 }}>
+              {d.faqs.map((faq, i) => (
+                <FaqItem key={i} q={faq.q} a={faq.a} color={d.color} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Internal links for SEO */}
         <div style={{ marginBottom:32, padding:'20px 24px', background:'var(--white)', borderRadius:14, border:'1px solid var(--border)' }}>
@@ -569,6 +628,46 @@ export default function CollegeDetailClient({ college }) {
           .overview-grid, .placements-grid, .fees-grid, .admissions-grid,
           .campus-grid, .verdict-grid, .reviews-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        .prose-content {
+          margin-top: 28px;
+          padding: 28px 32px;
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          font-size: 14.5px;
+          line-height: 1.85;
+          color: var(--ink2);
+        }
+        .prose-content h2 {
+          font-family: var(--serif-display);
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: var(--ink);
+          margin: 0 0 18px 0;
+          line-height: 1.3;
+        }
+        .prose-content h3 {
+          font-family: var(--serif);
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: var(--ink);
+          margin: 28px 0 12px 0;
+          padding-top: 8px;
+          border-top: 1px solid var(--border2);
+        }
+        .prose-content p {
+          margin: 0 0 16px 0;
+        }
+        .prose-content strong {
+          color: var(--ink);
+          font-weight: 600;
+        }
+        @media(max-width:768px){
+          .prose-content {
+            padding: 20px 18px;
+            font-size: 14px;
           }
         }
       `}</style>
