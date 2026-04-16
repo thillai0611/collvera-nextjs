@@ -201,65 +201,149 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── PLACEMENTS ── */}
         <div id="placements" style={{ marginBottom:56 }}>
-          <SectionHead>{d.name} Placements 2025 — Average Package, Sectors &amp; Top Recruiters</SectionHead>
+          <SectionHead>{d.name} Placements 2025 — PGPM &amp; PGDM Full Report</SectionHead>
 
-          {/* Numbers grid */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))', gap:10, marginBottom:20 }}>
-            {[
-              { label:'Avg Package', value:`₹${d.placements.avg || d.placements.avg_pgpm || '—'} LPA`, color:d.color },
-              { label:'Median Package', value:`₹${d.placements.median || d.placements.median_nirf || '—'} LPA`, color:d.color },
-              { label:'Highest (Domestic)', value:`₹${d.placements.highest || d.placements.highest_pgpm || '—'} LPA`, color:'#d95f02' },
-              { label:'Companies', value:d.placements.companies, color:'var(--ink)' },
-              { label:'PPOs Accepted', value:d.placements.ppo, color:'var(--ink)' },
-              { label:'Placed', value:`${d.placements.rate}%`, color:d.color },
-            ].map((s, i) => (
-              <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px' }}>
-                <div style={{ fontFamily:'var(--serif)', fontSize:'1.5rem', fontWeight:700, color:s.color, marginBottom:4 }}>{s.value}</div>
-                <div style={{ fontSize:11, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="placements-grid">
-            {/* Sector breakdown */}
-            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Sector breakdown</div>
-              {d.placements.sectors?.map((s, i) => (
-                <div key={i} style={{ marginBottom:14 }}>
-                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:6 }}>
-                    <span style={{ fontWeight:500 }}>{s.name}</span>
-                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:s.color }}>{s.pct}%</span>
+          {/* PGPM vs PGDM headline cards */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
+            {/* PGPM card */}
+            <div style={{ background:'var(--ink)', borderRadius:14, padding:'22px 24px' }}>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>PGPM 2025 — 1 Year</div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+                {[
+                  { label:'Average CTC', value:`₹${d.placements.avg_pgpm} LPA`, big:true },
+                  { label:'Top 10% Avg', value:`₹${d.placements.top10_pgpm} LPA`, big:false },
+                  { label:'Highest CTC', value:`₹${d.placements.highest_pgpm} LPA`, big:false },
+                  { label:'Salary 2.7×', value:'pre-MBA CTC', big:false },
+                ].map((s,i) => (
+                  <div key={i} style={{ background:'rgba(255,255,255,.07)', borderRadius:10, padding:'12px' }}>
+                    <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? '#60b4ff':'#fff', marginBottom:2 }}>{s.value}</div>
+                    <div style={{ fontSize:10, color:'rgba(255,255,255,.4)', fontFamily:'var(--mono)' }}>{s.label}</div>
                   </div>
-                  <div style={{ height:7, background:'var(--cream2)', borderRadius:4, overflow:'hidden' }}>
-                    <div style={{ height:'100%', width:`${s.pct}%`, background:s.color, borderRadius:4, transition:'width .6s ease' }} />
+                ))}
+              </div>
+              {/* PGPM function bars */}
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.35)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
+              {(d.placements.pgpm?.functions || []).slice(0,4).map((f,i) => (
+                <div key={i} style={{ marginBottom:8 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'rgba(255,255,255,.7)', marginBottom:3 }}>
+                    <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#60b4ff' }}>{f.pct}%</span>
+                  </div>
+                  <div style={{ height:5, background:'rgba(255,255,255,.1)', borderRadius:3, overflow:'hidden' }}>
+                    <div style={{ height:'100%', width:`${f.pct}%`, background:'#60b4ff', borderRadius:3 }} />
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Top recruiters table */}
-            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', overflow:'hidden' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', padding:'18px 20px 12px' }}>Top recruiters</div>
-              <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
-                <thead>
-                  <tr style={{ background:'var(--cream)' }}>
-                    <th style={{ textAlign:'left', padding:'9px 16px', fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:500 }}>Company</th>
-                    <th style={{ textAlign:'left', padding:'9px 16px', fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:500 }}>Sector</th>
-                    <th style={{ textAlign:'right', padding:'9px 16px', fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:500 }}>Offers</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {d.placements.recruiters?.map((r, i) => (
-                    <tr key={i} style={{ borderTop:'1px solid var(--border2)' }}>
-                      <td style={{ padding:'9px 16px', fontWeight:500 }}>{r.name}</td>
-                      <td style={{ padding:'9px 16px', color:'var(--muted)', fontSize:12 }}>{r.type}</td>
-                      <td style={{ padding:'9px 16px', textAlign:'right', fontFamily:'var(--mono)', color:d.color, fontWeight:600 }}>{r.offers || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            {/* PGDM card */}
+            <div style={{ background:'var(--white)', border:'2px solid var(--border)', borderRadius:14, padding:'22px 24px' }}>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>PGDM 2025 — 2 Years</div>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+                {[
+                  { label:'Average CTC', value:`₹${d.placements.avg_pgdm} LPA`, big:true },
+                  { label:'Top 10% Avg', value:`₹${d.placements.top10_pgdm} LPA`, big:false },
+                  { label:'Highest CTC', value:`₹${d.placements.highest_pgdm} LPA`, big:false },
+                  { label:'Batch Size', value:'368 students', big:false },
+                ].map((s,i) => (
+                  <div key={i} style={{ background:'var(--cream)', borderRadius:10, padding:'12px' }}>
+                    <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? d.color:'var(--ink)', marginBottom:2 }}>{s.value}</div>
+                    <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
+                  </div>
+                ))}
+              </div>
+              {/* PGDM function bars */}
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
+              {(d.placements.pgdm?.functions || []).slice(0,4).map((f,i) => (
+                <div key={i} style={{ marginBottom:8 }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'var(--ink2)', marginBottom:3 }}>
+                    <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:f.color || d.color }}>{f.pct}%</span>
+                  </div>
+                  <div style={{ height:5, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
+                    <div style={{ height:'100%', width:`${f.pct}%`, background:f.color || d.color, borderRadius:3 }} />
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+
+          {/* Salary ladder + recruiters */}
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
+            {/* Salary ladder */}
+            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Salary Ladder 2025</div>
+              <div style={{ marginBottom:16 }}>
+                <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>PGPM</div>
+                {[
+                  ['Top 10%', `₹${d.placements.top10_pgpm} LPA`],
+                  ['Top 25%', `₹${d.placements.top25_pgpm} LPA`],
+                  ['Median',  `₹${d.placements.top50_pgpm} LPA`],
+                  ['Average', `₹${d.placements.avg_pgpm} LPA`],
+                ].map(([label, val], i) => (
+                  <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                    <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
+                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color, fontSize:12.5 }}>{val}</span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>PGDM</div>
+                {[
+                  ['Top 10%', `₹${d.placements.top10_pgdm} LPA`],
+                  ['Top 25%', `₹${d.placements.top25_pgdm} LPA`],
+                  ['Median',  `₹${d.placements.top50_pgdm} LPA`],
+                  ['Average', `₹${d.placements.avg_pgdm} LPA`],
+                ].map(([label, val], i) => (
+                  <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                    <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
+                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02', fontSize:12.5 }}>{val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Top recruiters chips */}
+            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Top Recruiters 2025</div>
+              {(() => {
+                const all = [...(d.placements.recruiters || [])]
+                const typeColors = { BFSI:'#0057A8', Consulting:'#d95f02', Analytics:'#7b1fa2', Technology:'#2e7d32', FMCG:'#ef6c00' }
+                const grouped = all.reduce((acc, r) => { (acc[r.type] = acc[r.type] || []).push(r.name); return acc }, {})
+                return Object.entries(grouped).slice(0,5).map(([type, names]) => (
+                  <div key={type} style={{ marginBottom:12 }}>
+                    <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:6 }}>
+                      <span style={{ display:'inline-block', width:7, height:7, borderRadius:'50%', background: typeColors[type] || '#999', marginRight:5 }} />{type}
+                    </div>
+                    <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
+                      {names.slice(0,5).map((n,i) => (
+                        <span key={i} style={{ fontSize:11.5, padding:'3px 9px', borderRadius:20, background:'var(--cream)', border:`1px solid ${typeColors[type] || '#ddd'}40`, color:'var(--ink)', fontWeight:500 }}>{n}</span>
+                      ))}
+                      {names.length > 5 && <span style={{ fontSize:11, color:'var(--muted)', padding:'3px 6px' }}>+{names.length-5} more</span>}
+                    </div>
+                  </div>
+                ))
+              })()}
+              <a href={`/colleges/${d.slug}/placements`} style={{ display:'inline-block', marginTop:8, fontSize:12.5, color:d.color, fontWeight:600, textDecoration:'none' }}>
+                View full placement report →
+              </a>
+            </div>
+          </div>
+
+          {/* Internship highlight strip */}
+          {d.placements.internship?.companies && (
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:20 }}>
+              {[
+                { label:'Internship Companies', value:`${d.placements.internship.companies}+`, sub:'PGDM 2024-26 batch' },
+                { label:'Avg Monthly Stipend', value:`₹${(d.placements.internship.avg_stipend/1000).toFixed(1)}K`, sub:'per month' },
+                { label:'Highest Stipend', value:`₹${(d.placements.internship.highest_stipend/100000).toFixed(0)}L`, sub:'multinational consulting firm' },
+              ].map((s,i) => (
+                <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', textAlign:'center' }}>
+                  <div style={{ fontFamily:'var(--serif)', fontSize:'1.3rem', fontWeight:700, color:d.color }}>{s.value}</div>
+                  <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginTop:2 }}>{s.label}</div>
+                  <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)', marginTop:2 }}>{s.sub}</div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Long-form placements content */}
           {d.placements?.content && (
