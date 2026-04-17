@@ -188,7 +188,7 @@ export default function CollegeDetailClient({ college }) {
                 ['Accreditations', d.accreditations.join(', ')],
                 ['Campus', d.campusLabel],
                 ['Programs', d.programs?.map(p=>p.name).join(' · ')],
-                ['Website', d.slug === 'iim-bangalore' ? 'iimb.ac.in' : 'iima.ac.in'],
+                ['Website', d.website || (d.slug === 'iim-bangalore' ? 'iimb.ac.in' : 'iima.ac.in')],
               ].map(([k,v]) => (
                 <div key={k} style={{ display:'grid', gridTemplateColumns:'120px 1fr', gap:12, padding:'9px 0', borderBottom:'1px solid var(--border2)', alignItems:'start' }}>
                   <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase' }}>{k}</div>
@@ -357,10 +357,10 @@ export default function CollegeDetailClient({ college }) {
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }} className="fees-grid">
             {/* Fee breakdown */}
             <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>PGP 2025-27 fee breakdown</div>
+              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Fee breakdown 2025</div>
               {[
                 { label:'Tuition fee', amount:`₹${d.fees?.tuition || d.fees?.tuition_pgdm || '—'} L` },
-                { label:'Library, computing, materials', amount:`₹${d.fees?.other || '—'} L` },
+                { label: d.fees?.other_label || 'Hostel & other charges', amount:`₹${d.fees?.other || '—'} L` },
                 { label:'Total programme fee', amount:`₹${d.fees?.total || d.fees?.total_pgdm || '—'} L`, bold:true },
                 { label:'Monthly living (on-campus)', amount:d.fees?.living_monthly || '—' },
                 { label:'Education loan available', amount:d.fees?.loan_max || 'Available' },
@@ -372,7 +372,7 @@ export default function CollegeDetailClient({ college }) {
                 </div>
               ))}
               <div style={{ marginTop:16, padding:'12px 16px', background:'var(--teal-lt)', borderRadius:10, fontSize:12.5, color:'var(--teal)', lineHeight:1.6 }}>
-                ROI check: At ₹35 LPA average, you recover the full fee in under 10 months of salary.
+                ROI check: PGPM avg ₹17.80 LPA — tuition payback under 14 months.
               </div>
             </div>
             {/* Scholarships */}
@@ -386,7 +386,7 @@ export default function CollegeDetailClient({ college }) {
                 </div>
               ))}
               <div style={{ marginTop:16, padding:'12px 16px', background:'var(--orange-lt)', borderRadius:10, fontSize:12, color:'var(--muted)', lineHeight:1.6 }}>
-                Loans without collateral available from SBI, Bank of Baroda, PNB, Central Bank, Union Bank up to ₹20L.
+                {d.fees?.loan_note || 'Loans from SBI, HDFC Credila & Axis Bank. Up to ₹50L with full programme moratorium.'}
               </div>
             </div>
           </div>
@@ -413,16 +413,16 @@ export default function CollegeDetailClient({ college }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    ['General / EWS', '80%ile', '98-99%ile'],
-                    ['OBC', '75%ile', '95-97%ile'],
-                    ['SC', '75%ile', '88-92%ile'],
-                    ['ST', '75%ile', '85-90%ile'],
-                  ].map(([cat, min, real], i) => (
+                  {(d.admissions?.cat_cutoffs || [
+                    { category:'General / EWS', min:'80%ile', realistic:'98-99%ile' },
+                    { category:'OBC',           min:'75%ile', realistic:'95-97%ile' },
+                    { category:'SC',            min:'75%ile', realistic:'88-92%ile' },
+                    { category:'ST',            min:'75%ile', realistic:'85-90%ile' },
+                  ]).map((r, i) => (
                     <tr key={i} style={{ borderTop:'1px solid var(--border2)' }}>
-                      <td style={{ padding:'9px 14px', fontWeight:500 }}>{cat}</td>
-                      <td style={{ padding:'9px 14px', textAlign:'center', color:'var(--muted)', fontFamily:'var(--mono)' }}>{min}</td>
-                      <td style={{ padding:'9px 14px', textAlign:'center', fontFamily:'var(--mono)', fontWeight:700, color:d.color }}>{real}</td>
+                      <td style={{ padding:'9px 14px', fontWeight:500 }}>{r.category}</td>
+                      <td style={{ padding:'9px 14px', textAlign:'center', color:'var(--muted)', fontFamily:'var(--mono)' }}>{r.min}</td>
+                      <td style={{ padding:'9px 14px', textAlign:'center', fontFamily:'var(--mono)', fontWeight:700, color:d.color }}>{r.realistic}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -447,7 +447,7 @@ export default function CollegeDetailClient({ college }) {
                   </div>
                 </div>
               ))}
-              <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginBottom:10, marginTop:20, textTransform:'uppercase' }}>Stage 2 — Final selection (post-PI)</div>
+              {d.admissions?.final_weights?.length > 0 && <div style={{ fontSize:11, fontFamily:'var(--mono)', color:'var(--muted)', marginBottom:10, marginTop:20, textTransform:'uppercase' }}>Stage 2 — Final selection (post-PI)</div>}
               {d.admissions.final_weights?.map((w, i) => (
                 <div key={i} style={{ marginBottom:10 }}>
                   <div style={{ display:'flex', justifyContent:'space-between', fontSize:13, marginBottom:5 }}>
@@ -464,14 +464,14 @@ export default function CollegeDetailClient({ college }) {
 
           {/* Batch profile */}
           <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 28px' }}>
-            <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Batch profile — PGP 2025-27</div>
+            <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:18 }}>Batch profile — PGDM 2025-27</div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))', gap:16 }}>
               {[
-                { label:'Batch size', value:`${d.admissions?.batch?.size} students` },
-                { label:'Female students', value:`${d.admissions?.batch?.female}%` },
-                { label:'Engineers', value:`${d.admissions?.batch?.engineering}%` },
-                { label:'With work exp', value:`${d.admissions?.batch?.work_exp_pct}%` },
-                { label:'Avg work exp', value:`${d.admissions?.batch?.avg_work_months} months` },
+                { label:'Batch size', value: d.admissions?.batch?.size ? `${d.admissions.batch.size} students` : '—' },
+                { label:'Female students', value: d.admissions?.batch?.female ? `${d.admissions.batch.female}%` : '—' },
+                { label:'Freshers', value: d.admissions?.batch?.freshers_pct ? `${d.admissions.batch.freshers_pct}%` : (d.admissions?.batch?.engineering ? `${d.admissions.batch.engineering}%` : '—') },
+                { label:'With work exp', value: d.admissions?.batch?.work_exp_pct ? `${d.admissions.batch.work_exp_pct}%` : '—' },
+                { label:'Avg work exp', value: d.admissions?.batch?.avg_work_months ? `${d.admissions.batch.avg_work_months} months` : '—' },
               ].map((s, i) => (
                 <div key={i} style={{ textAlign:'center', padding:'16px', background:'var(--cream)', borderRadius:10 }}>
                   <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:'var(--ink)', marginBottom:4 }}>{s.value}</div>
