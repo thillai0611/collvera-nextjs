@@ -1,5 +1,9 @@
-import { COLLEGE_MAP } from '../../../lib/colleges/index'
+import { COLLEGE_MAP, COLLEGES } from '../../../lib/colleges/index'
 import CollegeDetailClient from './CollegeDetailClient'
+
+export async function generateStaticParams() {
+  return COLLEGES.map(college => ({ slug: college.slug }))
+}
 
 export async function generateMetadata({ params }) {
   const college = COLLEGE_MAP[params.slug]
