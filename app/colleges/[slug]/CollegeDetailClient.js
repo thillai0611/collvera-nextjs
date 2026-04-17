@@ -58,6 +58,32 @@ function SectionHead({ children }) {
 }
 
 // ── Main component ────────────────────────────────────────────────────────────
+
+function PlacementsRecruiterCard({ placements, color, slug }) {
+  const typeColors = { BFSI:'#0057A8', Consulting:'#d95f02', Analytics:'#7b1fa2', Technology:'#2e7d32', FMCG:'#ef6c00', 'HR Tech':'#8A8070', 'BPO / Analytics':'#185fa5', Telecom:'#c62828', 'Auto / Mfg':'#4e342e', Manufacturing:'#37474f', Conglomerate:'#1a237e', 'Real Estate':'#00838f', Retail:'#ef6c00', Logistics:'#4527a0' }
+  const all = placements.recruiters || []
+  const grouped = all.reduce((acc, r) => { (acc[r.type] = acc[r.type] || []).push(r.name); return acc }, {})
+  return (
+    <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px', flex:1 }}>
+      <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Top Recruiters 2025</div>
+      {Object.entries(grouped).slice(0,5).map(([type, names]) => (
+        <div key={type} style={{ marginBottom:12 }}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:6 }}>
+            <span style={{ display:'inline-block', width:7, height:7, borderRadius:'50%', background: typeColors[type] || '#999', marginRight:5 }} />{type}
+          </div>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
+            {names.slice(0,5).map((n,i) => (
+              <span key={i} style={{ fontSize:11.5, padding:'3px 9px', borderRadius:20, background:'var(--cream)', border:`1px solid ${typeColors[type] || '#ddd'}40`, color:'var(--ink)', fontWeight:500 }}>{n}</span>
+            ))}
+            {names.length > 5 && <span style={{ fontSize:11, color:'var(--muted)', padding:'3px 6px' }}>+{names.length-5} more</span>}
+          </div>
+        </div>
+      ))}
+      <a href={`/colleges/${slug}/placements`} style={{ display:'inline-block', marginTop:8, fontSize:12.5, color, fontWeight:600, textDecoration:'none' }}>View full report →</a>
+    </div>
+  )
+}
+
 export default function CollegeDetailClient({ college }) {
   const [leadOpen, setLeadOpen] = useState(false)
 
@@ -201,140 +227,194 @@ export default function CollegeDetailClient({ college }) {
 
         {/* ── PLACEMENTS ── */}
         <div id="placements" style={{ marginBottom:56 }}>
-          <SectionHead>{d.name} Placements 2025 — PGPM &amp; PGDM Full Report</SectionHead>
+          <SectionHead>{d.name} Placements 2025 — Packages, Sectors &amp; Recruiters</SectionHead>
 
-          {/* PGPM vs PGDM headline cards */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
-            {/* PGPM card */}
-            <div style={{ background:'var(--ink)', borderRadius:14, padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>PGPM 2025 — 1 Year</div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
-                {[
-                  { label:'Average CTC', value:`₹${d.placements.avg_pgpm} LPA`, big:true },
-                  { label:'Top 10% Avg', value:`₹${d.placements.top10_pgpm} LPA`, big:false },
-                  { label:'Highest CTC', value:`₹${d.placements.highest_pgpm} LPA`, big:false },
-                  { label:'Salary 2.7×', value:'pre-MBA CTC', big:false },
-                ].map((s,i) => (
-                  <div key={i} style={{ background:'rgba(255,255,255,.07)', borderRadius:10, padding:'12px' }}>
-                    <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? '#60b4ff':'#fff', marginBottom:2 }}>{s.value}</div>
-                    <div style={{ fontSize:10, color:'rgba(255,255,255,.4)', fontFamily:'var(--mono)' }}>{s.label}</div>
+          {/* ── MODE 1: Dual card (PGPM + PGDM both exist — e.g. GLIM Chennai) ── */}
+          {d.placements.pgpm && d.placements.pgdm ? (
+            <>
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
+                {/* Prog 1 card — dark */}
+                <div style={{ background:'var(--ink)', borderRadius:14, padding:'22px 24px' }}>
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>
+                    {d.placements.pgpm.label || 'PGPM 2025'} — {d.placements.pgpm.duration || '1 Year'}
                   </div>
-                ))}
-              </div>
-              {/* PGPM function bars */}
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.35)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
-              {(d.placements.pgpm?.functions || []).slice(0,4).map((f,i) => (
-                <div key={i} style={{ marginBottom:8 }}>
-                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'rgba(255,255,255,.7)', marginBottom:3 }}>
-                    <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#60b4ff' }}>{f.pct}%</span>
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+                    {[
+                      { label:'Average CTC', value:`₹${d.placements.pgpm.avg} LPA`, big:true },
+                      { label:'Top 10% Avg', value: d.placements.pgpm.top10_avg ? `₹${d.placements.pgpm.top10_avg} LPA` : `Top 50: ₹${d.placements.pgpm.top50_avg || '—'} LPA`, big:false },
+                      { label:'Highest CTC', value:`₹${d.placements.pgpm.highest} LPA`, big:false },
+                      { label: d.placements.pgpm.salary_multiplier ? `${d.placements.pgpm.salary_multiplier}× pre-MBA` : 'Placement Rate', value: d.placements.pgpm.salary_multiplier ? 'salary multiplier' : '100%', big:false },
+                    ].map((s,i) => (
+                      <div key={i} style={{ background:'rgba(255,255,255,.07)', borderRadius:10, padding:'12px' }}>
+                        <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? '#60b4ff':'#fff', marginBottom:2 }}>{s.value}</div>
+                        <div style={{ fontSize:10, color:'rgba(255,255,255,.4)', fontFamily:'var(--mono)' }}>{s.label}</div>
+                      </div>
+                    ))}
                   </div>
-                  <div style={{ height:5, background:'rgba(255,255,255,.1)', borderRadius:3, overflow:'hidden' }}>
-                    <div style={{ height:'100%', width:`${f.pct}%`, background:'#60b4ff', borderRadius:3 }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* PGDM card */}
-            <div style={{ background:'var(--white)', border:'2px solid var(--border)', borderRadius:14, padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>PGDM 2025 — 2 Years</div>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
-                {[
-                  { label:'Average CTC', value:`₹${d.placements.avg_pgdm} LPA`, big:true },
-                  { label:'Top 10% Avg', value:`₹${d.placements.top10_pgdm} LPA`, big:false },
-                  { label:'Highest CTC', value:`₹${d.placements.highest_pgdm} LPA`, big:false },
-                  { label:'Batch Size', value:'368 students', big:false },
-                ].map((s,i) => (
-                  <div key={i} style={{ background:'var(--cream)', borderRadius:10, padding:'12px' }}>
-                    <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? d.color:'var(--ink)', marginBottom:2 }}>{s.value}</div>
-                    <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
-                  </div>
-                ))}
-              </div>
-              {/* PGDM function bars */}
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
-              {(d.placements.pgdm?.functions || []).slice(0,4).map((f,i) => (
-                <div key={i} style={{ marginBottom:8 }}>
-                  <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'var(--ink2)', marginBottom:3 }}>
-                    <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:f.color || d.color }}>{f.pct}%</span>
-                  </div>
-                  <div style={{ height:5, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
-                    <div style={{ height:'100%', width:`${f.pct}%`, background:f.color || d.color, borderRadius:3 }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Salary ladder + recruiters */}
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
-            {/* Salary ladder */}
-            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Salary Ladder 2025</div>
-              <div style={{ marginBottom:16 }}>
-                <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>PGPM</div>
-                {[
-                  ['Top 10%', `₹${d.placements.top10_pgpm} LPA`],
-                  ['Top 25%', `₹${d.placements.top25_pgpm} LPA`],
-                  ['Median',  `₹${d.placements.top50_pgpm} LPA`],
-                  ['Average', `₹${d.placements.avg_pgpm} LPA`],
-                ].map(([label, val], i) => (
-                  <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
-                    <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
-                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color, fontSize:12.5 }}>{val}</span>
-                  </div>
-                ))}
-              </div>
-              <div>
-                <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>PGDM</div>
-                {[
-                  ['Top 10%', `₹${d.placements.top10_pgdm} LPA`],
-                  ['Top 25%', `₹${d.placements.top25_pgdm} LPA`],
-                  ['Median',  `₹${d.placements.top50_pgdm} LPA`],
-                  ['Average', `₹${d.placements.avg_pgdm} LPA`],
-                ].map(([label, val], i) => (
-                  <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
-                    <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
-                    <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02', fontSize:12.5 }}>{val}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Top recruiters chips */}
-            <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Top Recruiters 2025</div>
-              {(() => {
-                const all = [...(d.placements.recruiters || [])]
-                const typeColors = { BFSI:'#0057A8', Consulting:'#d95f02', Analytics:'#7b1fa2', Technology:'#2e7d32', FMCG:'#ef6c00' }
-                const grouped = all.reduce((acc, r) => { (acc[r.type] = acc[r.type] || []).push(r.name); return acc }, {})
-                return Object.entries(grouped).slice(0,5).map(([type, names]) => (
-                  <div key={type} style={{ marginBottom:12 }}>
-                    <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:6 }}>
-                      <span style={{ display:'inline-block', width:7, height:7, borderRadius:'50%', background: typeColors[type] || '#999', marginRight:5 }} />{type}
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.35)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
+                  {(d.placements.pgpm.functions || []).slice(0,4).map((f,i) => (
+                    <div key={i} style={{ marginBottom:8 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'rgba(255,255,255,.7)', marginBottom:3 }}>
+                        <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#60b4ff' }}>{f.pct}%</span>
+                      </div>
+                      <div style={{ height:5, background:'rgba(255,255,255,.1)', borderRadius:3, overflow:'hidden' }}>
+                        <div style={{ height:'100%', width:`${f.pct}%`, background:'#60b4ff', borderRadius:3 }} />
+                      </div>
                     </div>
-                    <div style={{ display:'flex', flexWrap:'wrap', gap:5 }}>
-                      {names.slice(0,5).map((n,i) => (
-                        <span key={i} style={{ fontSize:11.5, padding:'3px 9px', borderRadius:20, background:'var(--cream)', border:`1px solid ${typeColors[type] || '#ddd'}40`, color:'var(--ink)', fontWeight:500 }}>{n}</span>
+                  ))}
+                </div>
+                {/* Prog 2 card — white */}
+                <div style={{ background:'var(--white)', border:'2px solid var(--border)', borderRadius:14, padding:'22px 24px' }}>
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>
+                    {d.placements.pgdm.label || 'PGDM 2025'} — {d.placements.pgdm.duration || '2 Years'}
+                  </div>
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+                    {[
+                      { label:'Average CTC', value:`₹${d.placements.pgdm.avg} LPA`, big:true },
+                      { label:'Top 10% Avg', value: d.placements.pgdm.top10_avg ? `₹${d.placements.pgdm.top10_avg} LPA` : `Top 50: ₹${d.placements.pgdm.top50_avg || '—'} LPA`, big:false },
+                      { label:'Highest CTC', value:`₹${d.placements.pgdm.highest} LPA`, big:false },
+                      { label:'Batch Size', value: d.placements.pgdm.batch_size ? `${d.placements.pgdm.batch_size} students` : '100%', big:false },
+                    ].map((s,i) => (
+                      <div key={i} style={{ background:'var(--cream)', borderRadius:10, padding:'12px' }}>
+                        <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.5rem':'1.1rem', fontWeight:700, color: s.big ? d.color:'var(--ink)', marginBottom:2 }}>{s.value}</div>
+                        <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8 }}>Top functions</div>
+                  {(d.placements.pgdm.functions || []).slice(0,4).map((f,i) => (
+                    <div key={i} style={{ marginBottom:8 }}>
+                      <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'var(--ink2)', marginBottom:3 }}>
+                        <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:f.color || d.color }}>{f.pct}%</span>
+                      </div>
+                      <div style={{ height:5, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
+                        <div style={{ height:'100%', width:`${f.pct}%`, background:f.color || d.color, borderRadius:3 }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Salary ladder + recruiters for dual mode */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
+                <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
+                  <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Salary Ladder 2025</div>
+                  <div style={{ marginBottom:16 }}>
+                    <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>{d.placements.pgpm.label || 'PGPM'}</div>
+                    {[['Top 10%', d.placements.pgpm.top10_avg], ['Top 25%', d.placements.pgpm.top25_avg], ['Median', d.placements.pgpm.top50_avg], ['Average', d.placements.pgpm.avg]].map(([label, val], i) => (
+                      <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                        <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
+                        <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color, fontSize:12.5 }}>{val ? `₹${val} LPA` : '—'}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)', marginBottom:8 }}>{d.placements.pgdm.label || 'PGDM'}</div>
+                    {[['Top 10%', d.placements.pgdm.top10_avg], ['Top 25%', d.placements.pgdm.top25_avg], ['Median', d.placements.pgdm.top50_avg], ['Average', d.placements.pgdm.avg]].map(([label, val], i) => (
+                      <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'7px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                        <span style={{ fontSize:12.5, color:'var(--ink2)' }}>{label}</span>
+                        <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02', fontSize:12.5 }}>{val ? `₹${val} LPA` : '—'}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <PlacementsRecruiterCard placements={d.placements} color={d.color} slug={d.slug} />
+              </div>
+            </>
+          ) : (
+            <>
+              {/* ── MODE 2 / 3: Single programme or simple ── */}
+              {/* Hero stat pills */}
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:20 }}>
+                {[
+                  { label:'Avg Package', value: d.placements.avg ? `₹${d.placements.avg} LPA` : (d.placements.avg_pgpm ? `₹${d.placements.avg_pgpm} LPA` : '—'), color:d.color, sub:'2025 report' },
+                  { label:'Highest Package', value: d.placements.highest ? `₹${d.placements.highest} LPA` : (d.placements.highest_pgpm ? `₹${d.placements.highest_pgpm} LPA` : '—'), color:'#d95f02', sub:'domestic 2025' },
+                  { label:'Top 50 Avg', value: d.placements.top50 ? `₹${d.placements.top50} LPA` : (d.placements.top50_pgpm ? `₹${d.placements.top50_pgpm} LPA` : '—'), color:d.color, sub:'top 50 students' },
+                  { label:'Companies', value: d.placements.companies || '—', color:'var(--ink)', sub:'visited campus' },
+                  { label:'PPOs', value: d.placements.ppo || '—', color:'var(--ink)', sub:`${d.placements.ppo_pct || ''}% of batch` },
+                  { label:'Placement Rate', value:`${d.placements.rate || 100}%`, color:d.color, sub:'2025' },
+                ].map((s,i) => (
+                  <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', borderTop:`3px solid ${s.color}` }}>
+                    <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:s.color, marginBottom:2 }}>{s.value}</div>
+                    <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{s.label}</div>
+                    <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)' }}>{s.sub}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
+                {/* Salary ladder / programme-wise table */}
+                <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
+                  {d.placements.programme_wise?.length > 0 ? (
+                    <>
+                      <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Programme-wise Placements 2025</div>
+                      <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
+                        <thead>
+                          <tr style={{ background:'var(--cream)' }}>
+                            {['Programme','Avg CTC','Highest'].map(h => (
+                              <th key={h} style={{ textAlign: h==='Programme' ? 'left':'right', padding:'8px 10px', fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:500 }}>{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {d.placements.programme_wise.map((p,i) => (
+                            <tr key={i} style={{ borderTop:'1px solid var(--border2)' }}>
+                              <td style={{ padding:'9px 10px', fontWeight:500, fontSize:12.5 }}>{p.name}</td>
+                              <td style={{ padding:'9px 10px', textAlign:'right', fontFamily:'var(--mono)', fontWeight:700, color:d.color, fontSize:12.5 }}>₹{p.avg} L</td>
+                              <td style={{ padding:'9px 10px', textAlign:'right', fontFamily:'var(--mono)', color:'#d95f02', fontSize:12.5 }}>₹{p.highest} L</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Salary Ladder 2025</div>
+                      {(d.placements.salary_ladder || [
+                        { label:'Top 10%',  value: d.placements.top10_avg || d.placements.top10_pgpm },
+                        { label:'Top 25%',  value: d.placements.top25_avg || d.placements.top25_pgpm },
+                        { label:'Median',   value: d.placements.top50    || d.placements.top50_pgpm },
+                        { label:'Average',  value: d.placements.avg      || d.placements.avg_pgpm },
+                      ]).map((r,i,arr) => (
+                        <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < arr.length-1 ? '1px solid var(--border2)':'none' }}>
+                          <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
+                          <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:d.color, fontSize:13 }}>{r.value ? `₹${r.value} LPA` : '—'}</span>
+                        </div>
                       ))}
-                      {names.length > 5 && <span style={{ fontSize:11, color:'var(--muted)', padding:'3px 6px' }}>+{names.length-5} more</span>}
-                    </div>
-                  </div>
-                ))
-              })()}
-              <a href={`/colleges/${d.slug}/placements`} style={{ display:'inline-block', marginTop:8, fontSize:12.5, color:d.color, fontWeight:600, textDecoration:'none' }}>
-                View full placement report →
-              </a>
-            </div>
-          </div>
+                    </>
+                  )}
+                </div>
 
-          {/* Internship highlight strip */}
+                {/* Sectors + Recruiters */}
+                <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
+                  {d.placements.sectors?.length > 0 && (
+                    <div style={{ background:'var(--white)', borderRadius:14, border:'1px solid var(--border)', padding:'22px 24px' }}>
+                      <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:16 }}>Sector Breakdown</div>
+                      {d.placements.sectors.map((s,i) => (
+                        <div key={i} style={{ marginBottom:10 }}>
+                          <div style={{ display:'flex', justifyContent:'space-between', fontSize:12.5, marginBottom:4 }}>
+                            <span style={{ fontWeight:500 }}>{s.name}</span>
+                            <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:s.color }}>{s.pct}%</span>
+                          </div>
+                          <div style={{ height:6, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
+                            <div style={{ height:'100%', width:`${s.pct}%`, background:s.color, borderRadius:3 }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <PlacementsRecruiterCard placements={d.placements} color={d.color} slug={d.slug} />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Internship strip — shown in all modes */}
           {d.placements.internship?.companies && (
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10, marginBottom:20 }}>
               {[
-                { label:'Internship Companies', value:`${d.placements.internship.companies}+`, sub:'PGDM 2024-26 batch' },
+                { label:'Internship Companies', value:`${d.placements.internship.companies}+`, sub:'summer internship batch' },
                 { label:'Avg Monthly Stipend', value:`₹${(d.placements.internship.avg_stipend/1000).toFixed(1)}K`, sub:'per month' },
-                { label:'Highest Stipend', value:`₹${(d.placements.internship.highest_stipend/100000).toFixed(0)}L`, sub:'multinational consulting firm' },
+                { label:'Highest Stipend', value:`₹${(d.placements.internship.highest_stipend/100000).toFixed(0)}L`, sub:'per month' },
               ].map((s,i) => (
                 <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'14px 16px', textAlign:'center' }}>
                   <div style={{ fontFamily:'var(--serif)', fontSize:'1.3rem', fontWeight:700, color:d.color }}>{s.value}</div>
@@ -345,7 +425,7 @@ export default function CollegeDetailClient({ college }) {
             </div>
           )}
 
-          {/* Long-form placements content */}
+          {/* Long-form content */}
           {d.placements?.content && (
             <div className="prose-content" dangerouslySetInnerHTML={{ __html: d.placements.content }} />
           )}
