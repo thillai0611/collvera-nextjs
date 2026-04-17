@@ -473,6 +473,72 @@ function SectionCard({ title, children }) {
   )
 }
 
+
+function StatPill({ label, value, color, sub }) {
+  return (
+    <div style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', borderTop:`3px solid ${color}` }}>
+      <div style={{ fontFamily:'var(--serif)', fontSize:'1.45rem', fontWeight:700, color, marginBottom:2 }}>{value}</div>
+      <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{label}</div>
+      {sub && <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)' }}>{sub}</div>}
+    </div>
+  )
+}
+
+function SalaryBand({ bands, color }) {
+  const max = Math.max(...bands.map(b => b.pct || b.value || 1))
+  return (
+    <div style={{ display:'flex', alignItems:'flex-end', gap:4, height:72 }}>
+      {bands.map((b,i) => (
+        <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
+          <div style={{ fontSize:9, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:700 }}>{b.pct || b.value}</div>
+          <div style={{ width:'100%', background: color, borderRadius:'4px 4px 0 0', opacity: 0.4 + ((b.pct||b.value||0)/max)*0.6, height:`${((b.pct||b.value||0)/max)*52}px` }} />
+          <div style={{ fontSize:8.5, fontFamily:'var(--mono)', color:'var(--muted)', textAlign:'center', lineHeight:1.2 }}>{b.range || b.label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function BarChart({ items, color }) {
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+      {items.map((s,i) => (
+        <div key={i}>
+          <div style={{ display:'flex', justifyContent:'space-between', fontSize:12.5, marginBottom:4 }}>
+            <span style={{ color:'var(--ink2)', fontWeight:500 }}>{s.name}</span>
+            <span style={{ fontFamily:'var(--mono)', fontWeight:700, color: s.color || color }}>{s.pct}%</span>
+          </div>
+          <div style={{ height:8, background:'var(--cream2)', borderRadius:4, overflow:'hidden' }}>
+            <div style={{ height:'100%', width:`${s.pct}%`, background: s.color || color, borderRadius:4 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function RecruiterChips({ recruiters }) {
+  const typeColors = { BFSI:'#0057A8', Consulting:'#d95f02', Analytics:'#7b1fa2', Technology:'#2e7d32', FMCG:'#ef6c00', Retail:'#00838f', Logistics:'#4527a0', 'HR Tech':'#8A8070', 'BPO / Analytics':'#185fa5', Telecom:'#c62828', 'Auto / Mfg':'#4e342e', Manufacturing:'#37474f', Conglomerate:'#1a237e', 'Real Estate':'#00838f' }
+  const grouped = recruiters.reduce((acc, r) => { (acc[r.type] = acc[r.type] || []).push(r.name); return acc }, {})
+  return (
+    <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+      {Object.entries(grouped).map(([type, names]) => (
+        <div key={type}>
+          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:6 }}>
+            <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background: typeColors[type] || '#999', marginRight:5 }} />
+            {type} ({names.length})
+          </div>
+          <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+            {names.map((n,i) => (
+              <span key={i} style={{ fontSize:12, padding:'4px 10px', borderRadius:20, background:'var(--cream)', border:`1px solid ${typeColors[type] || '#ddd'}40`, color:'var(--ink)', fontWeight:500 }}>{n}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function GenericPlacements({ college }) {
   const p = college.placements
   const color = college.color || 'var(--orange)'
