@@ -473,242 +473,294 @@ function SectionCard({ title, children }) {
   )
 }
 
-function BarChart({ items, color }) {
-  return (
-    <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-      {items.map((s,i) => (
-        <div key={i}>
-          <div style={{ display:'flex', justifyContent:'space-between', fontSize:12.5, marginBottom:4 }}>
-            <span style={{ color:'var(--ink2)', fontWeight:500 }}>{s.name}</span>
-            <span style={{ fontFamily:'var(--mono)', fontWeight:700, color: s.color || color }}>{s.pct}%</span>
-          </div>
-          <div style={{ height:8, background:'var(--cream2)', borderRadius:4, overflow:'hidden' }}>
-            <div style={{ height:'100%', width:`${s.pct}%`, background: s.color || color, borderRadius:4, transition:'width .6s ease' }} />
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function SalaryBand({ bands, color }) {
-  const max = Math.max(...bands.map(b => b.pct))
-  return (
-    <div style={{ display:'flex', alignItems:'flex-end', gap:4, height:72 }}>
-      {bands.map((b,i) => (
-        <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
-          <div style={{ fontSize:9, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:700 }}>{b.pct}%</div>
-          <div style={{ width:'100%', background: color, borderRadius:'4px 4px 0 0', opacity: 0.4 + (b.pct/max)*0.6, height:`${(b.pct/max)*52}px` }} />
-          <div style={{ fontSize:8.5, fontFamily:'var(--mono)', color:'var(--muted)', textAlign:'center', lineHeight:1.2 }}>{b.range}</div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function RecruiterChips({ recruiters }) {
-  const typeColors = { BFSI:'#0057A8', Consulting:'#d95f02', Analytics:'#7b1fa2', Technology:'#2e7d32', FMCG:'#ef6c00', Retail:'#00838f', Logistics:'#4527a0', 'HR Tech':'#8A8070', 'BPO / Analytics':'#185fa5', Telecom:'#c62828', 'Auto / Mfg':'#4e342e', Manufacturing:'#37474f' }
-  const grouped = recruiters.reduce((acc, r) => { (acc[r.type] = acc[r.type] || []).push(r.name); return acc }, {})
-  return (
-    <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-      {Object.entries(grouped).map(([type, names]) => (
-        <div key={type}>
-          <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.08em', marginBottom:6 }}>
-            <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background: typeColors[type] || '#999', marginRight:5 }} />
-            {type} ({names.length})
-          </div>
-          <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-            {names.map((n,i) => (
-              <span key={i} style={{ fontSize:12, padding:'4px 10px', borderRadius:20, background:'var(--cream)', border:`1px solid ${typeColors[type] || '#ddd'}40`, color:'var(--ink)', fontWeight:500 }}>{n}</span>
-            ))}
-          </div>
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function StatPill({ label, value, color, sub }) {
-  return (
-    <div style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', borderTop:`3px solid ${color}` }}>
-      <div style={{ fontFamily:'var(--serif)', fontSize:'1.45rem', fontWeight:700, color, marginBottom:2 }}>{value}</div>
-      <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{label}</div>
-      {sub && <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)' }}>{sub}</div>}
-    </div>
-  )
-}
-
 function GenericPlacements({ college }) {
   const p = college.placements
   const color = college.color || 'var(--orange)'
-  const pgpm = p.pgpm || {}
-  const pgdm = p.pgdm || {}
-  const intern = p.internship || {}
+  const isDual = p.pgpm && p.pgdm
+
+  // ── helpers ──
+  function val(v) { return v != null ? `₹${v} LPA` : '—' }
+
+  // ── DUAL MODE (PGPM + PGDM both exist — e.g. GLIM Chennai) ──
+  if (isDual) {
+    const pgpm = p.pgpm
+    const pgdm = p.pgdm
+    const intern = p.internship || {}
+    return (
+      <>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
+          {/* PGPM dark card */}
+          <div style={{ background:'var(--ink)', borderRadius:14, padding:'22px 24px' }}>
+            <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.4)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>
+              {pgpm.label || 'PGPM'} — {pgpm.duration || '1 Year'}
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+              {[
+                { label:'Average CTC',  value: val(pgpm.avg), big:true },
+                { label:'Top 10% Avg', value: pgpm.top10_avg ? val(pgpm.top10_avg) : `Top 50: ${val(pgpm.top50_avg)}`, big:false },
+                { label:'Highest CTC', value: val(pgpm.highest), big:false },
+                { label: pgpm.salary_multiplier ? `${pgpm.salary_multiplier}× pre-MBA` : 'Placement Rate',
+                  value: pgpm.salary_multiplier ? 'salary multiplier' : '100%', big:false },
+              ].map((s,i) => (
+                <div key={i} style={{ background:'rgba(255,255,255,.07)', borderRadius:10, padding:'12px' }}>
+                  <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.45rem':'1.1rem', fontWeight:700, color: s.big ? '#60b4ff':'#fff', marginBottom:2 }}>{s.value}</div>
+                  <div style={{ fontSize:10, color:'rgba(255,255,255,.4)', fontFamily:'var(--mono)' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+            {pgpm.functions?.length > 0 && (
+              <>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.35)', textTransform:'uppercase', marginBottom:10 }}>Function breakdown</div>
+                {pgpm.functions.map((f,i) => (
+                  <div key={i} style={{ marginBottom:8 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'rgba(255,255,255,.7)', marginBottom:3 }}>
+                      <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#60b4ff' }}>{f.pct}%</span>
+                    </div>
+                    <div style={{ height:5, background:'rgba(255,255,255,.1)', borderRadius:3, overflow:'hidden' }}>
+                      <div style={{ height:'100%', width:`${f.pct}%`, background:'#60b4ff', borderRadius:3 }} />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {pgpm.salary_bands?.length > 0 && (
+              <>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'rgba(255,255,255,.35)', textTransform:'uppercase', marginBottom:8, marginTop:16 }}>Salary distribution</div>
+                <SalaryBand bands={pgpm.salary_bands} color="#60b4ff" />
+              </>
+            )}
+          </div>
+          {/* PGDM white card */}
+          <div style={{ background:'var(--white)', border:'2px solid var(--border)', borderRadius:14, padding:'22px 24px' }}>
+            <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', letterSpacing:'.1em', marginBottom:14 }}>
+              {pgdm.label || 'PGDM'} — {pgdm.duration || '2 Years'}
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:16 }}>
+              {[
+                { label:'Average CTC',  value: val(pgdm.avg), big:true },
+                { label:'Top 10% Avg', value: pgdm.top10_avg ? val(pgdm.top10_avg) : `Top 50: ${val(pgdm.top50_avg)}`, big:false },
+                { label:'Highest CTC', value: val(pgdm.highest), big:false },
+                { label:'Batch Size',  value: pgdm.batch_size ? `${pgdm.batch_size} students` : '100%', big:false },
+              ].map((s,i) => (
+                <div key={i} style={{ background:'var(--cream)', borderRadius:10, padding:'12px' }}>
+                  <div style={{ fontFamily:'var(--serif)', fontSize: s.big ? '1.45rem':'1.1rem', fontWeight:700, color: s.big ? color:'var(--ink)', marginBottom:2 }}>{s.value}</div>
+                  <div style={{ fontSize:10, color:'var(--muted)', fontFamily:'var(--mono)' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+            {pgdm.functions?.length > 0 && (
+              <>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:10 }}>Function breakdown</div>
+                {pgdm.functions.map((f,i) => (
+                  <div key={i} style={{ marginBottom:8 }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', fontSize:11.5, color:'var(--ink2)', marginBottom:3 }}>
+                      <span>{f.name}</span><span style={{ fontFamily:'var(--mono)', fontWeight:700, color:f.color || color }}>{f.pct}%</span>
+                    </div>
+                    <div style={{ height:5, background:'var(--cream2)', borderRadius:3, overflow:'hidden' }}>
+                      <div style={{ height:'100%', width:`${f.pct}%`, background:f.color || color, borderRadius:3 }} />
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {pgdm.salary_bands?.length > 0 && (
+              <>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8, marginTop:16 }}>Salary distribution</div>
+                <SalaryBand bands={pgdm.salary_bands} color="#d95f02" />
+              </>
+            )}
+          </div>
+        </div>
+        {/* Salary ladders side by side */}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
+          <SectionCard title={`${pgpm.label || 'PGPM'} Salary Ladder 2025`}>
+            {[['Top 10%', pgpm.top10_avg], ['Top 25%', pgpm.top25_avg], ['Median', pgpm.top50_avg], ['Average', pgpm.avg]].map(([label, v], i) => (
+              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'10px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                <span style={{ fontSize:13, color:'var(--ink2)' }}>{label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{val(v)}</span>
+              </div>
+            ))}
+            {pgpm.salary_multiplier && <div style={{ marginTop:14, padding:'10px 12px', background:'var(--teal-lt)', borderRadius:8, fontSize:12, color:'var(--teal)' }}>💡 Salary multiplier: <strong>{pgpm.salary_multiplier}× pre-MBA CTC</strong></div>}
+          </SectionCard>
+          <SectionCard title={`${pgdm.label || 'PGDM'} Salary Ladder 2025`}>
+            {[['Top 10%', pgdm.top10_avg], ['Top 25%', pgdm.top25_avg], ['Median', pgdm.top50_avg], ['Average', pgdm.avg]].map(([label, v], i) => (
+              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'10px 0', borderBottom: i < 3 ? '1px solid var(--border2)':'none' }}>
+                <span style={{ fontSize:13, color:'var(--ink2)' }}>{label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color:'#d95f02', fontSize:13 }}>{val(v)}</span>
+              </div>
+            ))}
+          </SectionCard>
+        </div>
+        {/* Industry breakdown */}
+        {(pgpm.industries?.length > 0 || pgdm.industries?.length > 0) && (
+          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
+            {pgpm.industries?.length > 0 && (
+              <SectionCard title={`${pgpm.label || 'PGPM'} — Industry Distribution`}>
+                <BarChart items={pgpm.industries} color={color} />
+              </SectionCard>
+            )}
+            {pgdm.industries?.length > 0 && (
+              <SectionCard title={`${pgdm.label || 'PGDM'} — Industry Distribution`}>
+                <BarChart items={pgdm.industries} color="#d95f02" />
+              </SectionCard>
+            )}
+          </div>
+        )}
+        {/* Recruiters */}
+        {pgpm.recruiters?.length > 0 && (
+          <SectionCard title={`${pgpm.label || 'PGPM'} Recruiters 2025`}>
+            <RecruiterChips recruiters={pgpm.recruiters} />
+            {pgpm.new_recruiters?.length > 0 && (
+              <div style={{ marginTop:14, padding:'10px 14px', background:'var(--teal-lt)', borderRadius:8, fontSize:12, color:'var(--teal)' }}>
+                🆕 New 2025: <strong>{pgpm.new_recruiters.join(', ')}</strong>
+              </div>
+            )}
+          </SectionCard>
+        )}
+        {pgdm.recruiters?.length > 0 && (
+          <SectionCard title={`${pgdm.label || 'PGDM'} Recruiters 2025`}>
+            <RecruiterChips recruiters={pgdm.recruiters} />
+            {pgdm.new_recruiters?.length > 0 && (
+              <div style={{ marginTop:14, padding:'10px 14px', background:'var(--orange-lt)', borderRadius:8, fontSize:12, color:'var(--muted)' }}>
+                🆕 New 2025: <strong>{pgdm.new_recruiters.join(', ')}</strong>
+              </div>
+            )}
+          </SectionCard>
+        )}
+        {/* Summer internship */}
+        {intern.companies && (
+          <SectionCard title={`Summer Internships ${intern.year || ''}`}>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))', gap:10, marginBottom:16 }}>
+              <StatPill label="Companies" value={intern.companies} color={color} />
+              <StatPill label="Avg Stipend" value={`₹${(intern.avg_stipend/1000).toFixed(1)}K/mo`} color={color} />
+              <StatPill label="Highest Stipend" value={`₹${(intern.highest_stipend/100000).toFixed(0)}L`} color="#d95f02" />
+            </div>
+            {intern.functions?.length > 0 && (
+              <div style={{ marginBottom:16 }}>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:10 }}>Function-wise roles</div>
+                <BarChart items={intern.functions} color={color} />
+              </div>
+            )}
+            {intern.recruiters?.length > 0 && (
+              <div>
+                <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8 }}>Notable companies</div>
+                <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+                  {intern.recruiters.map((n,i) => (
+                    <span key={i} style={{ fontSize:12, padding:'4px 10px', borderRadius:20, background:'var(--cream)', border:'1px solid var(--border2)', color:'var(--ink)' }}>{n}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </SectionCard>
+        )}
+        <EligibilityCTA college={college} />
+      </>
+    )
+  }
+
+  // ── SINGLE MODE (most colleges: TAPMI, IMT, FORE etc.) ──
+  const avgVal   = p.avg      ?? p.avg_pgpm
+  const highVal  = p.highest  ?? p.highest_pgpm
+  const top50Val = p.top50    ?? p.top50_pgpm
+  const intern   = p.internship || {}
 
   return (
     <>
-      {/* ── Top-line numbers ── */}
+      {/* Hero stat pills */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:24 }}>
-        <StatPill label="PGPM Avg CTC" value={`₹${p.avg_pgpm} LPA`} color={color} sub="2025 report" />
-        <StatPill label="PGPM Top 10%" value={`₹${p.top10_pgpm} LPA`} color={color} sub="avg for top decile" />
-        <StatPill label="PGPM Highest" value={`₹${p.highest_pgpm} LPA`} color="#d95f02" sub="domestic 2025" />
-        <StatPill label="PGDM Avg CTC" value={`₹${p.avg_pgdm} LPA`} color={color} sub="2025 report" />
-        <StatPill label="PGDM Top 10%" value={`₹${p.top10_pgdm} LPA`} color={color} sub="avg for top decile" />
-        <StatPill label="PGDM Highest" value={`₹${p.highest_pgdm} LPA`} color="#d95f02" sub="domestic 2025" />
+        {[
+          { label:'Avg Package',    value: val(avgVal),  color, sub:'2025 report' },
+          { label:'Highest Package',value: val(highVal), color:'#d95f02', sub:'domestic 2025' },
+          { label:'Top 50 Avg',     value: val(top50Val),color, sub:'top 50 students' },
+          { label:'Companies',      value: p.companies ?? '—', color:'var(--ink)', sub:'participated' },
+          { label:'PPOs',           value: p.ppo ?? '—', color:'var(--ink)', sub: p.ppo_pct ? `${p.ppo_pct}% of batch` : 'converted' },
+          { label:'Placement Rate', value:`${p.rate || 100}%`, color, sub:'2025' },
+        ].map((s,i) => (
+          <StatPill key={i} label={s.label} value={String(s.value)} color={s.color} sub={s.sub} />
+        ))}
       </div>
 
-      {/* ── PGPM vs PGDM salary ladder ── */}
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
-        <SectionCard title="PGPM Salary Ladder 2025">
-          {[
-            { label:'Top 10%', value:`₹${p.top10_pgpm} LPA` },
-            { label:'Top 25%', value:`₹${p.top25_pgpm} LPA` },
-            { label:'Top 50% (Median)', value:`₹${p.top50_pgpm} LPA` },
-            { label:'Top 75%', value:`₹${p.top75_pgpm} LPA` },
-            { label:'Average', value:`₹${p.avg_pgpm} LPA` },
-          ].map((r,i) => (
-            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom: i < 4 ? '1px solid var(--border2)':'none' }}>
-              <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
-              <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{r.value}</span>
-            </div>
-          ))}
-          <div style={{ marginTop:14, padding:'10px 12px', background:'var(--teal-lt)', borderRadius:8, fontSize:12, color:'var(--teal)' }}>
-            💡 Salary multiplier: <strong>2.7× pre-MBA CTC</strong> on average
-          </div>
-        </SectionCard>
-        <SectionCard title="PGDM Salary Ladder 2025">
-          {[
-            { label:'Top 10%', value:`₹${p.top10_pgdm} LPA` },
-            { label:'Top 25%', value:`₹${p.top25_pgdm} LPA` },
-            { label:'Top 50% (Median)', value:`₹${p.top50_pgdm} LPA` },
-            { label:'Top 75%', value:`₹${p.top75_pgdm} LPA` },
-            { label:'Average', value:`₹${p.avg_pgdm} LPA` },
-          ].map((r,i) => (
-            <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom: i < 4 ? '1px solid var(--border2)':'none' }}>
-              <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
-              <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{r.value}</span>
-            </div>
-          ))}
-          <div style={{ marginTop:14, padding:'10px 12px', background:'var(--orange-lt)', borderRadius:8, fontSize:12, color:'var(--muted)' }}>
-            💡 Highest domestic: <strong>₹39.30 LPA</strong> (leading MNC FinTech firm)
-          </div>
-        </SectionCard>
-      </div>
-
-      {/* ── Salary distribution bars ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
-        {pgpm.salary_bands?.length > 0 && (
-          <SectionCard title="PGPM Salary Distribution — % of Batch">
-            <SalaryBand bands={pgpm.salary_bands} color={color} />
-            <div style={{ marginTop:12, fontSize:12, color:'var(--muted)' }}>
-              <strong style={{ color:'var(--ink)' }}>54%</strong> of PGPM batch earns ₹16 LPA+ · <strong style={{ color:'var(--ink)' }}>31%</strong> earns ₹19 LPA+
-            </div>
-          </SectionCard>
-        )}
-        {pgdm.salary_bands?.length > 0 && (
-          <SectionCard title="PGDM Salary Distribution — % of Batch">
-            <SalaryBand bands={pgdm.salary_bands} color="#d95f02" />
-            <div style={{ marginTop:12, fontSize:12, color:'var(--muted)' }}>
-              <strong style={{ color:'var(--ink)' }}>42%</strong> of PGDM batch earns ₹15 LPA+ · <strong style={{ color:'var(--ink)' }}>14%</strong> earns ₹18 LPA+
-            </div>
-          </SectionCard>
-        )}
-      </div>
-
-      {/* ── Function-wise breakdown ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
-        {pgpm.functions?.length > 0 && (
-          <SectionCard title="PGPM — Function-wise Roles 2025">
-            <BarChart items={pgpm.functions} color={color} />
-            <div style={{ marginTop:12, fontSize:12, color:'var(--muted)' }}>Consulting (61%) dominates — GLIM Chennai PGPM is one of India's most consulting-concentrated 1-year MBAs</div>
-          </SectionCard>
-        )}
-        {pgdm.functions?.length > 0 && (
-          <SectionCard title="PGDM — Function-wise Roles 2025">
-            <BarChart items={pgdm.functions} color="#d95f02" />
-            <div style={{ marginTop:12, fontSize:12, color:'var(--muted)' }}>Finance (33%) + Sales & Marketing (32%) dominate — broad career paths for freshers</div>
-          </SectionCard>
-        )}
-      </div>
-
-      {/* ── Industry breakdown ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:24 }} className="grid-2col">
-        {pgpm.industries?.length > 0 && (
-          <SectionCard title="PGPM — Industry Distribution 2025">
-            <BarChart items={pgpm.industries} color={color} />
-          </SectionCard>
-        )}
-        {pgdm.industries?.length > 0 && (
-          <SectionCard title="PGDM — Industry Distribution 2025">
-            <BarChart items={pgdm.industries} color="#d95f02" />
-          </SectionCard>
-        )}
-      </div>
-
-      {/* ── PGPM Recruiters ── */}
-      {pgpm.recruiters?.length > 0 && (
-        <SectionCard title="PGPM Recruiters 2025">
-          <RecruiterChips recruiters={pgpm.recruiters} />
-          {pgpm.new_recruiters?.length > 0 && (
-            <div style={{ marginTop:14, padding:'10px 14px', background:'var(--teal-lt)', borderRadius:8, fontSize:12, color:'var(--teal)' }}>
-              🆕 New recruiters 2025: <strong>{pgpm.new_recruiters.join(', ')}</strong>
-            </div>
+        {/* Programme-wise table OR salary ladder */}
+        <SectionCard title={p.programme_wise?.length > 0 ? 'Programme-wise Placements 2025' : 'Salary Ladder 2025'}>
+          {p.programme_wise?.length > 0 ? (
+            <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
+              <thead>
+                <tr style={{ background:'var(--cream)' }}>
+                  {['Programme','Avg CTC','Highest'].map(h => (
+                    <th key={h} style={{ textAlign: h==='Programme' ? 'left':'right', padding:'8px 10px', fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', fontWeight:500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {p.programme_wise.map((pr,i) => (
+                  <tr key={i} style={{ borderTop:'1px solid var(--border2)' }}>
+                    <td style={{ padding:'9px 10px', fontWeight:500, fontSize:12.5 }}>{pr.name}</td>
+                    <td style={{ padding:'9px 10px', textAlign:'right', fontFamily:'var(--mono)', fontWeight:700, color, fontSize:12.5 }}>₹{pr.avg} L</td>
+                    <td style={{ padding:'9px 10px', textAlign:'right', fontFamily:'var(--mono)', color:'#d95f02', fontSize:12.5 }}>₹{pr.highest} L</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            (p.salary_ladder || [
+              { label:'Top 10%', value: p.top10_avg  },
+              { label:'Top 25%', value: p.top25_avg  },
+              { label:'Median',  value: p.top50      },
+              { label:'Average', value: avgVal        },
+            ]).map((r,i,arr) => (
+              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < arr.length-1 ? '1px solid var(--border2)':'none' }}>
+                <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
+                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{r.value ? val(r.value) : '—'}</span>
+              </div>
+            ))
           )}
+        </SectionCard>
+
+        {/* Sectors */}
+        {p.sectors?.length > 0 && (
+          <SectionCard title="Sector Breakdown 2025">
+            <BarChart items={p.sectors} color={color} />
+          </SectionCard>
+        )}
+      </div>
+
+      {/* Recruiters */}
+      {p.recruiters?.length > 0 && (
+        <SectionCard title="Top Recruiters 2025">
+          <RecruiterChips recruiters={p.recruiters} />
         </SectionCard>
       )}
 
-      {/* ── PGDM Recruiters ── */}
-      {pgdm.recruiters?.length > 0 && (
-        <SectionCard title="PGDM Recruiters 2025" >
-          <RecruiterChips recruiters={pgdm.recruiters} />
-          {pgdm.new_recruiters?.length > 0 && (
-            <div style={{ marginTop:14, padding:'10px 14px', background:'var(--orange-lt)', borderRadius:8, fontSize:12, color:'var(--muted)' }}>
-              🆕 New recruiters 2025: <strong>{pgdm.new_recruiters.join(', ')}</strong>
-            </div>
-          )}
-        </SectionCard>
-      )}
-
-      {/* ── Summer Internship ── */}
+      {/* Internship */}
       {intern.companies && (
-        <SectionCard title={`PGDM Summer Internships ${intern.year || '2024-26'}`}>
+        <SectionCard title={`Summer Internships ${intern.year || ''}`}>
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(130px,1fr))', gap:10, marginBottom:16 }}>
-            <StatPill label="Companies" value={intern.companies} color={color} />
+            <StatPill label="Companies" value={String(intern.companies)} color={color} />
             <StatPill label="Avg Stipend" value={`₹${(intern.avg_stipend/1000).toFixed(1)}K/mo`} color={color} />
             <StatPill label="Highest Stipend" value={`₹${(intern.highest_stipend/100000).toFixed(0)}L`} color="#d95f02" />
           </div>
-          {intern.functions?.length > 0 && (
-            <div style={{ marginBottom:16 }}>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:10 }}>Function-wise internship roles</div>
-              <BarChart items={intern.functions} color={color} />
-            </div>
-          )}
-          {intern.recruiters?.length > 0 && (
-            <div>
-              <div style={{ fontSize:10, fontFamily:'var(--mono)', color:'var(--muted)', textTransform:'uppercase', marginBottom:8 }}>Notable internship companies</div>
-              <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-                {intern.recruiters.map((n,i) => (
-                  <span key={i} style={{ fontSize:12, padding:'4px 10px', borderRadius:20, background:'var(--cream)', border:'1px solid var(--border2)', color:'var(--ink)' }}>{n}</span>
-                ))}
-              </div>
-            </div>
-          )}
+          {intern.functions?.length > 0 && <BarChart items={intern.functions} color={color} />}
         </SectionCard>
       )}
 
-      {/* ── Eligibility CTA ── */}
-      <div style={{ background:'linear-gradient(135deg,#0057A8,#185fa5)', borderRadius:14, padding:'24px 28px', marginTop:8, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16 }}>
-        <div>
-          <div style={{ fontSize:15, fontWeight:700, color:'#fff', marginBottom:4 }}>Will you get placed here?</div>
-          <div style={{ fontSize:13, color:'rgba(255,255,255,.65)', lineHeight:1.5 }}>Check your real conversion chance at {college.short || college.name} based on your profile and target sector.</div>
-        </div>
-        <a href="/eligibility" style={{ background:'#fff', color:'#0057A8', padding:'11px 22px', borderRadius:10, fontSize:13.5, fontWeight:600, textDecoration:'none', flexShrink:0 }}>
-          Check eligibility →
-        </a>
-      </div>
+      <EligibilityCTA college={college} />
     </>
   )
 }
+
+function EligibilityCTA({ college }) {
+  return (
+    <div style={{ background:'linear-gradient(135deg,#0057A8,#185fa5)', borderRadius:14, padding:'24px 28px', marginTop:8, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:16 }}>
+      <div>
+        <div style={{ fontSize:15, fontWeight:700, color:'#fff', marginBottom:4 }}>Will you get placed here?</div>
+        <div style={{ fontSize:13, color:'rgba(255,255,255,.65)', lineHeight:1.5 }}>Check your real conversion chance at {college.short || college.name} based on your profile.</div>
+      </div>
+      <a href="/eligibility" style={{ background:'#fff', color:'#0057A8', padding:'11px 22px', borderRadius:10, fontSize:13.5, fontWeight:600, textDecoration:'none', flexShrink:0 }}>Check eligibility →</a>
+    </div>
+  )
+}
+
 
 function GenericFees({ college }) {
   const f = college.fees
