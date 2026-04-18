@@ -727,22 +727,35 @@ function GenericPlacements({ college }) {
   // ── SINGLE MODE (most colleges: TAPMI, IMT, FORE etc.) ──
   const avgVal   = p.avg      ?? p.avg_pgpm
   const highVal  = p.highest  ?? p.highest_pgpm
+  const highIntl = p.highest_intl ?? null
+  const medVal   = p.median   ?? null
   const top50Val = p.top50    ?? p.top50_pgpm
   const intern   = p.internship || {}
 
+  // Priority list — show first 6 that have real data
+  const allPills = [
+    avgVal   != null && { label:'Avg Package',             value: val(avgVal),        color,           sub:'2025 report' },
+    highVal  != null && { label:'Highest Package',         value: val(highVal),       color:'#d95f02', sub:'domestic 2025' },
+    medVal   != null && { label:'Median Package',          value: val(medVal),        color,           sub:'2025 official' },
+    highIntl != null && { label:'Highest (International)', value: val(highIntl),      color:'#7b1fa2', sub:'international 2025' },
+    top50Val != null && { label:'Top 50 Avg',              value: val(top50Val),      color,           sub:'top 50 students' },
+    (p.top10_avg  ?? p.pgpm?.top10_avg)  != null && { label:'Top 10% Avg',  value: val(p.top10_avg ?? p.pgpm?.top10_avg),  color, sub:'top decile avg' },
+    (p.top25_avg  ?? p.pgpm?.top25_avg)  != null && { label:'Top 25% Avg',  value: val(p.top25_avg ?? p.pgpm?.top25_avg),  color, sub:'top quartile avg' },
+    p.companies   != null && { label:'Companies',          value: String(p.companies), color:'var(--ink)', sub:'participated 2025' },
+    p.ppo         != null && { label:'PPOs Converted',     value: String(p.ppo),      color:'var(--ink)', sub: p.ppo_pct ? `${p.ppo_pct}% of batch` : 'converted' },
+    p.ppo_pct     != null && p.ppo == null && { label:'PPO Rate', value:`${p.ppo_pct}%`, color:'var(--ink)', sub:'pre-placement offers' },
+    p.internship?.avg_stipend != null && { label:'Avg Internship Stipend', value:`₹${(p.internship.avg_stipend/1000).toFixed(0)}K/mo`, color, sub:'summer internship' },
+    p.internship?.highest_stipend != null && { label:'Highest Stipend',   value:`₹${(p.internship.highest_stipend/100000).toFixed(1)}L/mo`, color:'#d95f02', sub:'summer internship' },
+    { label:'Placement Rate', value:`${p.rate || 100}%`, color, sub:'2025 batch' },
+  ].filter(Boolean)
+  const pills = allPills.slice(0, 6)
+
   return (
     <>
-      {/* Hero stat pills */}
+      {/* Hero stat pills — only what exists */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:24 }}>
-        {[
-          { label:'Avg Package',    value: val(avgVal),  color, sub:'2025 report' },
-          { label:'Highest Package',value: val(highVal), color:'#d95f02', sub:'domestic 2025' },
-          { label:'Top 50 Avg',     value: val(top50Val),color, sub:'top 50 students' },
-          { label:'Companies',      value: p.companies ?? '—', color:'var(--ink)', sub:'participated' },
-          { label:'PPOs',           value: p.ppo ?? '—', color:'var(--ink)', sub: p.ppo_pct ? `${p.ppo_pct}% of batch` : 'converted' },
-          { label:'Placement Rate', value:`${p.rate || 100}%`, color, sub:'2025' },
-        ].map((s,i) => (
-          <StatPill key={i} label={s.label} value={String(s.value)} color={s.color} sub={s.sub} />
+        {pills.map((s,i) => (
+          <StatPill key={i} label={s.label} value={s.value} color={s.color} sub={s.sub} />
         ))}
       </div>
 
@@ -769,17 +782,21 @@ function GenericPlacements({ college }) {
               </tbody>
             </table>
           ) : (
-            (p.salary_ladder || [
-              { label:'Top 10%', value: p.top10_avg  },
-              { label:'Top 25%', value: p.top25_avg  },
-              { label:'Median',  value: p.top50      },
-              { label:'Average', value: avgVal        },
-            ]).map((r,i,arr) => (
-              <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < arr.length-1 ? '1px solid var(--border2)':'none' }}>
-                <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
-                <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{r.value ? val(r.value) : '—'}</span>
-              </div>
-            ))
+            (() => {
+              const ladder = p.salary_ladder?.length > 0 ? p.salary_ladder : [
+                p.top10_avg  != null && { label:'Top 10%', value: p.top10_avg },
+                p.top25_avg  != null && { label:'Top 25%', value: p.top25_avg },
+                medVal       != null && { label:'Median',  value: medVal },
+                top50Val     != null && { label:'Top 50%', value: top50Val },
+                avgVal       != null && { label:'Average', value: avgVal },
+              ].filter(Boolean)
+              return ladder.map((r,i,arr) => (
+                <div key={i} style={{ display:'flex', justifyContent:'space-between', padding:'9px 0', borderBottom: i < arr.length-1 ? '1px solid var(--border2)':'none' }}>
+                  <span style={{ fontSize:13, color:'var(--ink2)' }}>{r.label}</span>
+                  <span style={{ fontFamily:'var(--mono)', fontWeight:700, color, fontSize:13 }}>{r.value ? val(r.value) : '—'}</span>
+                </div>
+              ))
+            })()
           )}
         </SectionCard>
 
