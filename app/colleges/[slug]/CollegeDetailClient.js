@@ -323,23 +323,39 @@ export default function CollegeDetailClient({ college }) {
           ) : (
             <>
               {/* ── MODE 2 / 3: Single programme or simple ── */}
-              {/* Hero stat pills */}
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:20 }}>
-                {[
-                  { label:'Avg Package', value: d.placements.avg ? `₹${d.placements.avg} LPA` : (d.placements.avg_pgpm ? `₹${d.placements.avg_pgpm} LPA` : '—'), color:d.color, sub:'2025 report' },
-                  { label:'Highest Package', value: d.placements.highest ? `₹${d.placements.highest} LPA` : (d.placements.highest_pgpm ? `₹${d.placements.highest_pgpm} LPA` : '—'), color:'#d95f02', sub:'domestic 2025' },
-                  { label:'Top 50 Avg', value: d.placements.top50 ? `₹${d.placements.top50} LPA` : (d.placements.top50_pgpm ? `₹${d.placements.top50_pgpm} LPA` : '—'), color:d.color, sub:'top 50 students' },
-                  { label:'Companies', value: d.placements.companies || '—', color:'var(--ink)', sub:'visited campus' },
-                  { label:'PPOs', value: d.placements.ppo || '—', color:'var(--ink)', sub:`${d.placements.ppo_pct || ''}% of batch` },
-                  { label:'Placement Rate', value:`${d.placements.rate || 100}%`, color:d.color, sub:'2025' },
-                ].map((s,i) => (
-                  <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', borderTop:`3px solid ${s.color}` }}>
-                    <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:s.color, marginBottom:2 }}>{s.value}</div>
-                    <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{s.label}</div>
-                    <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)' }}>{s.sub}</div>
+              {/* Hero stat pills — top 6 from available data */}
+              {(() => {
+                const p = d.placements
+                const avg   = p.avg   ?? p.avg_pgpm
+                const high  = p.highest ?? p.highest_pgpm
+                const med   = p.median  ?? null
+                const top50 = p.top50   ?? p.top50_pgpm
+                const v = n => n != null ? `₹${n} LPA` : null
+                const pills = [
+                  avg   != null && { label:'Avg Package',             value: v(avg),   color:d.color,       sub:'2025 report' },
+                  high  != null && { label:'Highest Package',         value: v(high),  color:'#d95f02',     sub:'domestic 2025' },
+                  med   != null && { label:'Median Package',          value: v(med),   color:d.color,       sub:'2025 official' },
+                  p.highest_intl != null && { label:'Highest (Intl)', value: v(p.highest_intl), color:'#7b1fa2', sub:'international 2025' },
+                  top50 != null && { label:'Top 50 Avg',              value: v(top50), color:d.color,       sub:'top 50 students' },
+                  p.top10_avg != null && { label:'Top 10% Avg',       value: v(p.top10_avg), color:d.color, sub:'top decile' },
+                  p.companies != null && { label:'Companies',         value: String(p.companies), color:'var(--ink)', sub:'participated 2025' },
+                  p.ppo != null && { label:'PPOs Converted',          value: String(p.ppo), color:'var(--ink)', sub: p.ppo_pct ? `${p.ppo_pct}% of batch` : 'converted' },
+                  p.ppo_pct != null && p.ppo == null && { label:'PPO Rate', value:`${p.ppo_pct}%`, color:'var(--ink)', sub:'pre-placement offers' },
+                  p.internship?.avg_stipend != null && { label:'Avg Stipend', value:`₹${(p.internship.avg_stipend/1000).toFixed(0)}K/mo`, color:d.color, sub:'summer internship' },
+                  { label:'Placement Rate', value:`${p.rate || 100}%`, color:d.color, sub:'2025 batch' },
+                ].filter(Boolean).slice(0,6)
+                return (
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))', gap:10, marginBottom:20 }}>
+                    {pills.map((s,i) => (
+                      <div key={i} style={{ background:'var(--white)', border:'1px solid var(--border)', borderRadius:12, padding:'16px 18px', borderTop:`3px solid ${s.color}` }}>
+                        <div style={{ fontFamily:'var(--serif)', fontSize:'1.4rem', fontWeight:700, color:s.color, marginBottom:2 }}>{s.value}</div>
+                        <div style={{ fontSize:12, fontWeight:600, color:'var(--ink)', marginBottom:2 }}>{s.label}</div>
+                        <div style={{ fontSize:10.5, fontFamily:'var(--mono)', color:'var(--muted)' }}>{s.sub}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                )
+              })()}
 
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:20 }} className="placements-grid">
                 {/* Salary ladder / programme-wise table */}
